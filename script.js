@@ -1,66 +1,75 @@
-const imageInput = document.getElementById('imageInput');
-const editorBox = document.getElementById('editorBox');
-const previewImg = document.getElementById('previewImg');
-const widthInput = document.getElementById('widthInput');
-const heightInput = document.getElementById('heightInput');
-const qualityInput = document.getElementById('qualityInput');
-const formatSelect = document.getElementById('formatSelect');
-const originalSizeText = document.getElementById('originalSize');
-const newSizeText = document.getElementById('newSize');
-const downloadBtn = document.getElementById('downloadBtn');
+const dropZone = document.getElementById('drop-zone');
+const imageInput = document.getElementById('image-input');
+const controlsSection = document.getElementById('controls-section');
+const imagePreview = document.getElementById('image-preview');
+const widthInput = document.getElementById('width-input');
+const heightInput = document.getElementById('height-input');
+const qualitySlider = document.getElementById('quality-slider');
+const qualityVal = document.getElementById('quality-val');
+const processBtn = document.getElementById('process-btn');
 
-let loadedImage = new Image();
+let originalImage = null;
+
+// Drag & Drop
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = '#0369a1';
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.style.borderColor = '#0284c7';
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) handleImage(file);
+});
 
 imageInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
-    if (!file) return;
-
-    originalSizeText.textContent = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        loadedImage.src = event.target.result;
-        loadedImage.onload = () => {
-            previewImg.src = loadedImage.src;
-            widthInput.value = loadedImage.width;
-            heightInput.value = loadedImage.height;
-            editorBox.style.display = 'flex';
-            renderResizedImage();
-        };
-    };
-    reader.readAsDataURL(file);
+    if (file) handleImage(file);
 });
 
-function renderResizedImage() {
+function handleImage(file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        originalImage = new Image();
+        originalImage.onload = () => {
+            widthInput.value = originalImage.width;
+            heightInput.value = originalImage.height;
+            imagePreview.src = event.target.result;
+            controlsSection.classList.remove('hidden');
+            controlsSection.scrollIntoView({ behavior: 'smooth' });
+        };
+        originalImage.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+qualitySlider.addEventListener('input', () => {
+    qualityVal.innerText = `${qualitySlider.value}%`;
+});
+
+processBtn.addEventListener('click', () => {
+    if (!originalImage) return;
+
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    const targetWidth = parseInt(widthInput.value) || loadedImage.width;
-    const targetHeight = parseInt(heightInput.value) || loadedImage.height;
+    const newWidth = parseInt(widthInput.value) || originalImage.width;
+    const newHeight = parseInt(heightInput.value) || originalImage.height;
 
-    canvas.width = targetWidth;
-    canvas.height = targetHeight;
+    canvas.width = newWidth;
+    canvas.height = newHeight;
 
-    ctx.drawImage(loadedImage, 0, 0, targetWidth, targetHeight);
+    ctx.drawImage(originalImage, 0, 0, newWidth, newHeight);
 
-    const selectedFormat = formatSelect.value;
-    const selectedQuality = parseFloat(qualityInput.value);
+    const quality = qualitySlider.value / 100;
+    const resizedDataUrl = canvas.toDataURL('image/jpeg', quality);
 
-    canvas.toBlob((blob) => {
-        if (!blob) return;
-
-        newSizeText.textContent = `New Size: ${(blob.size / 1024).toFixed(2)} KB`;
-
-        downloadBtn.onclick = () => {
-            const downloadLink = document.createElement('a');
-            downloadLink.href = URL.createObjectURL(blob);
-            const extension = selectedFormat.split('/')[1];
-            downloadLink.download = `quickresizer-${targetWidth}x${targetHeight}.${extension}`;
-            downloadLink.click();
-        };
-    }, selectedFormat, selectedQuality);
-}
-
-[widthInput, heightInput, qualityInput, formatSelect].forEach(inputElement => {
-    inputElement.addEventListener('input', renderResizedImage);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = resizedDataUrl;
+    downloadLink.download = `resized_quickresizer.jpg`;
+    downloadLink.click();
 });
