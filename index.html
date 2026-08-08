@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickResizer - Free Online Photo Resizer & KB Reducer</title>
+    <meta name="description" content="Resize photo to 20KB, 50KB for Sarkari Result forms, UP Scholarship, and online applications. Fast and free image converter.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>Quick<span>Resizer</span></h1>
+            <p>Powered by Kryzex Technologies</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="tool-section">
+            <div class="upload-box" id="dropZone">
+                <input type="file" id="imageInput" accept="image/jpeg, image/png, image/webp">
+                <label for="imageInput" class="upload-btn">📁 Select Image / Photo</label>
+                <p>या फोटो को यहाँ Drag & Drop करें</p>
+            </div>
+
+            <div class="editor-box" id="editorBox" style="display: none;">
+                <div class="preview-area">
+                    <img id="previewImg" src="" alt="Preview">
+                    <div class="file-info">
+                        <p id="originalSize">Original Size: 0 KB</p>
+                        <p id="newSize">New Size: 0 KB</p>
+                    </div>
+                </div>
+
+                <div class="controls-area">
+                    <div class="input-group">
+                        <label>Width (px):</label>
+                        <input type="number" id="widthInput">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Height (px):</label>
+                        <input type="number" id="heightInput">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Format:</label>
+                        <select id="formatSelect">
+                            <option value="image/jpeg">JPG / JPEG</option>
+                            <option value="image/png">PNG</option>
+                            <option value="image/webp">WEBP</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Quality (Compress KB):</label>
+                        <input type="range" id="qualityInput" min="0.1" max="1" step="0.05" value="0.8">
+                    </div>
+
+                    <button id="downloadBtn" class="download-btn">⬇️ Download Resized Image</button>
+                </div>
+            </div>
+        </section>
+
+        <article class="seo-article">
+            <h2>फोटो का साइज KB में कम कैसे करें? (Online Photo KB Reducer)</h2>
+            <p>सरकारी फॉर्म, यूपी स्कॉलरशिप, SSC, UPSC या पुलिस भर्ती के ऑनलाइन आवेदन में फोटो और सिग्नेचर का साइज 20KB से 50KB के बीच मांगा जाता है। <strong>QuickResizer</strong> की मदद से आप बिना क्वालिटी खराब किए किसी भी फोटो का साइज आसानी से घटा सकते हैं।</p>
+            
+            <h3>QuickResizer का उपयोग कैसे करें:</h3>
+            <ol>
+                <li><strong>Select Image</strong> बटन पर क्लिक करके अपनी फोटो अपलोड करें।</li>
+                <li>फॉर्म की गाइडलाइन के अनुसार Width और Height (Pixels) दर्ज करें।</li>
+                <li><strong>Quality Slider</strong> को कम या ज्यादा करके अपना मनपसंद KB साइज सेट करें।</li>
+                <li><strong>Download</strong> बटन पर क्लिक करके अपनी फोटो सेव करें।</li>
+            </ol>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 QuickResizer. Product of Kryzex Technologies. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
