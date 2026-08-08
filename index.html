@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickResizer - Fast, Free & Secure Image Resizer Online</title>
+    <title>QuickResizer - All-in-One Image Tool</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,10 +17,10 @@
         </div>
 
         <nav class="tool-menu">
-            <a href="#resize" class="tool-link active"><i class="fa-solid fa-expand"></i> <span data-lang="menu-resize">Resize</span></a>
-            <a href="#crop" class="tool-link"><i class="fa-solid fa-crop-simple"></i> <span data-lang="menu-crop">Crop</span></a>
-            <a href="#compress" class="tool-link"><i class="fa-solid fa-file-zipper"></i> <span data-lang="menu-compress">Compress</span></a>
-            <a href="#convert" class="tool-link"><i class="fa-solid fa-arrow-rotate-right"></i> <span data-lang="menu-convert">Convert</span></a>
+            <a href="javascript:void(0)" class="tool-link active" onclick="switchMode('resize')"><i class="fa-solid fa-expand"></i> Resize</a>
+            <a href="javascript:void(0)" class="tool-link" onclick="switchMode('crop')"><i class="fa-solid fa-crop-simple"></i> Crop</a>
+            <a href="javascript:void(0)" class="tool-link" onclick="switchMode('compress')"><i class="fa-solid fa-file-zipper"></i> Compress KB</a>
+            <a href="javascript:void(0)" class="tool-link" onclick="switchMode('convert')"><i class="fa-solid fa-arrow-rotate-right"></i> Convert Format</a>
         </nav>
 
         <div class="nav-right">
@@ -31,35 +31,28 @@
                     <option value="hi">हिंदी</option>
                 </select>
             </div>
-
-            <button class="btn-auth btn-login" data-lang="btn-login" onclick="alert('Login feature coming soon!')">Login</button>
-            <button class="btn-auth btn-signup" data-lang="btn-signup" onclick="alert('Signup feature coming soon!')">Sign Up</button>
+            <button class="btn-auth btn-login" onclick="alert('Login feature coming soon!')">Login</button>
+            <button class="btn-auth btn-signup" onclick="alert('Signup feature coming soon!')">Sign Up</button>
         </div>
     </header>
 
     <main class="hero-section">
         <div class="action-tabs">
-            <button class="action-tab active"><i class="fa-solid fa-expand"></i> <span data-lang="tab-resize">Resize Image</span></button>
-            <button class="action-tab"><i class="fa-solid fa-crop-simple"></i> <span data-lang="tab-crop">Crop Image</span></button>
-            <button class="action-tab"><i class="fa-solid fa-file-zipper"></i> <span data-lang="tab-compress">Compress KB</span></button>
-            <button class="action-tab"><i class="fa-solid fa-file-export"></i> <span data-lang="tab-convert">Convert Format</span></button>
+            <button class="action-tab active" id="tab-resize" onclick="switchMode('resize')"><i class="fa-solid fa-expand"></i> Resize Image</button>
+            <button class="action-tab" id="tab-crop" onclick="switchMode('crop')"><i class="fa-solid fa-crop-simple"></i> Crop Image</button>
+            <button class="action-tab" id="tab-compress" onclick="switchMode('compress')"><i class="fa-solid fa-file-zipper"></i> Compress KB</button>
+            <button class="action-tab" id="tab-convert" onclick="switchMode('convert')"><i class="fa-solid fa-arrows-repeat"></i> Convert Format</button>
         </div>
 
-        <h1 class="main-title" data-lang="hero-title">Resize & Compress Images Online</h1>
-        <p class="sub-title" data-lang="hero-subtitle">Easily resize, crop, compress, and convert JPG, PNG, WEBP images in seconds for free!</p>
+        <h1 class="main-title" id="mode-title">Resize Image Online</h1>
+        <p class="sub-title" id="mode-desc">Change image width and height in pixels easily for free!</p>
         
         <div class="upload-container" id="drop-zone">
             <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
-            <p class="upload-text"><span data-lang="drop-text">Drop your images here or</span> <span class="browse-text" data-lang="browse-text">browse files</span></p>
-            <span class="file-limits" data-lang="limits-text">Supports JPG, PNG, WEBP, GIF | Unlimited File Size</span>
+            <p class="upload-text">Drop your image here or <span class="browse-text">browse files</span></p>
+            <span class="file-limits">Supports JPG, PNG, WEBP, GIF | Unlimited File Size</span>
             <input type="file" id="image-input" accept="image/*" hidden>
-            <button class="btn-primary" onclick="document.getElementById('image-input').click()" data-lang="btn-select">Select Image</button>
-        </div>
-
-        <div class="trust-badges">
-            <span><i class="fa-solid fa-shield-halved"></i> <span data-lang="badge-private">100% Private (No Server Uploads)</span></span>
-            <span><i class="fa-solid fa-bolt"></i> <span data-lang="badge-fast">Ultra Fast Processing</span></span>
-            <span><i class="fa-solid fa-face-smile"></i> <span data-lang="badge-free">Completely Free Forever</span></span>
+            <button class="btn-primary" onclick="document.getElementById('image-input').click()">Select Image</button>
         </div>
 
         <div class="controls-card hidden" id="controls-section">
@@ -67,80 +60,87 @@
                 <img id="image-preview" src="" alt="Preview">
             </div>
 
-            <div class="settings-grid">
-                <div class="setting-group">
-                    <label><i class="fa-solid fa-arrows-left-right"></i> <span data-lang="lbl-width">Width (Pixels):</span></label>
-                    <input type="number" id="width-input" placeholder="Auto">
-                </div>
-                <div class="setting-group">
-                    <label><i class="fa-solid fa-arrows-up-down"></i> <span data-lang="lbl-height">Height (Pixels):</span></label>
-                    <input type="number" id="height-input" placeholder="Auto">
-                </div>
-                <div class="setting-group full-width">
-                    <label><i class="fa-solid fa-sliders"></i> <span data-lang="lbl-quality">Compression Quality:</span> <span id="quality-val">80%</span></label>
-                    <input type="range" id="quality-slider" min="10" max="100" value="80">
+            <div class="mode-panel" id="panel-resize">
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-arrows-left-right"></i> Width (Pixels):</label>
+                        <input type="number" id="width-input" placeholder="e.g. 1920">
+                    </div>
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-arrows-up-down"></i> Height (Pixels):</label>
+                        <input type="number" id="height-input" placeholder="e.g. 1080">
+                    </div>
                 </div>
             </div>
 
-            <button class="btn-primary btn-block" id="process-btn"><i class="fa-solid fa-download"></i> <span data-lang="btn-download">Resize & Download Image</span></button>
+            <div class="mode-panel hidden" id="panel-crop">
+                <div class="settings-grid">
+                    <div class="setting-group full-width">
+                        <label><i class="fa-solid fa-crop"></i> Select Aspect Ratio / Crop Area:</label>
+                        <select id="crop-ratio">
+                            <option value="square">Square (1:1 - Passport / Instagram)</option>
+                            <option value="16:9">Landscape (16:9 - YouTube / Desktop)</option>
+                            <option value="4:3">Standard (4:3)</option>
+                            <option value="custom">Custom Center Crop</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mode-panel hidden" id="panel-compress">
+                <div class="settings-grid">
+                    <div class="setting-group full-width">
+                        <label><i class="fa-solid fa-sliders"></i> Compression Quality: <span id="quality-val">70%</span></label>
+                        <input type="range" id="quality-slider" min="10" max="95" value="70">
+                        <small style="color: #64748b; margin-top:5px; display:block;">Lower percentage = Smaller KB file size</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mode-panel hidden" id="panel-convert">
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-file-import"></i> Convert From:</label>
+                        <select id="convert-from" disabled>
+                            <option value="auto">Auto Detected File</option>
+                            <option value="jpg">JPG / JPEG</option>
+                            <option value="png">PNG</option>
+                            <option value="webp">WEBP</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-file-export"></i> Convert To:</label>
+                        <select id="convert-to">
+                            <option value="image/jpeg">JPG / JPEG</option>
+                            <option value="image/png">PNG</option>
+                            <option value="image/webp">WEBP</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary btn-block" id="process-btn"><i class="fa-solid fa-download"></i> Process & Download</button>
         </div>
     </main>
-
-    <section class="section-container" id="how-it-works">
-        <div class="section-heading">
-            <h2 data-lang="how-title">How to Resize an Image in 3 Easy Steps</h2>
-            <p data-lang="how-subtitle">QuickResizer is designed to be simple, fast, and accessible for everyone.</p>
-        </div>
-        <div class="steps-grid">
-            <div class="step-card">
-                <div class="step-num">1</div>
-                <h3 data-lang="step1-title">Upload Image</h3>
-                <p data-lang="step1-desc">Drag and drop your photo into the box above or click 'Select Image' to choose a file from your device.</p>
-            </div>
-            <div class="step-card">
-                <div class="step-num">2</div>
-                <h3 data-lang="step2-title">Adjust Settings</h3>
-                <p data-lang="step2-desc">Set your required pixel width/height or choose crop, compression, and conversion quality.</p>
-            </div>
-            <div class="step-card">
-                <div class="step-num">3</div>
-                <h3 data-lang="step3-title">Download Instantly</h3>
-                <p data-lang="step3-desc">Click 'Resize & Download' to save your newly optimized image directly to your device.</p>
-            </div>
-        </div>
-    </section>
 
     <footer class="footer">
         <div class="footer-links">
             <div class="footer-brand">
                 <h3><i class="fa-solid fa-expand"></i> QuickResizer</h3>
-                <p data-lang="footer-desc">QuickResizer is a privacy-focused online photo utility built to help users resize, crop, compress, and convert images safely.</p>
+                <p>Online privacy-focused image tool to resize, crop, compress, and convert images fast.</p>
             </div>
             <div class="footer-col">
-                <h4 data-lang="footer-tools">Our Tools</h4>
-                <a href="#resize">Image Resizer</a>
-                <a href="#crop">Image Cropper</a>
-                <a href="#compress">Image Compressor</a>
-                <a href="#convert">Image Converter</a>
-            </div>
-            <div class="footer-col">
-                <h4 data-lang="footer-legal">Legal Policies</h4>
-                <a href="#privacy">Privacy Guarantee</a>
-                <a href="#privacy">Terms of Service</a>
-            </div>
-            <div class="footer-col">
-                <h4 data-lang="footer-support">Support</h4>
-                <a href="mailto:support@kryzex.com">Contact Support</a>
+                <h4>Tools</h4>
+                <a href="javascript:void(0)" onclick="switchMode('resize')">Resize Image</a>
+                <a href="javascript:void(0)" onclick="switchMode('crop')">Crop Image</a>
+                <a href="javascript:void(0)" onclick="switchMode('compress')">Compress KB</a>
+                <a href="javascript:void(0)" onclick="switchMode('convert')">Convert Format</a>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <div class="copyright">
-                © 2026 QuickResizer. All rights reserved.
-            </div>
-            <div class="powered-by">
-                Powered by :- <span>Kryzex Technologies</span>
-            </div>
+            <div class="copyright">© 2026 QuickResizer. All rights reserved.</div>
+            <div class="powered-by">Powered by :- <span>Kryzex Technologies</span></div>
         </div>
     </footer>
 
