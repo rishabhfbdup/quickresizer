@@ -3,82 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickResizer - Free Online Photo Resizer & KB Reducer</title>
-    <meta name="description" content="Resize photo to 20KB, 50KB for Sarkari Result forms, UP Scholarship, and online applications. Fast and free image converter.">
+    <title>QuickResizer - Resize Images Online</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header>
+    <header class="navbar">
         <div class="logo">
-            <h1>Quick<span>Resizer</span></h1>
-            <p>Powered by Kryzex Technologies</p>
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
         </div>
+        <nav class="nav-links">
+            <a href="#about">Blog</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#login" class="login-btn">Login</a>
+            <a href="#pricing" class="premium-btn">Get Premium</a>
+        </nav>
     </header>
 
-    <main class="container">
-        <section class="tool-section">
-            <div class="upload-box" id="dropZone">
-                <input type="file" id="imageInput" accept="image/jpeg, image/png, image/webp">
-                <label for="imageInput" class="upload-btn">📁 Select Image / Photo</label>
-                <p>या फोटो को यहाँ Drag & Drop करें</p>
+    <main class="hero-section">
+        <h1 class="main-title">Resize an Image</h1>
+        
+        <div class="upload-container" id="drop-zone">
+            <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+            <p class="upload-text">Drop your images here or <span class="browse-text">browse.</span></p>
+            <input type="file" id="image-input" accept="image/*" hidden>
+            <button class="btn-primary" onclick="document.getElementById('image-input').click()">Select Image</button>
+        </div>
+
+        <div class="controls-card hidden" id="controls-section">
+            <div class="preview-box">
+                <img id="image-preview" src="" alt="Preview">
             </div>
 
-            <div class="editor-box" id="editorBox" style="display: none;">
-                <div class="preview-area">
-                    <img id="previewImg" src="" alt="Preview">
-                    <div class="file-info">
-                        <p id="originalSize">Original Size: 0 KB</p>
-                        <p id="newSize">New Size: 0 KB</p>
-                    </div>
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <label>Width (Pixels):</label>
+                    <input type="number" id="width-input" placeholder="Auto">
                 </div>
-
-                <div class="controls-area">
-                    <div class="input-group">
-                        <label>Width (px):</label>
-                        <input type="number" id="widthInput">
-                    </div>
-
-                    <div class="input-group">
-                        <label>Height (px):</label>
-                        <input type="number" id="heightInput">
-                    </div>
-
-                    <div class="input-group">
-                        <label>Format:</label>
-                        <select id="formatSelect">
-                            <option value="image/jpeg">JPG / JPEG</option>
-                            <option value="image/png">PNG</option>
-                            <option value="image/webp">WEBP</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label>Quality (Compress KB):</label>
-                        <input type="range" id="qualityInput" min="0.1" max="1" step="0.05" value="0.8">
-                    </div>
-
-                    <button id="downloadBtn" class="download-btn">⬇️ Download Resized Image</button>
+                <div class="setting-group">
+                    <label>Height (Pixels):</label>
+                    <input type="number" id="height-input" placeholder="Auto">
+                </div>
+                <div class="setting-group full-width">
+                    <label>Quality: <span id="quality-val">80%</span></label>
+                    <input type="range" id="quality-slider" min="10" max="100" value="80">
                 </div>
             </div>
-        </section>
 
-        <article class="seo-article">
-            <h2>फोटो का साइज KB में कम कैसे करें? (Online Photo KB Reducer)</h2>
-            <p>सरकारी फॉर्म, यूपी स्कॉलरशिप, SSC, UPSC या पुलिस भर्ती के ऑनलाइन आवेदन में फोटो और सिग्नेचर का साइज 20KB से 50KB के बीच मांगा जाता है। <strong>QuickResizer</strong> की मदद से आप बिना क्वालिटी खराब किए किसी भी फोटो का साइज आसानी से घटा सकते हैं।</p>
-            
-            <h3>QuickResizer का उपयोग कैसे करें:</h3>
-            <ol>
-                <li><strong>Select Image</strong> बटन पर क्लिक करके अपनी फोटो अपलोड करें।</li>
-                <li>फॉर्म की गाइडलाइन के अनुसार Width और Height (Pixels) दर्ज करें।</li>
-                <li><strong>Quality Slider</strong> को कम या ज्यादा करके अपना मनपसंद KB साइज सेट करें।</li>
-                <li><strong>Download</strong> बटन पर क्लिक करके अपनी फोटो सेव करें।</li>
-            </ol>
-        </article>
+            <button class="btn-primary btn-block" id="process-btn">Resize & Download Image</button>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 QuickResizer. Product of Kryzex Technologies. All Rights Reserved.</p>
+    <section class="info-section" id="about">
+        <div class="info-container">
+            <div class="info-text">
+                <h2>What is an image file size?</h2>
+                <p>Images are composed of several dots called pixels, and each of them has a color. To store each pixel, bytes are used. Large images with high resolution take millions of bytes, making them slow to share or upload on online portals.</p>
+            </div>
+            <div class="info-graphic">
+                <i class="fa-solid fa-file-image graphic-icon"></i>
+            </div>
+        </div>
+
+        <div class="info-container reverse">
+            <div class="info-text">
+                <h2>How can I reduce my image's file size?</h2>
+                <p>You can compress the image or change its dimensions (width and height). QuickResizer allows you to reduce image size instantly without losing quality directly inside your browser!</p>
+            </div>
+            <div class="info-graphic">
+                <i class="fa-solid fa-sliders graphic-icon"></i>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+        <h2>Flexible plans just for you</h2>
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h3>Free Plan</h3>
+                <p class="desc">Perfect for basic daily image resizing tasks.</p>
+                <div class="price">$0 <span>/ month</span></div>
+                <button class="card-btn outline">Current Plan</button>
+                <ul class="features">
+                    <li><i class="fa-solid fa-check"></i> Fast Image Resizing</li>
+                    <li><i class="fa-solid fa-check"></i> 100% Privacy (Device Processing)</li>
+                    <li><i class="fa-solid fa-check"></i> Unlimited Downloads</li>
+                </ul>
+            </div>
+
+            <div class="price-card featured">
+                <div class="badge">50% OFF</div>
+                <h3>Pro Plan</h3>
+                <p class="desc">For power users who need bulk processing & premium speed.</p>
+                <div class="price">$3.99 <span>/ month</span></div>
+                <button class="card-btn primary">Select</button>
+                <ul class="features">
+                    <li><i class="fa-solid fa-check"></i> Resize Multiple Images at once</li>
+                    <li><i class="fa-solid fa-check"></i> No Ads / Super Fast</li>
+                    <li><i class="fa-solid fa-check"></i> High Precision Quality Control</li>
+                    <li><i class="fa-solid fa-check"></i> Priority E-mail Support</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <div class="footer-brand">
+                <h3><i class="fa-solid fa-expand"></i> QuickResizer</h3>
+                <p>QuickResizer is a free online image resizer that allows you to compress, resize, and convert images fast.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Privacy</h4>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-col">
+                <h4>Reach Out</h4>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="footer-col">
+                <h4>Our Product</h4>
+                <a href="#">How it works</a>
+                <a href="#">Resize an Image</a>
+            </div>
+        </div>
+        <div class="copyright">
+            2026 © All rights reserved - QuickResizer Online
+        </div>
     </footer>
 
     <script src="script.js"></script>
