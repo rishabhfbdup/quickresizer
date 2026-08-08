@@ -1,4 +1,4 @@
-// Image Processing Elements
+// Global Variables & Elements
 const dropZone = document.getElementById('drop-zone');
 const imageInput = document.getElementById('image-input');
 const controlsSection = document.getElementById('controls-section');
@@ -10,6 +10,49 @@ const qualityVal = document.getElementById('quality-val');
 const processBtn = document.getElementById('process-btn');
 
 let originalImage = null;
+let currentMode = 'resize'; // Default mode: resize, crop, compress, convert
+
+// Tab Selection (Resize, Crop, Compress, Convert)
+const actionTabs = document.querySelectorAll('.action-tab');
+const toolLinks = document.querySelectorAll('.tool-link');
+
+function setActiveMode(mode) {
+    currentMode = mode;
+
+    // Update Tab Styles
+    actionTabs.forEach(tab => tab.classList.remove('active'));
+    toolLinks.forEach(link => link.classList.remove('active'));
+
+    // Highlight Selected Tab
+    actionTabs.forEach(tab => {
+        if (tab.innerText.toLowerCase().includes(mode)) tab.classList.add('active');
+    });
+
+    // Adjust UI Labels based on Mode
+    if (processBtn) {
+        if (mode === 'resize') processBtn.innerHTML = `<i class="fa-solid fa-download"></i> Resize & Download`;
+        else if (mode === 'crop') processBtn.innerHTML = `<i class="fa-solid fa-crop-simple"></i> Crop & Download`;
+        else if (mode === 'compress') processBtn.innerHTML = `<i class="fa-solid fa-file-zipper"></i> Compress KB & Download`;
+        else if (mode === 'convert') processBtn.innerHTML = `<i class="fa-solid fa-arrow-rotate-right"></i> Convert & Download`;
+    }
+}
+
+// Click Listeners for Action Tabs
+actionTabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => {
+        const modes = ['resize', 'crop', 'compress', 'convert'];
+        setActiveMode(modes[index]);
+    });
+});
+
+toolLinks.forEach((link, index) => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const modes = ['resize', 'crop', 'compress', 'convert'];
+        setActiveMode(modes[index]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
 
 // Drag and Drop Logic
 dropZone.addEventListener('dragover', (e) => {
@@ -52,14 +95,26 @@ qualitySlider.addEventListener('input', () => {
     qualityVal.innerText = `${qualitySlider.value}%`;
 });
 
+// Image Processing Action
 processBtn.addEventListener('click', () => {
     if (!originalImage) return;
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    const newWidth = parseInt(widthInput.value) || originalImage.width;
-    const newHeight = parseInt(heightInput.value) || originalImage.height;
+    let newWidth = parseInt(widthInput.value) || originalImage.width;
+    let newHeight = parseInt(heightInput.value) || originalImage.height;
+
+    // Mode-based Logic
+    if (currentMode === 'compress') {
+        // Compress Mode: Keep original resolution, only adjust quality
+        newWidth = originalImage.width;
+        newHeight = originalImage.height;
+    } else if (currentMode === 'crop') {
+        // Crop Mode: Center Crop Strategy
+        newWidth = Math.min(newWidth, originalImage.width);
+        newHeight = Math.min(newHeight, originalImage.height);
+    }
 
     canvas.width = newWidth;
     canvas.height = newHeight;
@@ -71,11 +126,11 @@ processBtn.addEventListener('click', () => {
 
     const downloadLink = document.createElement('a');
     downloadLink.href = resizedDataUrl;
-    downloadLink.download = `quickresizer_image.jpg`;
+    downloadLink.download = `quickresizer_${currentMode}_image.jpg`;
     downloadLink.click();
 });
 
-// Language Switcher Dictionary (English & Hindi)
+// Language Switcher Dictionary
 const translations = {
     en: {
         "menu-resize": "Resize",
@@ -100,15 +155,7 @@ const translations = {
         "lbl-width": "Width (Pixels):",
         "lbl-height": "Height (Pixels):",
         "lbl-quality": "Compression Quality:",
-        "btn-download": "Resize & Download Image",
-        "how-title": "How to Resize an Image in 3 Easy Steps",
-        "how-subtitle": "QuickResizer is designed to be simple, fast, and accessible for everyone.",
-        "step1-title": "Upload Image",
-        "step1-desc": "Drag and drop your photo into the box above or click 'Select Image' to choose a file.",
-        "step2-title": "Adjust Settings",
-        "step2-desc": "Set your required pixel width/height or choose crop, compression, and conversion quality.",
-        "step3-title": "Download Instantly",
-        "step3-desc": "Click 'Resize & Download' to save your newly optimized image directly to your device."
+        "btn-download": "Resize & Download Image"
     },
     hi: {
         "menu-resize": "रिसाइज",
@@ -133,19 +180,10 @@ const translations = {
         "lbl-width": "चौड़ाई (Pixels):",
         "lbl-height": "ऊंचाई (Pixels):",
         "lbl-quality": "इमेज क्वालिटी:",
-        "btn-download": "रिसाइज करके डाउनलोड करें",
-        "how-title": "फोटो रिसाइज करने के 3 आसान स्टेप्स",
-        "how-subtitle": "क्विक-रिसाइजर उपयोग करने में बहुत आसान और फास्ट है।",
-        "step1-title": "फोटो अपलोड करें",
-        "step1-desc": "ऊपर दिए गए बॉक्स में अपनी फोटो ड्रैग करें या 'फोटो चुनें' बटन दबाएं।",
-        "step2-title": "सेटिंग्स चुनें",
-        "step2-desc": "अपनी पसंद के पिक्सल (चौड़ाई/ऊंचाई) या कंप्रेशन क्वालिटी सेट करें।",
-        "step3-title": "तुरंत डाउनलोड करें",
-        "step3-desc": "'डाउनलोड' बटन दबाकर नई फोटो को तुरंत अपने मोबाइल या लैपटॉप में सेव करें।"
+        "btn-download": "डाउनलोड करें"
     }
 };
 
-// Language Dropdown Event Listener
 document.getElementById('lang-select').addEventListener('change', (e) => {
     const lang = e.target.value;
     document.querySelectorAll('[data-lang]').forEach((element) => {
