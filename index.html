@@ -15,32 +15,51 @@
             <i class="fa-solid fa-expand logo-icon"></i>
             <span>QuickResizer</span>
         </div>
-        <nav class="nav-links">
-            <a href="#how-it-works">How It Works</a>
-            <a href="#features">Features</a>
-            <a href="#about">About</a>
-            <a href="#faq">FAQ</a>
-            <a href="#privacy">Privacy</a>
-            <a href="#how-it-works" class="premium-btn">Resize Now</a>
+
+        <nav class="tool-menu">
+            <a href="#resize" class="tool-link active"><i class="fa-solid fa-expand"></i> <span data-lang="menu-resize">Resize</span></a>
+            <a href="#crop" class="tool-link"><i class="fa-solid fa-crop-simple"></i> <span data-lang="menu-crop">Crop</span></a>
+            <a href="#compress" class="tool-link"><i class="fa-solid fa-file-zipper"></i> <span data-lang="menu-compress">Compress</span></a>
+            <a href="#convert" class="tool-link"><i class="fa-solid fa-arrow-rotate-right"></i> <span data-lang="menu-convert">Convert</span></a>
         </nav>
+
+        <div class="nav-right">
+            <div class="lang-selector">
+                <i class="fa-solid fa-globe"></i>
+                <select id="lang-select">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                </select>
+            </div>
+
+            <button class="btn-auth btn-login" data-lang="btn-login" onclick="alert('Login feature coming soon!')">Login</button>
+            <button class="btn-auth btn-signup" data-lang="btn-signup" onclick="alert('Signup feature coming soon!')">Sign Up</button>
+        </div>
     </header>
 
     <main class="hero-section">
-        <h1 class="main-title">Resize & Compress Images Online</h1>
-        <p class="sub-title">Easily resize JPG, PNG, WEBP images in seconds for free without losing original quality!</p>
+        <div class="action-tabs">
+            <button class="action-tab active"><i class="fa-solid fa-expand"></i> <span data-lang="tab-resize">Resize Image</span></button>
+            <button class="action-tab"><i class="fa-solid fa-crop-simple"></i> <span data-lang="tab-crop">Crop Image</span></button>
+            <button class="action-tab"><i class="fa-solid fa-file-zipper"></i> <span data-lang="tab-compress">Compress KB</span></button>
+            <button class="action-tab"><i class="fa-solid fa-file-export"></i> <span data-lang="tab-convert">Convert Format</span></button>
+        </div>
+
+        <h1 class="main-title" data-lang="hero-title">Resize & Compress Images Online</h1>
+        <p class="sub-title" data-lang="hero-subtitle">Easily resize, crop, compress, and convert JPG, PNG, WEBP images in seconds for free!</p>
         
         <div class="upload-container" id="drop-zone">
             <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
-            <p class="upload-text">Drop your images here or <span class="browse-text">browse files</span></p>
-            <span class="file-limits">Supports JPG, PNG, WEBP, GIF | Unlimited File Size</span>
+            <p class="upload-text"><span data-lang="drop-text">Drop your images here or</span> <span class="browse-text" data-lang="browse-text">browse files</span></p>
+            <span class="file-limits" data-lang="limits-text">Supports JPG, PNG, WEBP, GIF | Unlimited File Size</span>
             <input type="file" id="image-input" accept="image/*" hidden>
-            <button class="btn-primary" onclick="document.getElementById('image-input').click()">Select Image</button>
+            <button class="btn-primary" onclick="document.getElementById('image-input').click()" data-lang="btn-select">Select Image</button>
         </div>
 
         <div class="trust-badges">
-            <span><i class="fa-solid fa-shield-halved"></i> 100% Private (No Server Uploads)</span>
-            <span><i class="fa-solid fa-bolt"></i> Ultra Fast Processing</span>
-            <span><i class="fa-solid fa-face-smile"></i> Completely Free Forever</span>
+            <span><i class="fa-solid fa-shield-halved"></i> <span data-lang="badge-private">100% Private (No Server Uploads)</span></span>
+            <span><i class="fa-solid fa-bolt"></i> <span data-lang="badge-fast">Ultra Fast Processing</span></span>
+            <span><i class="fa-solid fa-face-smile"></i> <span data-lang="badge-free">Completely Free Forever</span></span>
         </div>
 
         <div class="controls-card hidden" id="controls-section">
@@ -50,121 +69,43 @@
 
             <div class="settings-grid">
                 <div class="setting-group">
-                    <label><i class="fa-solid fa-arrows-left-right"></i> Width (Pixels):</label>
+                    <label><i class="fa-solid fa-arrows-left-right"></i> <span data-lang="lbl-width">Width (Pixels):</span></label>
                     <input type="number" id="width-input" placeholder="Auto">
                 </div>
                 <div class="setting-group">
-                    <label><i class="fa-solid fa-arrows-up-down"></i> Height (Pixels):</label>
+                    <label><i class="fa-solid fa-arrows-up-down"></i> <span data-lang="lbl-height">Height (Pixels):</span></label>
                     <input type="number" id="height-input" placeholder="Auto">
                 </div>
                 <div class="setting-group full-width">
-                    <label><i class="fa-solid fa-sliders"></i> Compression Quality: <span id="quality-val">80%</span></label>
+                    <label><i class="fa-solid fa-sliders"></i> <span data-lang="lbl-quality">Compression Quality:</span> <span id="quality-val">80%</span></label>
                     <input type="range" id="quality-slider" min="10" max="100" value="80">
                 </div>
             </div>
 
-            <button class="btn-primary btn-block" id="process-btn"><i class="fa-solid fa-download"></i> Resize & Download Image</button>
+            <button class="btn-primary btn-block" id="process-btn"><i class="fa-solid fa-download"></i> <span data-lang="btn-download">Resize & Download Image</span></button>
         </div>
     </main>
 
     <section class="section-container" id="how-it-works">
         <div class="section-heading">
-            <h2>How to Resize an Image in 3 Easy Steps</h2>
-            <p>QuickResizer is designed to be simple, fast, and accessible for everyone.</p>
+            <h2 data-lang="how-title">How to Resize an Image in 3 Easy Steps</h2>
+            <p data-lang="how-subtitle">QuickResizer is designed to be simple, fast, and accessible for everyone.</p>
         </div>
         <div class="steps-grid">
             <div class="step-card">
                 <div class="step-num">1</div>
-                <h3>Upload Image</h3>
-                <p>Drag and drop your photo into the box above or click 'Select Image' to choose a file from your device.</p>
+                <h3 data-lang="step1-title">Upload Image</h3>
+                <p data-lang="step1-desc">Drag and drop your photo into the box above or click 'Select Image' to choose a file from your device.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">2</div>
-                <h3>Adjust Dimensions</h3>
-                <p>Set your required pixel width and height, or adjust the compression slider to reduce file size in KB/MB.</p>
+                <h3 data-lang="step2-title">Adjust Settings</h3>
+                <p data-lang="step2-desc">Set your required pixel width/height or choose crop, compression, and conversion quality.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">3</div>
-                <h3>Download Instantly</h3>
-                <p>Click 'Resize & Download' to save your newly optimized image directly to your computer or smartphone.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-container bg-white" id="features">
-        <div class="section-heading">
-            <h2>Powerful Features of QuickResizer</h2>
-            <p>Get professional image processing tools right inside your browser.</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-box">
-                <i class="fa-solid fa-bolt feature-icon"></i>
-                <h3>Lightning Fast Speed</h3>
-                <p>Because all image resizing is handled locally on your own browser, processing takes less than a second regardless of file size.</p>
-            </div>
-            <div class="feature-box">
-                <i class="fa-solid fa-user-lock feature-icon"></i>
-                <h3>Zero Server Uploads</h3>
-                <p>Your photos stay 100% private. QuickResizer never sends your files to external servers or cloud databases.</p>
-            </div>
-            <div class="feature-box">
-                <i class="fa-solid fa-image feature-icon"></i>
-                <h3>Multiple Formats Supported</h3>
-                <p>Easily compress and resize photos in all popular formats including JPG, PNG, WEBP, and GIF without compatibility issues.</p>
-            </div>
-            <div class="feature-box">
-                <i class="fa-solid fa-sliders feature-icon"></i>
-                <h3>Custom Quality Control</h3>
-                <p>Fine-tune image compression level to balance file size reduction with crystal-clear visual quality.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-container" id="about">
-        <div class="info-block">
-            <h2>What is an Image File Size and Pixel Resolution?</h2>
-            <p>Digital images are made up of millions of microscopic square units called pixels. The number of pixels across width and height defines the image resolution. For example, a photo with 4000x3000 resolution contains 12 million pixels (12 Megapixels). While high resolution looks great, it creates huge file sizes—often reaching 5MB to 15MB per picture.</p>
-            <p>Large image files can slow down website loading speeds, fail to upload on official job portals or government exam forms, and consume excessive mobile data when shared on social media.</p>
-        </div>
-
-        <div class="info-block margin-top">
-            <h2>How QuickResizer Reduces Image KB Without Quality Loss</h2>
-            <p>Reducing image file size can be done in two ways: changing pixel dimensions or applying intelligent compression. QuickResizer allows you to combine both methods seamlessly. By scaling down excessive pixel dimensions (e.g., converting 4000px down to 1920px), you can reduce image KB by over 80% while keeping visual appearance identical on mobile and desktop screens.</p>
-        </div>
-    </section>
-
-    <section class="section-container bg-white" id="privacy">
-        <div class="section-heading">
-            <h2>Privacy & Security Guarantee</h2>
-            <p>Your data security is our top priority.</p>
-        </div>
-        <div class="privacy-box">
-            <p><i class="fa-solid fa-circle-check icon-blue"></i> <strong>Browser-Side Processing:</strong> Unlike traditional image compression websites that upload your files to remote cloud servers, QuickResizer uses modern WebAssembly and Canvas JavaScript technologies to process images directly inside your web browser's RAM memory.</p>
-            <p><i class="fa-solid fa-circle-check icon-blue"></i> <strong>No Tracking or Storage:</strong> We do not store, view, or analyze your pictures. Once you close or refresh the browser tab, all temporary image data is instantly erased from your device memory.</p>
-        </div>
-    </section>
-
-    <section class="section-container" id="faq">
-        <div class="section-heading">
-            <h2>Frequently Asked Questions (FAQ)</h2>
-            <p>Got questions? We've got answers.</p>
-        </div>
-        <div class="faq-grid">
-            <div class="faq-item">
-                <h4><i class="fa-solid fa-circle-question"></i> Is QuickResizer completely free?</h4>
-                <p>Yes, QuickResizer is 100% free with no hidden charges, daily usage limits, or forced account registration.</p>
-            </div>
-            <div class="faq-item">
-                <h4><i class="fa-solid fa-circle-question"></i> What image formats are supported?</h4>
-                <p>We support all standard web image formats including JPG/JPEG, PNG, WEBP, and GIF.</p>
-            </div>
-            <div class="faq-item">
-                <h4><i class="fa-solid fa-circle-question"></i> Can I use QuickResizer on my phone?</h4>
-                <p>Yes! QuickResizer is fully responsive and works smoothly on Android devices, iPhones, iPads, laptops, and desktop computers.</p>
-            </div>
-            <div class="faq-item">
-                <h4><i class="fa-solid fa-circle-question"></i> Will resizing reduce my photo clarity?</h4>
-                <p>If you keep the quality slider set between 75% and 90%, you will achieve a significantly smaller file size with zero visible loss in image clarity.</p>
+                <h3 data-lang="step3-title">Download Instantly</h3>
+                <p data-lang="step3-desc">Click 'Resize & Download' to save your newly optimized image directly to your device.</p>
             </div>
         </div>
     </section>
@@ -173,25 +114,23 @@
         <div class="footer-links">
             <div class="footer-brand">
                 <h3><i class="fa-solid fa-expand"></i> QuickResizer</h3>
-                <p>QuickResizer is a privacy-focused online photo utility built to help users compress, resize, and optimize images safely and instantly.</p>
+                <p data-lang="footer-desc">QuickResizer is a privacy-focused online photo utility built to help users resize, crop, compress, and convert images safely.</p>
             </div>
             <div class="footer-col">
-                <h4>Quick Navigation</h4>
-                <a href="#how-it-works">How It Works</a>
-                <a href="#features">Key Features</a>
-                <a href="#about">About Resolution</a>
-                <a href="#faq">FAQs</a>
+                <h4 data-lang="footer-tools">Our Tools</h4>
+                <a href="#resize">Image Resizer</a>
+                <a href="#crop">Image Cropper</a>
+                <a href="#compress">Image Compressor</a>
+                <a href="#convert">Image Converter</a>
             </div>
             <div class="footer-col">
-                <h4>Legal Policies</h4>
+                <h4 data-lang="footer-legal">Legal Policies</h4>
                 <a href="#privacy">Privacy Guarantee</a>
                 <a href="#privacy">Terms of Service</a>
-                <a href="#privacy">Security Standards</a>
             </div>
             <div class="footer-col">
-                <h4>Connect & Support</h4>
+                <h4 data-lang="footer-support">Support</h4>
                 <a href="mailto:support@kryzex.com">Contact Support</a>
-                <a href="#">Report an Issue</a>
             </div>
         </div>
 
