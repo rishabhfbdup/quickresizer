@@ -8,7 +8,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8274688603267902"
      crossorigin="anonymous"></script>
 
-    <title>QuickResizer - All-in-One Image & PDF Tool</title>
+    <title>QuickResizer - All-in-One Image, PDF & Micro Tools</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
@@ -58,6 +58,10 @@
             <button class="action-tab" id="tab-pdftoimg" onclick="switchMode('pdftoimg')"><i class="fa-solid fa-file-image"></i> <span>PDF to Image</span></button>
             <button class="action-tab" id="tab-mergepdf" onclick="switchMode('mergepdf')"><i class="fa-solid fa-object-group"></i> <span>Merge PDF</span></button>
             <button class="action-tab" id="tab-compresspdf" onclick="switchMode('compresspdf')"><i class="fa-solid fa-file-contract"></i> <span>Compress PDF</span></button>
+            <button class="action-tab" id="tab-wordcounter" onclick="switchMode('wordcounter')"><i class="fa-solid fa-font"></i> <span>Word Counter</span></button>
+            <button class="action-tab" id="tab-wa-chat" onclick="switchMode('wa-chat')"><i class="fa-brands fa-whatsapp"></i> <span>WhatsApp Direct</span></button>
+            <button class="action-tab" id="tab-svgtopng" onclick="switchMode('svgtopng')"><i class="fa-solid fa-file-code"></i> <span>SVG to PNG</span></button>
+            <button class="action-tab" id="tab-jsonformat" onclick="switchMode('jsonformat')"><i class="fa-solid fa-code"></i> <span>JSON Formatter</span></button>
         </div>
 
         <h1 class="main-title" id="mode-title" data-lang="hero-title">Resize Image Online</h1>
@@ -66,8 +70,8 @@
         <div class="upload-container" id="drop-zone">
             <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
             <p class="upload-text"><span data-lang="drop-text">Drop your file here or</span> <span class="browse-text" data-lang="browse-text">browse files</span></p>
-            <span class="file-limits" data-lang="limits-text" id="upload-limits-text">Supports JPG, PNG, WEBP, GIF, PDF | Bulk Processing Allowed</span>
-            <input type="file" id="image-input" accept="image/*,.pdf" multiple hidden>
+            <span class="file-limits" data-lang="limits-text" id="upload-limits-text">Supports JPG, PNG, WEBP, GIF, PDF, SVG | Bulk Processing Allowed</span>
+            <input type="file" id="image-input" accept="image/*,.pdf,.svg" multiple hidden>
             <button class="btn-primary" onclick="document.getElementById('image-input').click()" data-lang="btn-select">Select File</button>
         </div>
 
@@ -270,7 +274,70 @@
                     </div>
                 </div>
                 <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
-                    💡 <strong>Compress PDF:</strong> Reduces large PDF file size while keeping text and images clear.
+                    💡 <strong>Compress PDF:</strong> Reduces large PDF document size while keeping text and images clear.
+                </small>
+            </div>
+
+            <div class="mode-panel hidden" id="panel-wordcounter">
+                <div class="setting-group full-width">
+                    <label><i class="fa-solid fa-align-left"></i> Paste or Type Your Text:</label>
+                    <textarea id="word-input-text" rows="6" placeholder="Type or paste your content here..." style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:12px; font-family:'Poppins',sans-serif;"></textarea>
+                </div>
+                <div class="settings-grid" style="margin-top:15px; text-align:center;">
+                    <div style="background:#0f172a; padding:12px; border-radius:8px; border:1px solid #1e293b;">
+                        <h3 id="cnt-words" style="color:#38bdf8; margin:0; font-size:24px;">0</h3>
+                        <span style="font-size:12px; color:#94a3b8;">Words</span>
+                    </div>
+                    <div style="background:#0f172a; padding:12px; border-radius:8px; border:1px solid #1e293b;">
+                        <h3 id="cnt-chars" style="color:#38bdf8; margin:0; font-size:24px;">0</h3>
+                        <span style="font-size:12px; color:#94a3b8;">Characters</span>
+                    </div>
+                    <div style="background:#0f172a; padding:12px; border-radius:8px; border:1px solid #1e293b;">
+                        <h3 id="cnt-reading" style="color:#38bdf8; margin:0; font-size:24px;">0s</h3>
+                        <span style="font-size:12px; color:#94a3b8;">Reading Time</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mode-panel hidden" id="panel-wa-chat">
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-phone"></i> Mobile Number (with country code):</label>
+                        <input type="tel" id="wa-phone" placeholder="e.g. 919876543210">
+                    </div>
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-comment-dots"></i> Preset Message (Optional):</label>
+                        <input type="text" id="wa-msg" placeholder="e.g. Hi, I found your contact on QuickResizer">
+                    </div>
+                </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Direct Chat:</strong> Open WhatsApp chat directly without saving phone numbers in your phone contacts!
+                </small>
+            </div>
+
+            <div class="mode-panel hidden" id="panel-svgtopng">
+                <div class="settings-grid">
+                    <div class="setting-group full-width">
+                        <label><i class="fa-solid fa-expand"></i> Target Scale (Multiplier):</label>
+                        <select id="svg-scale">
+                            <option value="1">Original Size (1x)</option>
+                            <option value="2">2x High Resolution</option>
+                            <option value="4" selected>4x Ultra HD (Best for Print/Design)</option>
+                        </select>
+                    </div>
+                </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>SVG Vector Converter:</strong> Renders vector SVG files to crisp PNG images with transparent backgrounds.
+                </small>
+            </div>
+
+            <div class="mode-panel hidden" id="panel-jsonformat">
+                <div class="setting-group full-width">
+                    <label><i class="fa-solid fa-code"></i> Paste Raw JSON Code:</label>
+                    <textarea id="json-input" rows="6" placeholder='{"name":"QuickResizer","status":"active"}' style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:12px; font-family:monospace;"></textarea>
+                </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>JSON Tool:</strong> Formats, validates, and beautifies raw JSON strings for developers.
                 </small>
             </div>
 
@@ -286,18 +353,18 @@
         <div class="steps-grid">
             <div class="step-card">
                 <div class="step-num">1</div>
-                <h3 data-lang="step1-title">Upload File</h3>
-                <p data-lang="step1-desc">Drag and drop your photo or PDF into the box above or click 'Select File' to choose from your device.</p>
+                <h3 data-lang="step1-title">Upload / Input File</h3>
+                <p data-lang="step1-desc">Drag and drop your file above, or select from our daily utility tools.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">2</div>
                 <h3 data-lang="step2-title">Choose Tool & Adjust</h3>
-                <p data-lang="step2-desc">Select Resize, Crop, Compress, Convert, Name & Date, Signature, BG Color, or PDF Tools.</p>
+                <p data-lang="step2-desc">Select Image, PDF, Developer, or Micro tools and customize your settings.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">3</div>
-                <h3 data-lang="step3-title">Download Instantly</h3>
-                <p data-lang="step3-desc">Click 'Process & Download' to save your optimized images or PDF files directly to your device.</p>
+                <h3 data-lang="step3-title">Download / Copy Instantly</h3>
+                <p data-lang="step3-desc">Click process to get your converted files or instant output generated directly in your browser.</p>
             </div>
         </div>
     </section>
@@ -434,7 +501,7 @@
     <section class="section-container bg-white" id="features">
         <div class="section-heading">
             <h2>Powerful Features of QuickResizer</h2>
-            <p>Get professional image and PDF processing tools right inside your browser.</p>
+            <p>Get professional image, PDF, and micro tools right inside your browser.</p>
         </div>
         <div class="features-grid">
             <div class="feature-box">
@@ -445,12 +512,12 @@
             <div class="feature-box">
                 <i class="fa-solid fa-user-lock feature-icon"></i>
                 <h3>Zero Server Uploads</h3>
-                <p>Your photos and PDFs stay 100% private. QuickResizer never sends your files to external servers or cloud databases.</p>
+                <p>Your photos and files stay 100% private. QuickResizer never sends your files to external servers or cloud databases.</p>
             </div>
             <div class="feature-box">
                 <i class="fa-solid fa-image feature-icon"></i>
                 <h3>Multiple Formats Supported</h3>
-                <p>Easily compress, crop, and resize photos in all popular formats including JPG, PNG, WEBP, and convert to/from PDF.</p>
+                <p>Easily compress, crop, and resize photos in all popular formats including JPG, PNG, WEBP, SVG, and convert to/from PDF.</p>
             </div>
             <div class="feature-box">
                 <i class="fa-solid fa-sliders feature-icon"></i>
@@ -485,7 +552,7 @@
             </div>
             <div class="faq-item">
                 <h4><i class="fa-solid fa-circle-question"></i> What image formats are supported?</h4>
-                <p>We support all standard web image formats including JPG/JPEG, PNG, WEBP, GIF, and PDF documents.</p>
+                <p>We support all standard web image formats including JPG/JPEG, PNG, WEBP, GIF, SVG, and PDF documents.</p>
             </div>
             <div class="faq-item">
                 <h4><i class="fa-solid fa-circle-question"></i> Can I use QuickResizer on my phone?</h4>
