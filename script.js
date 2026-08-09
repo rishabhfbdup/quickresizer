@@ -7,6 +7,11 @@ let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
 let pendingSubscriptionAfterAuth = false;
 let billingDetails = {};
 
+// Initialize PDF.js worker
+if (typeof pdfjsLib !== 'undefined') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+}
+
 // Default Plan State (Yearly Plan default)
 let selectedPlan = { name: 'Yearly', inrPrice: 2199, usdDisplay: '$25.99' };
 
@@ -16,12 +21,10 @@ let selectedPlan = { name: 'Yearly', inrPrice: 2199, usdDisplay: '$25.99' };
 function switchMode(mode) {
     currentMode = mode;
 
-    // Update Action Tabs UI
     document.querySelectorAll('.action-tab').forEach(tab => tab.classList.remove('active'));
     const activeTab = document.getElementById(`tab-${mode}`);
     if(activeTab) activeTab.classList.add('active');
 
-    // Update Title & Description
     const titles = {
         resize: "Resize Image Online",
         crop: "Crop Image Online",
@@ -29,7 +32,9 @@ function switchMode(mode) {
         convert: "Convert Image Format",
         namedate: "Add Name & Date to Photo",
         signature: "Signature Cleaner & Enhancer",
-        bgcolor: "Change Photo Background Color"
+        bgcolor: "Change Photo Background Color",
+        imgtopdf: "Convert Images to PDF Document",
+        pdftoimg: "Convert PDF Pages to Images (JPG/PNG)"
     };
     const descs = {
         resize: "Change image width and height in pixels easily for free!",
@@ -38,25 +43,24 @@ function switchMode(mode) {
         convert: "Convert images from JPG, PNG, WEBP to desired formats instantly.",
         namedate: "Add candidate name and photo date/DOB at the bottom for official forms.",
         signature: "Clean background shadows from photo signatures and make ink pitch black.",
-        bgcolor: "Fill or replace photo background with official white, passport blue, or custom colors."
+        bgcolor: "Fill or replace photo background with official white, passport blue, or custom colors.",
+        imgtopdf: "Combine single or multiple images into a clean PDF document instantly.",
+        pdftoimg: "Extract crisp JPG/PNG image files from every page of your PDF file."
     };
 
     if (document.getElementById('mode-title')) document.getElementById('mode-title').innerText = titles[mode] || titles.resize;
     if (document.getElementById('mode-desc')) document.getElementById('mode-desc').innerText = descs[mode] || descs.resize;
 
-    // Hide All Panels and Show Selected Panel
     document.querySelectorAll('.mode-panel').forEach(panel => panel.classList.add('hidden'));
     const selectedPanel = document.getElementById(`panel-${mode}`);
     if (selectedPanel) selectedPanel.classList.remove('hidden');
 
-    // Handle Cropper Initialization on Crop Mode
     if (currentMode === 'crop' && document.getElementById('image-preview').src) {
         initCropper();
     } else {
         destroyCropper();
     }
 
-    // Update Download Button Text
     const btn = document.getElementById('process-btn');
     if (btn) {
         const countText = uploadedFiles.length > 1 ? ` (${uploadedFiles.length} Files)` : '';
@@ -67,6 +71,8 @@ function switchMode(mode) {
         else if (mode === 'namedate') btn.innerHTML = `<i class="fa-solid fa-id-card"></i> Add Name/Date & Download${countText}`;
         else if (mode === 'signature') btn.innerHTML = `<i class="fa-solid fa-signature"></i> Clean Signature & Download${countText}`;
         else if (mode === 'bgcolor') btn.innerHTML = `<i class="fa-solid fa-palette"></i> Apply BG Color & Download${countText}`;
+        else if (mode === 'imgtopdf') btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Generate PDF & Download`;
+        else if (mode === 'pdftoimg') btn.innerHTML = `<i class="fa-solid fa-file-image"></i> Extract Images & Download`;
     }
 }
 
@@ -100,7 +106,7 @@ function handleFiles(files) {
 
     if (!isPremiumUser) {
         if (filesArray.length > 1) {
-            alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process only 1 image at a time. Please upgrade to Pro for bulk processing!');
+            alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process only 1 file at a time. Please upgrade to Pro for bulk processing!');
             const pricingSection = document.getElementById('pricing');
             if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
             uploadedFiles = [filesArray[0]];
@@ -108,7 +114,7 @@ function handleFiles(files) {
             uploadedFiles = filesArray;
         }
     } else if (userPlan === 'Subscription' && filesArray.length > 10) {
-        alert('⚠️ Your Subscription Plan allows up to 10 images at once.\n\nProcessing the first 10 images. Upgrade to Simple, Smart, Professional, or Yearly for Unlimited Bulk Uploads!');
+        alert('⚠️ Your Subscription Plan allows up to 10 files at once.\n\nProcessing first 10 files. Upgrade to Simple, Smart, Professional, or Yearly for Unlimited Bulk Uploads!');
         uploadedFiles = filesArray.slice(0, 10);
     } else {
         uploadedFiles = filesArray;
@@ -116,24 +122,31 @@ function handleFiles(files) {
 
     const firstFile = uploadedFiles[0];
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        imagePreview.src = e.target.result;
-        
-        const img = new Image();
-        img.onload = () => {
-            if (document.getElementById('width-input')) document.getElementById('width-input').value = img.width;
-            if (document.getElementById('height-input')) document.getElementById('height-input').value = img.height;
-            if (controlsSection) controlsSection.classList.remove('hidden');
-            if (controlsSection) controlsSection.scrollIntoView({ behavior: 'smooth' });
+    if (firstFile.type === 'application/pdf') {
+        imagePreview.src = 'https://cdn-icons-png.flaticon.com/512/337/337946.png'; // PDF Icon Preview
+        if (controlsSection) controlsSection.classList.remove('hidden');
+        if (controlsSection) controlsSection.scrollIntoView({ behavior: 'smooth' });
+        if (currentMode !== 'pdftoimg') switchMode('pdftoimg');
+    } else {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imagePreview.src = e.target.result;
+            
+            const img = new Image();
+            img.onload = () => {
+                if (document.getElementById('width-input')) document.getElementById('width-input').value = img.width;
+                if (document.getElementById('height-input')) document.getElementById('height-input').value = img.height;
+                if (controlsSection) controlsSection.classList.remove('hidden');
+                if (controlsSection) controlsSection.scrollIntoView({ behavior: 'smooth' });
 
-            if (currentMode === 'crop') {
-                initCropper();
-            }
+                if (currentMode === 'crop') {
+                    initCropper();
+                }
+            };
+            img.src = e.target.result;
         };
-        img.src = e.target.result;
-    };
-    reader.readAsDataURL(firstFile);
+        reader.readAsDataURL(firstFile);
+    }
 
     switchMode(currentMode);
 }
@@ -143,7 +156,7 @@ function handleFiles(files) {
 // ==========================================
 function initCropper() {
     destroyCropper();
-    if (typeof Cropper !== 'undefined' && imagePreview && imagePreview.src) {
+    if (typeof Cropper !== 'undefined' && imagePreview && imagePreview.src && !imagePreview.src.includes('337946.png')) {
         cropperInstance = new Cropper(imagePreview, {
             aspectRatio: NaN,
             viewMode: 1,
@@ -186,23 +199,122 @@ document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
 });
 
 // ==========================================
-// 4. IMAGE PROCESSING & SPECIAL TOOLS LOGIC
+// 4. MAIN PROCESSOR & PDF UTILITIES LOGIC
 // ==========================================
 document.getElementById('process-btn')?.addEventListener('click', async () => {
     if (!uploadedFiles.length) return;
 
-    for (let i = 0; i < uploadedFiles.length; i++) {
-        const file = uploadedFiles[i];
-        
-        if (currentMode === 'crop' && cropperInstance) {
-            const croppedCanvas = cropperInstance.getCroppedCanvas();
-            const dataUrl = croppedCanvas.toDataURL('image/jpeg', 0.9);
-            downloadDataUrl(dataUrl, `quickresizer_cropped_${i + 1}.jpg`);
-        } else {
-            await processSingleFile(file, i);
+    if (currentMode === 'imgtopdf') {
+        await convertImagesToPdf();
+    } else if (currentMode === 'pdftoimg') {
+        await convertPdfToImages();
+    } else {
+        for (let i = 0; i < uploadedFiles.length; i++) {
+            const file = uploadedFiles[i];
+            
+            if (currentMode === 'crop' && cropperInstance) {
+                const croppedCanvas = cropperInstance.getCroppedCanvas();
+                const dataUrl = croppedCanvas.toDataURL('image/jpeg', 0.9);
+                downloadDataUrl(dataUrl, `quickresizer_cropped_${i + 1}.jpg`);
+            } else {
+                await processSingleFile(file, i);
+            }
         }
     }
 });
+
+// IMAGE TO PDF CONVERTER (jsPDF)
+async function convertImagesToPdf() {
+    if (typeof window.jspdf === 'undefined') {
+        alert('PDF generator library is loading. Please try again in 3 seconds.');
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const orientation = document.getElementById('pdf-orientation')?.value || 'portrait';
+    const margin = parseInt(document.getElementById('pdf-margin')?.value || 0);
+
+    const pdf = new jsPDF(orientation, 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    for (let i = 0; i < uploadedFiles.length; i++) {
+        const file = uploadedFiles[i];
+        if (file.type === 'application/pdf') continue;
+
+        const dataUrl = await readFileAsDataUrl(file);
+        const img = await loadImage(dataUrl);
+
+        if (i > 0) pdf.addPage();
+
+        let renderWidth = pdfWidth - (margin * 2);
+        let renderHeight = (img.height * renderWidth) / img.width;
+
+        if (renderHeight > (pdfHeight - (margin * 2))) {
+            renderHeight = pdfHeight - (margin * 2);
+            renderWidth = (img.width * renderHeight) / img.height;
+        }
+
+        const xPos = (pdfWidth - renderWidth) / 2;
+        const yPos = (pdfHeight - renderHeight) / 2;
+
+        pdf.addImage(dataUrl, 'JPEG', xPos, yPos, renderWidth, renderHeight);
+    }
+
+    pdf.save(`quickresizer_document_${Date.now()}.pdf`);
+}
+
+// PDF TO IMAGE EXTRACTOR (pdf.js)
+async function convertPdfToImages() {
+    const pdfFile = uploadedFiles.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+    if (!pdfFile) {
+        alert('Please select a valid PDF file to convert to images!');
+        return;
+    }
+
+    if (typeof pdfjsLib === 'undefined') {
+        alert('PDF reader library is loading. Please try again in 3 seconds.');
+        return;
+    }
+
+    const fileArrayBuffer = await pdfFile.arrayBuffer();
+    const pdfDoc = await pdfjsLib.getDocument({ data: fileArrayBuffer }).promise;
+    
+    const mimeType = document.getElementById('pdf-to-img-format')?.value || 'image/jpeg';
+    const scale = parseFloat(document.getElementById('pdf-to-img-dpi')?.value || 2.0);
+    const ext = mimeType === 'image/png' ? 'png' : 'jpg';
+
+    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+        const page = await pdfDoc.getPage(pageNum);
+        const viewport = page.getViewport({ scale: scale });
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+        const imgDataUrl = canvas.toDataURL(mimeType, 0.92);
+        downloadDataUrl(imgDataUrl, `quickresizer_pdf_page_${pageNum}.${ext}`);
+    }
+}
+
+function readFileAsDataUrl(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+    });
+}
+
+function loadImage(src) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.src = src;
+    });
+}
 
 function drawNameAndDate(ctx, canvasWidth, canvasHeight, nameText, dateText) {
     if (!nameText && !dateText) return;
@@ -261,17 +373,18 @@ function cleanSignatureBackground(ctx, width, height) {
 
 function applyBackgroundColor(ctx, img, width, height) {
     const colorHex = document.getElementById('bg-custom-color')?.value || '#FFFFFF';
-    
-    // Fill background solid color first
     ctx.fillStyle = colorHex;
     ctx.fillRect(0, 0, width, height);
-
-    // Draw the original image over the background color
     ctx.drawImage(img, 0, 0, width, height);
 }
 
 function processSingleFile(file, index) {
     return new Promise((resolve) => {
+        if (file.type === 'application/pdf') {
+            resolve();
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = (e) => {
             const img = new Image();
@@ -294,7 +407,6 @@ function processSingleFile(file, index) {
                 canvas.width = w;
                 canvas.height = h;
 
-                // Process BG Color Changer mode
                 if (currentMode === 'bgcolor') {
                     applyBackgroundColor(ctx, img, w, h);
                 } else {
