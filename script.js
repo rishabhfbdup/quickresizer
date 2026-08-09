@@ -36,7 +36,11 @@ function switchMode(mode) {
         imgtopdf: "Convert Images to PDF Document",
         pdftoimg: "Convert PDF Pages to Images (JPG/PNG)",
         mergepdf: "Merge Multiple PDF Files Online",
-        compresspdf: "Compress PDF File Size"
+        compresspdf: "Compress PDF File Size",
+        wordcounter: "Word & Character Counter",
+        'wa-chat': "WhatsApp Direct Chat Link Generator",
+        svgtopng: "Convert SVG to High-Res PNG",
+        jsonformat: "JSON Formatter & Validator"
     };
     const descs = {
         resize: "Change image width and height in pixels easily for free!",
@@ -49,7 +53,11 @@ function switchMode(mode) {
         imgtopdf: "Combine single or multiple images into a clean PDF document instantly.",
         pdftoimg: "Extract crisp JPG/PNG image files from every page of your PDF file.",
         mergepdf: "Select 2 or more PDF files to combine them into 1 single document.",
-        compresspdf: "Reduce large PDF document size directly in your browser."
+        compresspdf: "Reduce large PDF document size directly in your browser.",
+        wordcounter: "Count words, characters, and estimated reading time live.",
+        'wa-chat': "Generate instant WhatsApp direct chat link without saving contact.",
+        svgtopng: "Convert scalable vector SVG graphics into crisp PNG images.",
+        jsonformat: "Beautify, format, and validate raw JSON code strings instantly."
     };
 
     if (document.getElementById('mode-title')) document.getElementById('mode-title').innerText = titles[mode] || titles.resize;
@@ -58,6 +66,15 @@ function switchMode(mode) {
     document.querySelectorAll('.mode-panel').forEach(panel => panel.classList.add('hidden'));
     const selectedPanel = document.getElementById(`panel-${mode}`);
     if (selectedPanel) selectedPanel.classList.remove('hidden');
+
+    // Show controls section directly for text/micro tools
+    const microTools = ['wordcounter', 'wa-chat', 'jsonformat'];
+    if (microTools.includes(mode)) {
+        document.getElementById('controls-section')?.classList.remove('hidden');
+        document.querySelector('.preview-box')?.classList.add('hidden');
+    } else {
+        document.querySelector('.preview-box')?.classList.remove('hidden');
+    }
 
     if (currentMode === 'crop' && document.getElementById('image-preview').src) {
         initCropper();
@@ -79,6 +96,10 @@ function switchMode(mode) {
         else if (mode === 'pdftoimg') btn.innerHTML = `<i class="fa-solid fa-file-image"></i> Extract Images & Download`;
         else if (mode === 'mergepdf') btn.innerHTML = `<i class="fa-solid fa-object-group"></i> Merge PDFs & Download`;
         else if (mode === 'compresspdf') btn.innerHTML = `<i class="fa-solid fa-file-contract"></i> Compress PDF & Download`;
+        else if (mode === 'wordcounter') btn.innerHTML = `<i class="fa-solid fa-copy"></i> Copy Text`;
+        else if (mode === 'wa-chat') btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Open Direct Chat`;
+        else if (mode === 'svgtopng') btn.innerHTML = `<i class="fa-solid fa-download"></i> Convert & Download PNG`;
+        else if (mode === 'jsonformat') btn.innerHTML = `<i class="fa-solid fa-code"></i> Format & Validate JSON`;
     }
 }
 
@@ -132,6 +153,11 @@ function handleFiles(files) {
         imagePreview.src = 'https://cdn-icons-png.flaticon.com/512/337/337946.png';
         if (controlsSection) controlsSection.classList.remove('hidden');
         if (controlsSection) controlsSection.scrollIntoView({ behavior: 'smooth' });
+    } else if (firstFile.name.endsWith('.svg')) {
+        imagePreview.src = 'https://cdn-icons-png.flaticon.com/512/5968/5968364.png';
+        if (controlsSection) controlsSection.classList.remove('hidden');
+        if (controlsSection) controlsSection.scrollIntoView({ behavior: 'smooth' });
+        if (currentMode !== 'svgtopng') switchMode('svgtopng');
     } else {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -203,12 +229,22 @@ document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
     }
 });
 
+// WORD COUNTER LIVE LOGIC
+document.getElementById('word-input-text')?.addEventListener('input', (e) => {
+    const text = e.target.value.trim();
+    const words = text ? text.split(/\s+/).length : 0;
+    const chars = text.length;
+    const readingTimeSec = Math.ceil(words / 3.3); // Avg reading speed 200 wpm
+
+    if (document.getElementById('cnt-words')) document.getElementById('cnt-words').innerText = words;
+    if (document.getElementById('cnt-chars')) document.getElementById('cnt-chars').innerText = chars;
+    if (document.getElementById('cnt-reading')) document.getElementById('cnt-reading').innerText = `${readingTimeSec}s`;
+});
+
 // ==========================================
-// 4. MAIN PROCESSOR & PDF UTILITIES LOGIC
+// 4. MAIN PROCESSOR & MICRO TOOLS LOGIC
 // ==========================================
 document.getElementById('process-btn')?.addEventListener('click', async () => {
-    if (!uploadedFiles.length) return;
-
     if (currentMode === 'imgtopdf') {
         await convertImagesToPdf();
     } else if (currentMode === 'pdftoimg') {
@@ -217,10 +253,26 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
         await mergePdfFiles();
     } else if (currentMode === 'compresspdf') {
         await compressPdfFile();
+    } else if (currentMode === 'wordcounter') {
+        const text = document.getElementById('word-input-text')?.value;
+        navigator.clipboard.writeText(text);
+        alert('✅ Text copied to clipboard!');
+    } else if (currentMode === 'wa-chat') {
+        let phone = document.getElementById('wa-phone')?.value.replace(/[^0-9]/g, '');
+        const msg = encodeURIComponent(document.getElementById('wa-msg')?.value || '');
+        if (!phone) {
+            alert('Please enter a valid mobile number with country code!');
+            return;
+        }
+        window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+    } else if (currentMode === 'svgtopng') {
+        await convertSvgToPng();
+    } else if (currentMode === 'jsonformat') {
+        formatJsonText();
     } else {
+        if (!uploadedFiles.length) return;
         for (let i = 0; i < uploadedFiles.length; i++) {
             const file = uploadedFiles[i];
-            
             if (currentMode === 'crop' && cropperInstance) {
                 const croppedCanvas = cropperInstance.getCroppedCanvas();
                 const dataUrl = croppedCanvas.toDataURL('image/jpeg', 0.9);
@@ -231,6 +283,53 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
         }
     }
 });
+
+// SVG TO PNG CONVERTER
+async function convertSvgToPng() {
+    const svgFile = uploadedFiles.find(f => f.name.endsWith('.svg'));
+    if (!svgFile) {
+        alert('Please select an SVG file first!');
+        return;
+    }
+
+    const scale = parseFloat(document.getElementById('svg-scale')?.value || 4.0);
+    const svgText = await svgFile.text();
+
+    const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    const img = new Image();
+    img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = (img.width || 800) * scale;
+        canvas.height = (img.height || 600) * scale;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const pngUrl = canvas.toDataURL('image/png');
+        downloadDataUrl(pngUrl, `quickresizer_${svgFile.name.replace('.svg', '')}.png`);
+        URL.revokeObjectURL(url);
+    };
+    img.src = url;
+}
+
+// JSON FORMATTER & VALIDATOR
+function formatJsonText() {
+    const textarea = document.getElementById('json-input');
+    const val = textarea?.value.trim();
+    if (!val) {
+        alert('Please paste JSON text first!');
+        return;
+    }
+    try {
+        const parsed = JSON.parse(val);
+        textarea.value = JSON.stringify(parsed, null, 4);
+        alert('✅ Valid JSON! Formatted successfully.');
+    } catch (err) {
+        alert('❌ Invalid JSON Code: ' + err.message);
+    }
+}
 
 // IMAGE TO PDF CONVERTER (jsPDF)
 async function convertImagesToPdf() {
@@ -339,7 +438,7 @@ async function mergePdfFiles() {
     link.click();
 }
 
-// COMPRESS PDF FILE (Re-renders pages as optimized PDF)
+// COMPRESS PDF FILE
 async function compressPdfFile() {
     const pdfFile = uploadedFiles.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
     if (!pdfFile) {
@@ -371,7 +470,7 @@ async function compressPdfFile() {
 
         await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
-        const imgDataUrl = canvas.toDataURL('image/jpeg', 0.65); // Compressed JPEG quality
+        const imgDataUrl = canvas.toDataURL('image/jpeg', 0.65);
 
         const orientation = viewport.width > viewport.height ? 'landscape' : 'portrait';
 
