@@ -247,7 +247,7 @@
         <div class="modal-card">
             <button class="modal-close" onclick="closeAuthModal()">&times;</button>
             
-            <div class="modal-tabs">
+            <div class="modal-tabs" id="modal-tabs-header">
                 <button id="tab-login-btn" class="modal-tab active" onclick="switchAuthTab('login')">Login</button>
                 <button id="tab-signup-btn" class="modal-tab" onclick="switchAuthTab('signup')">Sign Up</button>
             </div>
@@ -263,6 +263,9 @@
                     <label>Password</label>
                     <input type="password" id="login-password" placeholder="••••••••" required>
                 </div>
+                <div style="text-align: right; margin-bottom: 15px;">
+                    <a href="javascript:void(0)" onclick="switchAuthTab('forgot')" style="color: #0284c7; font-size: 13px; text-decoration: none; font-weight: 500;">Forgot Password?</a>
+                </div>
                 <button type="submit" class="btn-primary btn-block">Login to Continue</button>
             </form>
 
@@ -274,6 +277,10 @@
                     <input type="text" id="signup-name" placeholder="Rishabh Rajput" required>
                 </div>
                 <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="signup-mobile" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+                </div>
+                <div class="form-group">
                     <label>Email Address</label>
                     <input type="email" id="signup-email" placeholder="name@example.com" required>
                 </div>
@@ -282,6 +289,23 @@
                     <input type="password" id="signup-password" placeholder="••••••••" required>
                 </div>
                 <button type="submit" class="btn-primary btn-block">Create Account & Proceed</button>
+            </form>
+
+            <form id="forgot-form" class="auth-form hidden" onsubmit="handleAuthSubmit(event, 'forgot')">
+                <h3>Reset Password</h3>
+                <p>Enter your registered email to reset your password.</p>
+                <div class="form-group">
+                    <label>Registered Email Address</label>
+                    <input type="email" id="forgot-email" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="forgot-new-password" placeholder="Enter new password" required>
+                </div>
+                <button type="submit" class="btn-primary btn-block">Update Password</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: #64748b; font-size: 13px; text-decoration: none;">← Back to Login</a>
+                </div>
             </form>
         </div>
     </div>
