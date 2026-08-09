@@ -1,8 +1,13 @@
+// Global App States
 let currentMode = 'resize';
 let uploadedFiles = [];
 let cropperInstance = null;
+let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+let pendingSubscriptionAfterAuth = false;
 
-// Switch Tool Mode Function
+// ==========================================
+// 1. TOOL MODE SWITCHER LOGIC
+// ==========================================
 function switchMode(mode) {
     currentMode = mode;
 
@@ -51,7 +56,9 @@ function switchMode(mode) {
     }
 }
 
-// Drag & Drop & Input Logic
+// ==========================================
+// 2. FILE UPLOAD & DRAG-DROP LOGIC
+// ==========================================
 const dropZone = document.getElementById('drop-zone');
 const imageInput = document.getElementById('image-input');
 const controlsSection = document.getElementById('controls-section');
@@ -98,10 +105,12 @@ function handleFiles(files) {
     switchMode(currentMode);
 }
 
-// Cropper.js Initialization
+// ==========================================
+// 3. CROPPER.JS VISUAL CROPPER
+// ==========================================
 function initCropper() {
     destroyCropper();
-    if (typeof Cropper !== 'undefined' && imagePreview) {
+    if (typeof Cropper !== 'undefined' && imagePreview && imagePreview.src) {
         cropperInstance = new Cropper(imagePreview, {
             aspectRatio: NaN,
             viewMode: 1,
@@ -118,7 +127,6 @@ function destroyCropper() {
     }
 }
 
-// Aspect ratio selector for Crop
 document.getElementById('crop-ratio')?.addEventListener('change', (e) => {
     if (!cropperInstance) return;
     const val = e.target.value;
@@ -128,14 +136,15 @@ document.getElementById('crop-ratio')?.addEventListener('change', (e) => {
     else cropperInstance.setAspectRatio(NaN);
 });
 
-// Slider quality label update
 document.getElementById('quality-slider')?.addEventListener('input', (e) => {
     if (document.getElementById('quality-val')) {
         document.getElementById('quality-val').innerText = `${e.target.value}%`;
     }
 });
 
-// Process Image Action (Handles Bulk, Exact KB, and Drag-Crop)
+// ==========================================
+// 4. IMAGE PROCESSING & BINARY SEARCH COMPRESSOR
+// ==========================================
 document.getElementById('process-btn')?.addEventListener('click', async () => {
     if (!uploadedFiles.length) return;
 
@@ -200,7 +209,6 @@ function processSingleFile(file, index) {
     });
 }
 
-// Binary Search Algorithm for Exact Target KB
 function compressToTargetKB(canvas, mimeType, targetKB) {
     let minQuality = 0.01;
     let maxQuality = 0.98;
@@ -230,3 +238,138 @@ function downloadDataUrl(dataUrl, filename) {
     link.download = filename;
     link.click();
 }
+
+// ==========================================
+// 5. USER AUTHENTICATION & RAZORPAY PAYMENT
+// ==========================================
+function updateAuthUI() {
+    const loginBtn = document.querySelector('.btn-login');
+    const signupBtn = document.querySelector('.btn-signup');
+
+    if (currentUser) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (signupBtn) {
+            signupBtn.innerText = `Hi, ${currentUser.name.split(' ')[0]}`;
+            signupBtn.onclick = logoutUser;
+            signupBtn.title = 'Click to Logout';
+        }
+    } else {
+        if (loginBtn) {
+            loginBtn.style.display = 'inline-block';
+            loginBtn.onclick = () => openAuthModal('login');
+        }
+        if (signupBtn) {
+            signupBtn.innerText = 'Sign Up';
+            signupBtn.onclick = () => openAuthModal('signup');
+        }
+    }
+}
+
+function openAuthModal(tab = 'login', triggerSubscription = false) {
+    pendingSubscriptionAfterAuth = triggerSubscription;
+    switchAuthTab(tab);
+    const modal = document.getElementById('auth-modal');
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closeAuthModal() {
+    const modal = document.getElementById('auth-modal');
+    if (modal) modal.classList.add('hidden');
+    pendingSubscriptionAfterAuth = false;
+}
+
+function switchAuthTab(tab) {
+    const loginTab = document.getElementById('tab-login-btn');
+    const signupTab = document.getElementById('tab-signup-btn');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+
+    if (tab === 'login') {
+        if (loginTab) loginTab.classList.add('active');
+        if (signupTab) signupTab.classList.remove('active');
+        if (loginForm) loginForm.classList.remove('hidden');
+        if (signupForm) signupForm.classList.add('hidden');
+    } else {
+        if (signupTab) signupTab.classList.add('active');
+        if (loginTab) loginTab.classList.remove('active');
+        if (signupForm) signupForm.classList.remove('hidden');
+        if (loginForm) loginForm.classList.add('hidden');
+    }
+}
+
+function handleAuthSubmit(event, type) {
+    event.preventDefault();
+    
+    if (type === 'signup') {
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        currentUser = { name, email };
+    } else {
+        const email = document.getElementById('login-email').value;
+        const name = email.split('@')[0];
+        currentUser = { name, email };
+    }
+
+    localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
+    updateAuthUI();
+    closeAuthModal();
+
+    alert(`Successfully ${type === 'signup' ? 'registered' : 'logged in'} as ${currentUser.name}!`);
+
+    if (pendingSubscriptionAfterAuth) {
+        initiateRazorpayPayment();
+    }
+}
+
+function logoutUser() {
+    if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('quickresizer_user');
+        currentUser = null;
+        updateAuthUI();
+        alert('You have logged out.');
+    }
+}
+
+function buyProSubscription() {
+    if (!currentUser) {
+        alert('Please signup or login to your account before purchasing the Pro Plan.');
+        openAuthModal('signup', true);
+    } else {
+        initiateRazorpayPayment();
+    }
+}
+
+function initiateRazorpayPayment() {
+    const razorpayKey = "rzp_test_YOUR_KEY_HERE"; // Replace with your live Razorpay key ID
+
+    const options = {
+        "key": razorpayKey, 
+        "amount": 29900, // ₹299
+        "currency": "INR",
+        "name": "QuickResizer Pro Plan",
+        "description": "Unlimited Bulk Resizing & High Speed Access",
+        "image": "https://quickresizer.in/favicon.ico",
+        "handler": function (response) {
+            alert(`Payment Successful!\nPayment ID: ${response.razorpay_payment_id}\nYour Pro Plan is now ACTIVE!`);
+        },
+        "prefill": {
+            "name": currentUser ? currentUser.name : "",
+            "email": currentUser ? currentUser.email : ""
+        },
+        "theme": {
+            "color": "#0284c7"
+        }
+    };
+
+    if (typeof Razorpay !== 'undefined') {
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+    } else {
+        alert('Razorpay Gateway is loading. Please try again in 5 seconds.');
+    }
+}
+
+// Initialize Auth state on DOM Load
+document.addEventListener('DOMContentLoaded', () => {
+    updateAuthUI();
+});
