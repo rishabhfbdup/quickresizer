@@ -35,7 +35,6 @@ body {
     color: #0284c7;
 }
 
-/* Tool Navigation Links */
 .tool-menu {
     display: flex;
     gap: 12px;
@@ -56,7 +55,6 @@ body {
     color: #0284c7;
 }
 
-/* Right Nav Actions */
 .nav-right {
     display: flex;
     align-items: center;
@@ -121,7 +119,6 @@ body {
     text-align: center;
 }
 
-/* Quick Action Tabs Above Upload */
 .action-tabs {
     display: flex;
     justify-content: center;
@@ -294,7 +291,7 @@ body {
 
 /* Steps & Content Grids */
 .section-container {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 60px auto;
     padding: 0 20px;
 }
@@ -358,6 +355,143 @@ body {
     font-size: 14px;
     color: #64748b;
     line-height: 1.6;
+}
+
+/* 5-Column Pricing Grid Design */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.pricing-card {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    transition: 0.3s ease;
+}
+
+.pricing-card:hover {
+    border-color: #0284c7;
+    box-shadow: 0 10px 25px rgba(2, 132, 199, 0.1);
+}
+
+.pricing-card.highlighted {
+    background: #f0f9ff;
+    border: 2px solid #0284c7;
+}
+
+.pricing-card h3 {
+    font-size: 22px;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.plan-desc {
+    font-size: 12px;
+    color: #64748b;
+    min-height: 38px;
+    line-height: 1.4;
+}
+
+.plan-price {
+    margin: 20px 0 15px;
+}
+
+.plan-price .currency {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.plan-price .amount {
+    font-size: 36px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.plan-price .cents {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    vertical-align: super;
+}
+
+.plan-price .currency-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0284c7;
+    margin-left: 2px;
+}
+
+.plan-price .duration {
+    display: block;
+    font-size: 12px;
+    color: #64748b;
+    margin-top: -3px;
+}
+
+.btn-select-plan {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #0284c7;
+    background: transparent;
+    color: #0284c7;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-select-plan:hover {
+    background: #e0f2fe;
+}
+
+.btn-select-plan.primary {
+    background: #0284c7;
+    color: #ffffff;
+}
+
+.btn-select-plan.primary:hover {
+    background: #0369a1;
+}
+
+.top-features {
+    margin-top: 25px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 15px;
+}
+
+.top-features h4 {
+    font-size: 14px;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.top-features ul {
+    list-style: none;
+    padding: 0;
+}
+
+.top-features li {
+    font-size: 12px;
+    color: #475569;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.4;
+}
+
+.top-features i {
+    color: #0284c7;
+    margin-top: 2px;
 }
 
 .features-grid, .faq-grid {
