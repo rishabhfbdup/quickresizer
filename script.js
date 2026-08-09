@@ -26,17 +26,19 @@ function switchMode(mode) {
         resize: "Resize Image Online",
         crop: "Crop Image Online",
         compress: "Compress Image KB Size",
-        convert: "Convert Image Format"
+        convert: "Convert Image Format",
+        namedate: "Add Name & Date to Photo"
     };
     const descs = {
         resize: "Change image width and height in pixels easily for free!",
         crop: "Drag and adjust box to visual crop your image precisely.",
         compress: "Set exact target KB (PRO Feature) or adjust compression slider.",
-        convert: "Convert images from JPG, PNG, WEBP to desired formats instantly."
+        convert: "Convert images from JPG, PNG, WEBP to desired formats instantly.",
+        namedate: "Add candidate name and photo date/DOB at the bottom for official forms."
     };
 
-    if (document.getElementById('mode-title')) document.getElementById('mode-title').innerText = titles[mode];
-    if (document.getElementById('mode-desc')) document.getElementById('mode-desc').innerText = descs[mode];
+    if (document.getElementById('mode-title')) document.getElementById('mode-title').innerText = titles[mode] || titles.resize;
+    if (document.getElementById('mode-desc')) document.getElementById('mode-desc').innerText = descs[mode] || descs.resize;
 
     // Hide All Panels and Show Selected Panel
     document.querySelectorAll('.mode-panel').forEach(panel => panel.classList.add('hidden'));
@@ -58,11 +60,12 @@ function switchMode(mode) {
         else if (mode === 'crop') btn.innerHTML = `<i class="fa-solid fa-crop"></i> Crop & Download`;
         else if (mode === 'compress') btn.innerHTML = `<i class="fa-solid fa-file-zipper"></i> Compress KB & Download${countText}`;
         else if (mode === 'convert') btn.innerHTML = `<i class="fa-solid fa-arrows-repeat"></i> Convert & Download${countText}`;
+        else if (mode === 'namedate') btn.innerHTML = `<i class="fa-solid fa-id-card"></i> Add Name/Date & Download${countText}`;
     }
 }
 
 // ==========================================
-// 2. FILE UPLOAD & DRAG-DROP LOGIC (WITH PRO & SUBSCRIPTION CHECK)
+// 2. FILE UPLOAD & DRAG-DROP LOGIC
 // ==========================================
 const dropZone = document.getElementById('drop-zone');
 const imageInput = document.getElementById('image-input');
@@ -89,23 +92,19 @@ function handleFiles(files) {
     const isPremiumUser = currentUser && currentUser.isPro;
     const userPlan = currentUser ? currentUser.plan : '';
 
-    // 🔒 PRO FEATURE 1: Bulk Upload Restriction Logic
     if (!isPremiumUser) {
-        // Free User Restriction (Only 1 File Allowed)
         if (filesArray.length > 1) {
             alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process only 1 image at a time. Please upgrade to Pro for bulk processing!');
             const pricingSection = document.getElementById('pricing');
             if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
-            uploadedFiles = [filesArray[0]]; // Keep only 1st file
+            uploadedFiles = [filesArray[0]];
         } else {
             uploadedFiles = filesArray;
         }
     } else if (userPlan === 'Subscription' && filesArray.length > 10) {
-        // Subscription Plan Limit (Max 10 Files)
         alert('⚠️ Your Subscription Plan allows up to 10 images at once.\n\nProcessing the first 10 images. Upgrade to Simple, Smart, Professional, or Yearly for Unlimited Bulk Uploads!');
         uploadedFiles = filesArray.slice(0, 10);
     } else {
-        // Unlimited for Simple, Smart, Professional, Yearly Plans
         uploadedFiles = filesArray;
     }
 
@@ -170,7 +169,6 @@ document.getElementById('quality-slider')?.addEventListener('input', (e) => {
     }
 });
 
-// 🔒 PRO FEATURE 2: Target KB Restriction
 document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
     const isPremiumUser = currentUser && currentUser.isPro;
     if (!isPremiumUser) {
@@ -182,7 +180,7 @@ document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
 });
 
 // ==========================================
-// 4. IMAGE PROCESSING & BINARY SEARCH COMPRESSOR
+// 4. IMAGE PROCESSING & NAME/DATE ADDER LOGIC
 // ==========================================
 document.getElementById('process-btn')?.addEventListener('click', async () => {
     if (!uploadedFiles.length) return;
@@ -199,6 +197,40 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
         }
     }
 });
+
+function drawNameAndDate(ctx, canvasWidth, canvasHeight, nameText, dateText) {
+    if (!nameText && !dateText) return;
+
+    const bannerHeight = Math.round(canvasHeight * 0.18);
+    const bannerY = canvasHeight - bannerHeight;
+
+    // Draw White Box
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, bannerY, canvasWidth, bannerHeight);
+
+    // Border line on top of banner
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = Math.max(2, Math.round(canvasHeight * 0.005));
+    ctx.strokeRect(0, bannerY, canvasWidth, bannerHeight);
+
+    // Text Styling
+    ctx.fillStyle = "#000000";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    const fontSize = Math.round(bannerHeight * 0.35);
+    ctx.font = `bold ${fontSize}px 'Poppins', Arial, sans-serif`;
+
+    if (nameText && dateText) {
+        ctx.fillText(nameText.toUpperCase(), canvasWidth / 2, bannerY + (bannerHeight * 0.35));
+        ctx.font = `${Math.round(fontSize * 0.85)}px 'Poppins', Arial, sans-serif`;
+        ctx.fillText(`DOP: ${dateText}`, canvasWidth / 2, bannerY + (bannerHeight * 0.75));
+    } else if (nameText) {
+        ctx.fillText(nameText.toUpperCase(), canvasWidth / 2, bannerY + (bannerHeight / 2));
+    } else if (dateText) {
+        ctx.fillText(`DOP: ${dateText}`, canvasWidth / 2, bannerY + (bannerHeight / 2));
+    }
+}
 
 function processSingleFile(file, index) {
     return new Promise((resolve) => {
@@ -224,6 +256,13 @@ function processSingleFile(file, index) {
                 canvas.width = w;
                 canvas.height = h;
                 ctx.drawImage(img, 0, 0, w, h);
+
+                // Execute Name & Date Drawing if in NameDate Mode
+                if (currentMode === 'namedate') {
+                    const candidateName = document.getElementById('candidate-name')?.value.trim();
+                    const photoDate = document.getElementById('photo-date')?.value;
+                    drawNameAndDate(ctx, w, h, candidateName, photoDate);
+                }
 
                 const targetKB = parseFloat(document.getElementById('target-kb-input')?.value);
                 const isPremiumUser = currentUser && currentUser.isPro;
@@ -425,7 +464,6 @@ function logoutUser() {
     }
 }
 
-// Dynamic Plan Selection & Billing Checkout
 function buyPlan(planName, inrAmount, usdText) {
     selectedPlan = { name: planName, inrPrice: inrAmount, usdDisplay: usdText };
     
@@ -480,13 +518,12 @@ function initiateRazorpayPayment() {
 
     const options = {
         "key": razorpayKey, 
-        "amount": selectedPlan.inrPrice * 100, // Converts INR to Paise
+        "amount": selectedPlan.inrPrice * 100,
         "currency": "INR",
         "name": "QuickResizer",
         "description": `${selectedPlan.name} Plan (${selectedPlan.usdDisplay})`,
         "image": "https://quickresizer.in/favicon.ico",
         "handler": function (response) {
-            // Activate Pro Account Status & Plan tracking
             if (currentUser) {
                 currentUser.isPro = true;
                 currentUser.plan = selectedPlan.name;
