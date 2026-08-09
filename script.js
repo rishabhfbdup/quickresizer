@@ -28,7 +28,8 @@ function switchMode(mode) {
         compress: "Compress Image KB Size",
         convert: "Convert Image Format",
         namedate: "Add Name & Date to Photo",
-        signature: "Signature Cleaner & Enhancer"
+        signature: "Signature Cleaner & Enhancer",
+        bgcolor: "Change Photo Background Color"
     };
     const descs = {
         resize: "Change image width and height in pixels easily for free!",
@@ -36,7 +37,8 @@ function switchMode(mode) {
         compress: "Set exact target KB (PRO Feature) or adjust compression slider.",
         convert: "Convert images from JPG, PNG, WEBP to desired formats instantly.",
         namedate: "Add candidate name and photo date/DOB at the bottom for official forms.",
-        signature: "Clean background shadows from photo signatures and make ink pitch black."
+        signature: "Clean background shadows from photo signatures and make ink pitch black.",
+        bgcolor: "Fill or replace photo background with official white, passport blue, or custom colors."
     };
 
     if (document.getElementById('mode-title')) document.getElementById('mode-title').innerText = titles[mode] || titles.resize;
@@ -64,6 +66,7 @@ function switchMode(mode) {
         else if (mode === 'convert') btn.innerHTML = `<i class="fa-solid fa-arrows-repeat"></i> Convert & Download${countText}`;
         else if (mode === 'namedate') btn.innerHTML = `<i class="fa-solid fa-id-card"></i> Add Name/Date & Download${countText}`;
         else if (mode === 'signature') btn.innerHTML = `<i class="fa-solid fa-signature"></i> Clean Signature & Download${countText}`;
+        else if (mode === 'bgcolor') btn.innerHTML = `<i class="fa-solid fa-palette"></i> Apply BG Color & Download${countText}`;
     }
 }
 
@@ -183,7 +186,7 @@ document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
 });
 
 // ==========================================
-// 4. IMAGE PROCESSING, NAME/DATE & SIGNATURE CLEANER LOGIC
+// 4. IMAGE PROCESSING & SPECIAL TOOLS LOGIC
 // ==========================================
 document.getElementById('process-btn')?.addEventListener('click', async () => {
     if (!uploadedFiles.length) return;
@@ -256,6 +259,17 @@ function cleanSignatureBackground(ctx, width, height) {
     ctx.putImageData(imgData, 0, 0);
 }
 
+function applyBackgroundColor(ctx, img, width, height) {
+    const colorHex = document.getElementById('bg-custom-color')?.value || '#FFFFFF';
+    
+    // Fill background solid color first
+    ctx.fillStyle = colorHex;
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw the original image over the background color
+    ctx.drawImage(img, 0, 0, width, height);
+}
+
 function processSingleFile(file, index) {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -279,7 +293,13 @@ function processSingleFile(file, index) {
 
                 canvas.width = w;
                 canvas.height = h;
-                ctx.drawImage(img, 0, 0, w, h);
+
+                // Process BG Color Changer mode
+                if (currentMode === 'bgcolor') {
+                    applyBackgroundColor(ctx, img, w, h);
+                } else {
+                    ctx.drawImage(img, 0, 0, w, h);
+                }
 
                 if (currentMode === 'namedate') {
                     const candidateName = document.getElementById('candidate-name')?.value.trim();
