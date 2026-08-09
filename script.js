@@ -62,7 +62,7 @@ function switchMode(mode) {
 }
 
 // ==========================================
-// 2. FILE UPLOAD & DRAG-DROP LOGIC
+// 2. FILE UPLOAD & DRAG-DROP LOGIC (WITH PRO CHECK)
 // ==========================================
 const dropZone = document.getElementById('drop-zone');
 const imageInput = document.getElementById('image-input');
@@ -85,7 +85,24 @@ if (imageInput) {
 }
 
 function handleFiles(files) {
-    uploadedFiles = Array.from(files);
+    const filesArray = Array.from(files);
+
+    // 🔒 RESTRICTION: Bulk Upload Only For Premium Users
+    const isPremiumUser = currentUser && currentUser.isPro;
+
+    if (filesArray.length > 1 && !isPremiumUser) {
+        alert('⭐ Bulk Upload (multiple files at once) is a Pro Feature!\n\nFree users can process 1 image at a time. Upgrade to Pro to process unlimited images together!');
+        
+        // Redirect or prompt to Pro Plans
+        const pricingSection = document.getElementById('pricing');
+        if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
+        
+        // Take only the 1st file for free user
+        uploadedFiles = [filesArray[0]];
+    } else {
+        uploadedFiles = filesArray;
+    }
+
     const firstFile = uploadedFiles[0];
 
     const reader = new FileReader();
@@ -254,7 +271,8 @@ function updateAuthUI() {
     if (currentUser) {
         if (loginBtn) loginBtn.style.display = 'none';
         if (signupBtn) {
-            signupBtn.innerText = `Hi, ${currentUser.name.split(' ')[0]}`;
+            const badge = currentUser.isPro ? ' ⭐PRO' : '';
+            signupBtn.innerText = `Hi, ${currentUser.name.split(' ')[0]}${badge}`;
             signupBtn.onclick = logoutUser;
             signupBtn.title = 'Click to Logout';
         }
@@ -328,11 +346,11 @@ function handleAuthSubmit(event, type) {
             return;
         }
 
-        const newUser = { name, mobile, email, password };
+        const newUser = { name, mobile, email, password, isPro: false };
         registeredUsers.push(newUser);
         localStorage.setItem('quickresizer_registered_users', JSON.stringify(registeredUsers));
 
-        currentUser = { name, email, mobile };
+        currentUser = { name, email, mobile, isPro: false };
         localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
         
         alert(`✅ Account created successfully! Welcome, ${name}.`);
@@ -348,7 +366,7 @@ function handleAuthSubmit(event, type) {
             return;
         }
 
-        currentUser = { name: user.name, email: user.email, mobile: user.mobile };
+        currentUser = { name: user.name, email: user.email, mobile: user.mobile, isPro: user.isPro || false };
         localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
         
         alert(`✅ Welcome back, ${currentUser.name}!`);
@@ -410,7 +428,6 @@ function openBillingModal() {
             if (document.getElementById('billing-mobile')) document.getElementById('billing-mobile').value = currentUser.mobile || '';
         }
         
-        // Dynamic Price Display on Submit Button
         const payBtn = document.querySelector('#billing-form button[type="submit"]');
         if (payBtn) {
             payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay ₹${selectedPlan.inrPrice} (${selectedPlan.usdDisplay})`;
@@ -452,7 +469,22 @@ function initiateRazorpayPayment() {
         "description": `${selectedPlan.name} Plan (${selectedPlan.usdDisplay})`,
         "image": "https://quickresizer.in/favicon.ico",
         "handler": function (response) {
-            alert(`✅ Payment Successful!\nPayment ID: ${response.razorpay_payment_id}\nYour ${selectedPlan.name} Plan is now ACTIVE!`);
+            // Activate Pro Account Status
+            if (currentUser) {
+                currentUser.isPro = true;
+                localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
+                
+                // Update registered users array
+                const userIndex = registeredUsers.findIndex(u => u.email === currentUser.email);
+                if (userIndex !== -1) {
+                    registeredUsers[userIndex].isPro = true;
+                    localStorage.setItem('quickresizer_registered_users', JSON.stringify(registeredUsers));
+                }
+                
+                updateAuthUI();
+            }
+
+            alert(`🎉 Congratulations!\nPayment Successful! Payment ID: ${response.razorpay_payment_id}\nYour ${selectedPlan.name} PRO Account is now ACTIVE with Unlimited Bulk Uploads!`);
         },
         "prefill": {
             "name": billingDetails.name || (currentUser ? currentUser.name : ""),
