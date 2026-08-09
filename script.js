@@ -431,16 +431,17 @@ function handleBillingSubmit(event) {
 
 function initiateRazorpayPayment() {
     const razorpayKey = "rzp_live_TNXhcB0cg4sMeQ"; 
+    const planId = "plan_TNY6cptmSJ1mY8"; // Your Live Autopay Plan ID
 
     const options = {
         "key": razorpayKey, 
-        "amount": 29900, // ₹299
-        "currency": "INR",
+        "plan_id": planId,
         "name": "QuickResizer Pro Plan",
-        "description": "Unlimited Bulk Resizing & High Speed Access",
+        "description": "₹299/month (Autopay Subscription)",
         "image": "https://quickresizer.in/favicon.ico",
+        "customer_notify": 1,
         "handler": function (response) {
-            alert(`✅ Payment Successful!\nPayment ID: ${response.razorpay_payment_id}\nYour Pro Plan is now ACTIVE!`);
+            alert(`✅ Payment & Autopay Activated!\nSubscription ID: ${response.razorpay_subscription_id}\nPayment ID: ${response.razorpay_payment_id}\nYour Pro Plan is now ACTIVE!`);
         },
         "prefill": {
             "name": billingDetails.name || (currentUser ? currentUser.name : ""),
