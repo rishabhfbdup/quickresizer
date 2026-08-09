@@ -36,7 +36,9 @@ function switchMode(mode) {
         imgtopdf: "Convert Images to PDF Document",
         pdftoimg: "Convert PDF Pages to Images (JPG/PNG)",
         mergepdf: "Merge Multiple PDF Files Online",
+        splitpdf: "Split & Extract PDF Pages",
         compresspdf: "Compress PDF File Size",
+        resume: "1-Click Clean PDF Resume Builder",
         wordcounter: "Word & Character Counter",
         'wa-chat': "WhatsApp Direct Chat Link Generator",
         svgtopng: "Convert SVG to High-Res PNG",
@@ -53,7 +55,9 @@ function switchMode(mode) {
         imgtopdf: "Combine single or multiple images into a clean PDF document instantly.",
         pdftoimg: "Extract crisp JPG/PNG image files from every page of your PDF file.",
         mergepdf: "Select 2 or more PDF files to combine them into 1 single document.",
+        splitpdf: "Extract specific page ranges into a separate new PDF document.",
         compresspdf: "Reduce large PDF document size directly in your browser.",
+        resume: "Fill your details below to generate an ATS-friendly professional PDF Resume.",
         wordcounter: "Count words, characters, and estimated reading time live.",
         'wa-chat': "Generate instant WhatsApp direct chat link without saving contact.",
         svgtopng: "Convert scalable vector SVG graphics into crisp PNG images.",
@@ -67,8 +71,7 @@ function switchMode(mode) {
     const selectedPanel = document.getElementById(`panel-${mode}`);
     if (selectedPanel) selectedPanel.classList.remove('hidden');
 
-    // Show controls section directly for text/micro tools
-    const microTools = ['wordcounter', 'wa-chat', 'jsonformat'];
+    const microTools = ['wordcounter', 'wa-chat', 'jsonformat', 'resume'];
     if (microTools.includes(mode)) {
         document.getElementById('controls-section')?.classList.remove('hidden');
         document.querySelector('.preview-box')?.classList.add('hidden');
@@ -95,7 +98,9 @@ function switchMode(mode) {
         else if (mode === 'imgtopdf') btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Generate PDF & Download`;
         else if (mode === 'pdftoimg') btn.innerHTML = `<i class="fa-solid fa-file-image"></i> Extract Images & Download`;
         else if (mode === 'mergepdf') btn.innerHTML = `<i class="fa-solid fa-object-group"></i> Merge PDFs & Download`;
+        else if (mode === 'splitpdf') btn.innerHTML = `<i class="fa-solid fa-scissors"></i> Split & Download PDF`;
         else if (mode === 'compresspdf') btn.innerHTML = `<i class="fa-solid fa-file-contract"></i> Compress PDF & Download`;
+        else if (mode === 'resume') btn.innerHTML = `<i class="fa-solid fa-file-user"></i> Generate Resume PDF`;
         else if (mode === 'wordcounter') btn.innerHTML = `<i class="fa-solid fa-copy"></i> Copy Text`;
         else if (mode === 'wa-chat') btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Open Direct Chat`;
         else if (mode === 'svgtopng') btn.innerHTML = `<i class="fa-solid fa-download"></i> Convert & Download PNG`;
@@ -234,7 +239,7 @@ document.getElementById('word-input-text')?.addEventListener('input', (e) => {
     const text = e.target.value.trim();
     const words = text ? text.split(/\s+/).length : 0;
     const chars = text.length;
-    const readingTimeSec = Math.ceil(words / 3.3); // Avg reading speed 200 wpm
+    const readingTimeSec = Math.ceil(words / 3.3);
 
     if (document.getElementById('cnt-words')) document.getElementById('cnt-words').innerText = words;
     if (document.getElementById('cnt-chars')) document.getElementById('cnt-chars').innerText = chars;
@@ -242,7 +247,7 @@ document.getElementById('word-input-text')?.addEventListener('input', (e) => {
 });
 
 // ==========================================
-// 4. MAIN PROCESSOR & MICRO TOOLS LOGIC
+// 4. MAIN PROCESSOR & SPECIAL TOOLS LOGIC
 // ==========================================
 document.getElementById('process-btn')?.addEventListener('click', async () => {
     if (currentMode === 'imgtopdf') {
@@ -251,8 +256,12 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
         await convertPdfToImages();
     } else if (currentMode === 'mergepdf') {
         await mergePdfFiles();
+    } else if (currentMode === 'splitpdf') {
+        await splitPdfFile();
     } else if (currentMode === 'compresspdf') {
         await compressPdfFile();
+    } else if (currentMode === 'resume') {
+        generateResumePdf();
     } else if (currentMode === 'wordcounter') {
         const text = document.getElementById('word-input-text')?.value;
         navigator.clipboard.writeText(text);
@@ -283,6 +292,125 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
         }
     }
 });
+
+// SPLIT PDF FILE (pdf-lib)
+async function splitPdfFile() {
+    const pdfFile = uploadedFiles.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+    if (!pdfFile) {
+        alert('Please upload a PDF file to split!');
+        return;
+    }
+
+    if (typeof PDFLib === 'undefined') {
+        alert('PDF library is loading. Please try again in 3 seconds.');
+        return;
+    }
+
+    const fileBuffer = await pdfFile.arrayBuffer();
+    const srcPdf = await PDFLib.PDFDocument.load(fileBuffer);
+    const totalPages = srcPdf.getPageCount();
+
+    let start = parseInt(document.getElementById('split-start')?.value || 1);
+    let end = parseInt(document.getElementById('split-end')?.value || totalPages);
+
+    if (start < 1) start = 1;
+    if (end > totalPages) end = totalPages;
+    if (start > end) {
+        alert('Start page cannot be greater than End page!');
+        return;
+    }
+
+    const newPdf = await PDFLib.PDFDocument.create();
+    const pageIndices = [];
+    for (let i = start - 1; i < end; i++) {
+        pageIndices.push(i);
+    }
+
+    const copiedPages = await newPdf.copyPages(srcPdf, pageIndices);
+    copiedPages.forEach(p => newPdf.addPage(p));
+
+    const pdfBytes = await newPdf.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `quickresizer_split_p${start}-to-p${end}.pdf`;
+    link.click();
+}
+
+// 1-CLICK RESUME / CV GENERATOR (jsPDF)
+function generateResumePdf() {
+    if (typeof window.jspdf === 'undefined') {
+        alert('PDF generator engine is loading. Please try again in 3 seconds.');
+        return;
+    }
+
+    const name = document.getElementById('res-name')?.value.trim() || 'Rishabh Rajput';
+    const title = document.getElementById('res-title')?.value.trim() || 'Software Developer';
+    const email = document.getElementById('res-email')?.value.trim() || 'contact@example.com';
+    const phone = document.getElementById('res-phone')?.value.trim() || '+91 9876543210';
+    const edu = document.getElementById('res-edu')?.value.trim() || 'B.Tech in Computer Science & Engineering';
+    const skills = document.getElementById('res-skills')?.value.trim() || 'JavaScript, Python, Problem Solving, Web Development';
+    const exp = document.getElementById('res-exp')?.value.trim() || 'Developed web tools and optimized digital solutions.';
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('portrait', 'mm', 'a4');
+
+    // Header Banner Style
+    doc.setFillColor(15, 23, 42); // Dark slate
+    doc.rect(0, 0, 210, 40, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('Poppins', 'bold');
+    doc.setFontSize(22);
+    doc.text(name.toUpperCase(), 15, 18);
+
+    doc.setFontSize(12);
+    doc.setFont('Poppins', 'normal');
+    doc.text(title, 15, 27);
+
+    doc.setFontSize(9);
+    doc.text(`Email: ${email} | Phone: ${phone}`, 15, 34);
+
+    // Body Styling
+    doc.setTextColor(15, 23, 42);
+    let y = 55;
+
+    // Helper Heading Function
+    function addSectionHeader(heading) {
+        doc.setFillColor(56, 189, 248); // Sky blue line
+        doc.rect(15, y, 180, 0.8, 'F');
+        doc.setFont('Poppins', 'bold');
+        doc.setFontSize(13);
+        doc.text(heading, 15, y - 2);
+        y += 8;
+    }
+
+    // Education
+    addSectionHeader('EDUCATION');
+    doc.setFont('Poppins', 'normal');
+    doc.setFontSize(10);
+    const splitEdu = doc.splitTextToSize(edu, 175);
+    doc.text(splitEdu, 15, y);
+    y += (splitEdu.length * 6) + 10;
+
+    // Skills
+    addSectionHeader('KEY SKILLS');
+    doc.setFont('Poppins', 'normal');
+    doc.setFontSize(10);
+    const splitSkills = doc.splitTextToSize(skills, 175);
+    doc.text(splitSkills, 15, y);
+    y += (splitSkills.length * 6) + 10;
+
+    // Experience / Projects
+    addSectionHeader('EXPERIENCE & PROJECTS');
+    doc.setFont('Poppins', 'normal');
+    doc.setFontSize(10);
+    const splitExp = doc.splitTextToSize(exp, 175);
+    doc.text(splitExp, 15, y);
+
+    // Save Resume PDF
+    doc.save(`Resume_${name.replace(/\s+/g, '_')}.pdf`);
+}
 
 // SVG TO PNG CONVERTER
 async function convertSvgToPng() {
