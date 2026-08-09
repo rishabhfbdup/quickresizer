@@ -31,7 +31,7 @@ function switchMode(mode) {
     const descs = {
         resize: "Change image width and height in pixels easily for free!",
         crop: "Drag and adjust box to visual crop your image precisely.",
-        compress: "Set exact target KB (e.g. 20KB, 50KB) or adjust compression slider.",
+        compress: "Set exact target KB (PRO Feature) or adjust compression slider.",
         convert: "Convert images from JPG, PNG, WEBP to desired formats instantly."
     };
 
@@ -86,19 +86,16 @@ if (imageInput) {
 
 function handleFiles(files) {
     const filesArray = Array.from(files);
-
-    // 🔒 RESTRICTION: Bulk Upload Only For Premium Users
     const isPremiumUser = currentUser && currentUser.isPro;
 
+    // 🔒 PRO FEATURE 1: Bulk Upload Restriction
     if (filesArray.length > 1 && !isPremiumUser) {
-        alert('⭐ Bulk Upload (multiple files at once) is a Pro Feature!\n\nFree users can process 1 image at a time. Upgrade to Pro to process unlimited images together!');
+        alert('⭐ Bulk Upload (multiple files at once) is a PRO Feature!\n\nFree users can process 1 image at a time. Please upgrade to Pro for unlimited bulk processing!');
         
-        // Redirect or prompt to Pro Plans
         const pricingSection = document.getElementById('pricing');
         if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
         
-        // Take only the 1st file for free user
-        uploadedFiles = [filesArray[0]];
+        uploadedFiles = [filesArray[0]]; // Process only the 1st image
     } else {
         uploadedFiles = filesArray;
     }
@@ -164,6 +161,17 @@ document.getElementById('quality-slider')?.addEventListener('input', (e) => {
     }
 });
 
+// 🔒 PRO FEATURE 2: Target KB Restriction
+document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
+    const isPremiumUser = currentUser && currentUser.isPro;
+    if (!isPremiumUser) {
+        e.target.blur();
+        alert('⭐ Exact Target KB Compression (e.g. 20KB for govt forms) is a PRO Feature!\n\nUpgrade to Pro to set exact file size limits.');
+        const pricingSection = document.getElementById('pricing');
+        if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
+    }
+});
+
 // ==========================================
 // 4. IMAGE PROCESSING & BINARY SEARCH COMPRESSOR
 // ==========================================
@@ -209,9 +217,10 @@ function processSingleFile(file, index) {
                 ctx.drawImage(img, 0, 0, w, h);
 
                 const targetKB = parseFloat(document.getElementById('target-kb-input')?.value);
+                const isPremiumUser = currentUser && currentUser.isPro;
                 let resultDataUrl;
 
-                if (currentMode === 'compress' && targetKB && targetKB > 0) {
+                if (currentMode === 'compress' && targetKB && targetKB > 0 && isPremiumUser) {
                     resultDataUrl = compressToTargetKB(canvas, mimeType, targetKB);
                 } else {
                     quality = parseInt(document.getElementById('quality-slider')?.value || 70) / 100;
@@ -338,7 +347,6 @@ function handleAuthSubmit(event, type) {
         const email = document.getElementById('signup-email').value.toLowerCase().trim();
         const password = document.getElementById('signup-password').value;
 
-        // Validation for Duplicate Email
         const existingUser = registeredUsers.find(u => u.email === email);
         if (existingUser) {
             alert('❌ This Email ID is already registered! Please Login instead.');
@@ -366,7 +374,7 @@ function handleAuthSubmit(event, type) {
             return;
         }
 
-        currentUser = { name: user.name, email: user.email, mobile: user.mobile, isPro: user.isPro || false };
+        currentUser = { name: user.name, email: user.email, mobile: user.mobile, isPro: user.isPro || false, plan: user.plan || '' };
         localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
         
         alert(`✅ Welcome back, ${currentUser.name}!`);
@@ -469,22 +477,28 @@ function initiateRazorpayPayment() {
         "description": `${selectedPlan.name} Plan (${selectedPlan.usdDisplay})`,
         "image": "https://quickresizer.in/favicon.ico",
         "handler": function (response) {
-            // Activate Pro Account Status
+            // Activate Pro Account Status & Plan tracking
             if (currentUser) {
                 currentUser.isPro = true;
+                currentUser.plan = selectedPlan.name;
                 localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
                 
-                // Update registered users array
                 const userIndex = registeredUsers.findIndex(u => u.email === currentUser.email);
                 if (userIndex !== -1) {
                     registeredUsers[userIndex].isPro = true;
+                    registeredUsers[userIndex].plan = selectedPlan.name;
                     localStorage.setItem('quickresizer_registered_users', JSON.stringify(registeredUsers));
                 }
                 
                 updateAuthUI();
             }
 
-            alert(`🎉 Congratulations!\nPayment Successful! Payment ID: ${response.razorpay_payment_id}\nYour ${selectedPlan.name} PRO Account is now ACTIVE with Unlimited Bulk Uploads!`);
+            let supportMsg = "24×7 Email Support";
+            if (selectedPlan.name === 'Professional' || selectedPlan.name === 'Yearly') {
+                supportMsg = "24×7 Direct Customer Care Call & VIP Support";
+            }
+
+            alert(`🎉 Congratulations!\nPayment Successful! Payment ID: ${response.razorpay_payment_id}\n\nYour ${selectedPlan.name} PRO Account is now ACTIVE!\nIncluded Support: ${supportMsg}`);
         },
         "prefill": {
             "name": billingDetails.name || (currentUser ? currentUser.name : ""),
