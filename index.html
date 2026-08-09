@@ -6,6 +6,7 @@
     <title>QuickResizer - All-in-One Image Tool</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -44,8 +45,8 @@
         <div class="upload-container" id="drop-zone">
             <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
             <p class="upload-text"><span data-lang="drop-text">Drop your image here or</span> <span class="browse-text" data-lang="browse-text">browse files</span></p>
-            <span class="file-limits" data-lang="limits-text">Supports JPG, PNG, WEBP, GIF | Unlimited File Size</span>
-            <input type="file" id="image-input" accept="image/*" hidden>
+            <span class="file-limits" data-lang="limits-text">Supports JPG, PNG, WEBP, GIF | Bulk Upload Allowed</span>
+            <input type="file" id="image-input" accept="image/*" multiple hidden>
             <button class="btn-primary" onclick="document.getElementById('image-input').click()" data-lang="btn-select">Select Image</button>
         </div>
 
@@ -76,12 +77,12 @@
             <div class="mode-panel hidden" id="panel-crop">
                 <div class="settings-grid">
                     <div class="setting-group full-width">
-                        <label><i class="fa-solid fa-crop"></i> Select Aspect Ratio / Crop Area:</label>
+                        <label><i class="fa-solid fa-crop"></i> Aspect Ratio / Preset Box:</label>
                         <select id="crop-ratio">
+                            <option value="custom">Free / Custom Drag Crop</option>
                             <option value="square">Square (1:1 - Passport / Instagram)</option>
                             <option value="16:9">Landscape (16:9 - YouTube / Desktop)</option>
-                            <option value="4:3">Standard (4:3)</option>
-                            <option value="custom">Custom Center Crop</option>
+                            <option value="4:3">Standard Photo (4:3)</option>
                         </select>
                     </div>
                 </div>
@@ -89,12 +90,18 @@
 
             <div class="mode-panel hidden" id="panel-compress">
                 <div class="settings-grid">
-                    <div class="setting-group full-width">
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-weight-scale"></i> Target Max File Size (KB):</label>
+                        <input type="number" id="target-kb-input" placeholder="e.g. 20, 50, 100 KB">
+                    </div>
+                    <div class="setting-group">
                         <label><i class="fa-solid fa-sliders"></i> <span data-lang="lbl-quality">Compression Quality:</span> <span id="quality-val">70%</span></label>
                         <input type="range" id="quality-slider" min="10" max="95" value="70">
-                        <small style="color: #64748b; margin-top:5px; display:block;">Lower percentage = Smaller KB file size</small>
                     </div>
                 </div>
+                <small style="color: #0284c7; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Pro Tip:</strong> Type exact KB (e.g., 20KB for government forms) and QuickResizer will automatically compress your image to fit that size!
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-convert">
@@ -132,17 +139,17 @@
             <div class="step-card">
                 <div class="step-num">1</div>
                 <h3 data-lang="step1-title">Upload Image</h3>
-                <p data-lang="step1-desc">Drag and drop your photo into the box above or click 'Select Image' to choose a file from your device.</p>
+                <p data-lang="step1-desc">Drag and drop your photo into the box above or click 'Select Image' to choose files from your device.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">2</div>
                 <h3 data-lang="step2-title">Choose Tool & Adjust</h3>
-                <p data-lang="step2-desc">Select Resize, Crop, Compress, or Convert and adjust settings like width, ratio, quality, or format.</p>
+                <p data-lang="step2-desc">Select Resize, Crop, Compress, or Convert and set your target KB, width/height, or format.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">3</div>
                 <h3 data-lang="step3-title">Download Instantly</h3>
-                <p data-lang="step3-desc">Click 'Process & Download' to save your newly optimized image directly to your computer or smartphone.</p>
+                <p data-lang="step3-desc">Click 'Process & Download' to save your optimized images directly to your computer or phone.</p>
             </div>
         </div>
     </section>
@@ -171,7 +178,7 @@
             <div class="feature-box">
                 <i class="fa-solid fa-sliders feature-icon"></i>
                 <h3>Custom Quality Control</h3>
-                <p>Fine-tune image compression level to balance file size reduction with crystal-clear visual quality.</p>
+                <p>Fine-tune image compression level or enter exact target KB to balance file size with crystal-clear quality.</p>
             </div>
         </div>
     </section>
@@ -239,6 +246,7 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
