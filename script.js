@@ -7,6 +7,9 @@ let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
 let pendingSubscriptionAfterAuth = false;
 let billingDetails = {};
 
+// Default Plan State (Yearly Plan default)
+let selectedPlan = { name: 'Yearly', inrPrice: 2199, usdDisplay: '$25.99' };
+
 // ==========================================
 // 1. TOOL MODE SWITCHER LOGIC
 // ==========================================
@@ -387,10 +390,12 @@ function logoutUser() {
     }
 }
 
-// Billing Modal & Direct Checkout Flow
-function buyProSubscription() {
+// Dynamic Plan Selection & Billing Checkout
+function buyPlan(planName, inrAmount, usdText) {
+    selectedPlan = { name: planName, inrPrice: inrAmount, usdDisplay: usdText };
+    
     if (!currentUser) {
-        alert('Please signup or login to your account before purchasing the Pro Plan.');
+        alert(`Please signup or login to your account before purchasing the ${planName} plan.`);
         openAuthModal('signup', true);
     } else {
         openBillingModal();
@@ -404,6 +409,13 @@ function openBillingModal() {
             if (document.getElementById('billing-name')) document.getElementById('billing-name').value = currentUser.name || '';
             if (document.getElementById('billing-mobile')) document.getElementById('billing-mobile').value = currentUser.mobile || '';
         }
+        
+        // Dynamic Price Display on Submit Button
+        const payBtn = document.querySelector('#billing-form button[type="submit"]');
+        if (payBtn) {
+            payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay ₹${selectedPlan.inrPrice} (${selectedPlan.usdDisplay})`;
+        }
+        
         modal.classList.remove('hidden');
     }
 }
@@ -434,13 +446,13 @@ function initiateRazorpayPayment() {
 
     const options = {
         "key": razorpayKey, 
-        "amount": 29900, // Direct ₹299 Charge On-The-Spot (No ₹1 Trial / Verification)
+        "amount": selectedPlan.inrPrice * 100, // Converts INR to Paise
         "currency": "INR",
-        "name": "QuickResizer Pro Plan",
-        "description": "Pro Subscription Access (₹299/month)",
+        "name": "QuickResizer",
+        "description": `${selectedPlan.name} Plan (${selectedPlan.usdDisplay})`,
         "image": "https://quickresizer.in/favicon.ico",
         "handler": function (response) {
-            alert(`✅ Payment Successful!\nPayment ID: ${response.razorpay_payment_id}\nYour Pro Plan is now ACTIVE!`);
+            alert(`✅ Payment Successful!\nPayment ID: ${response.razorpay_payment_id}\nYour ${selectedPlan.name} Plan is now ACTIVE!`);
         },
         "prefill": {
             "name": billingDetails.name || (currentUser ? currentUser.name : ""),
@@ -448,6 +460,8 @@ function initiateRazorpayPayment() {
             "contact": billingDetails.mobile || (currentUser ? currentUser.mobile : "")
         },
         "notes": {
+            "plan_name": selectedPlan.name,
+            "usd_price": selectedPlan.usdDisplay,
             "city": billingDetails.city || "",
             "state": billingDetails.state || "",
             "pincode": billingDetails.pincode || ""
