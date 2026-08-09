@@ -1,7 +1,8 @@
-// Global App States
+// Global App States & Local Storage DB
 let currentMode = 'resize';
 let uploadedFiles = [];
 let cropperInstance = null;
+let registeredUsers = JSON.parse(localStorage.getItem('quickresizer_registered_users')) || [];
 let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
 let pendingSubscriptionAfterAuth = false;
 
@@ -283,17 +284,26 @@ function switchAuthTab(tab) {
     const signupTab = document.getElementById('tab-signup-btn');
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
+    const forgotForm = document.getElementById('forgot-form');
+    const modalHeader = document.getElementById('modal-tabs-header');
+
+    if (loginForm) loginForm.classList.add('hidden');
+    if (signupForm) signupForm.classList.add('hidden');
+    if (forgotForm) forgotForm.classList.add('hidden');
 
     if (tab === 'login') {
+        if (modalHeader) modalHeader.style.display = 'flex';
         if (loginTab) loginTab.classList.add('active');
         if (signupTab) signupTab.classList.remove('active');
         if (loginForm) loginForm.classList.remove('hidden');
-        if (signupForm) signupForm.classList.add('hidden');
-    } else {
+    } else if (tab === 'signup') {
+        if (modalHeader) modalHeader.style.display = 'flex';
         if (signupTab) signupTab.classList.add('active');
         if (loginTab) loginTab.classList.remove('active');
         if (signupForm) signupForm.classList.remove('hidden');
-        if (loginForm) loginForm.classList.add('hidden');
+    } else if (tab === 'forgot') {
+        if (modalHeader) modalHeader.style.display = 'none';
+        if (forgotForm) forgotForm.classList.remove('hidden');
     }
 }
 
@@ -302,19 +312,65 @@ function handleAuthSubmit(event, type) {
     
     if (type === 'signup') {
         const name = document.getElementById('signup-name').value;
-        const email = document.getElementById('signup-email').value;
-        currentUser = { name, email };
-    } else {
-        const email = document.getElementById('login-email').value;
-        const name = email.split('@')[0];
-        currentUser = { name, email };
+        const mobile = document.getElementById('signup-mobile').value;
+        const email = document.getElementById('signup-email').value.toLowerCase().trim();
+        const password = document.getElementById('signup-password').value;
+
+        // Validation for Duplicate Email
+        const existingUser = registeredUsers.find(u => u.email === email);
+        if (existingUser) {
+            alert('❌ This Email ID is already registered! Please Login instead.');
+            switchAuthTab('login');
+            return;
+        }
+
+        const newUser = { name, mobile, email, password };
+        registeredUsers.push(newUser);
+        localStorage.setItem('quickresizer_registered_users', JSON.stringify(registeredUsers));
+
+        currentUser = { name, email, mobile };
+        localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
+        
+        alert(`✅ Account created successfully! Welcome, ${name}.`);
+
+    } else if (type === 'login') {
+        const email = document.getElementById('login-email').value.toLowerCase().trim();
+        const password = document.getElementById('login-password').value;
+
+        const user = registeredUsers.find(u => u.email === email && u.password === password);
+
+        if (!user) {
+            alert('❌ Incorrect Email or Password! Please check your credentials.');
+            return;
+        }
+
+        currentUser = { name: user.name, email: user.email, mobile: user.mobile };
+        localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
+        
+        alert(`✅ Welcome back, ${currentUser.name}!`);
+
+    } else if (type === 'forgot') {
+        const email = document.getElementById('forgot-email').value.toLowerCase().trim();
+        const newPassword = document.getElementById('forgot-new-password').value;
+
+        const userIndex = registeredUsers.findIndex(u => u.email === email);
+
+        if (userIndex === -1) {
+            alert('❌ Email ID not found! Please register a new account.');
+            switchAuthTab('signup');
+            return;
+        }
+
+        registeredUsers[userIndex].password = newPassword;
+        localStorage.setItem('quickresizer_registered_users', JSON.stringify(registeredUsers));
+
+        alert('✅ Password updated successfully! Please Login with your new password.');
+        switchAuthTab('login');
+        return;
     }
 
-    localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
     updateAuthUI();
     closeAuthModal();
-
-    alert(`Successfully ${type === 'signup' ? 'registered' : 'logged in'} as ${currentUser.name}!`);
 
     if (pendingSubscriptionAfterAuth) {
         initiateRazorpayPayment();
@@ -354,7 +410,8 @@ function initiateRazorpayPayment() {
         },
         "prefill": {
             "name": currentUser ? currentUser.name : "",
-            "email": currentUser ? currentUser.email : ""
+            "email": currentUser ? currentUser.email : "",
+            "contact": currentUser ? currentUser.mobile : ""
         },
         "theme": {
             "color": "#0284c7"
