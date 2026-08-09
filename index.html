@@ -16,6 +16,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 </head>
 <body>
 
@@ -55,6 +56,8 @@
             <button class="action-tab" id="tab-bgcolor" onclick="switchMode('bgcolor')"><i class="fa-solid fa-palette"></i> <span>BG Color Changer</span></button>
             <button class="action-tab" id="tab-imgtopdf" onclick="switchMode('imgtopdf')"><i class="fa-solid fa-file-pdf"></i> <span>Image to PDF</span></button>
             <button class="action-tab" id="tab-pdftoimg" onclick="switchMode('pdftoimg')"><i class="fa-solid fa-file-image"></i> <span>PDF to Image</span></button>
+            <button class="action-tab" id="tab-mergepdf" onclick="switchMode('mergepdf')"><i class="fa-solid fa-object-group"></i> <span>Merge PDF</span></button>
+            <button class="action-tab" id="tab-compresspdf" onclick="switchMode('compresspdf')"><i class="fa-solid fa-file-contract"></i> <span>Compress PDF</span></button>
         </div>
 
         <h1 class="main-title" id="mode-title" data-lang="hero-title">Resize Image Online</h1>
@@ -241,6 +244,33 @@
                 </div>
                 <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>PDF Page Extractor:</strong> Renders each page of your uploaded PDF file as crisp downloadable images.
+                </small>
+            </div>
+
+            <div class="mode-panel hidden" id="panel-mergepdf">
+                <div class="settings-grid">
+                    <div class="setting-group full-width">
+                        <label><i class="fa-solid fa-object-group"></i> PDF Files Selected:</label>
+                        <small style="color:#94a3b8; display:block; margin-top:5px;">Select multiple PDF files above. They will be merged sequentially into a single file.</small>
+                    </div>
+                </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Merge PDFs:</strong> Combines 2 or more PDF documents into 1 consolidated PDF file safely in your browser.
+                </small>
+            </div>
+
+            <div class="mode-panel hidden" id="panel-compresspdf">
+                <div class="settings-grid">
+                    <div class="setting-group full-width">
+                        <label><i class="fa-solid fa-sliders"></i> PDF Compression Level:</label>
+                        <select id="pdf-compress-level">
+                            <option value="1.0">Recommended Quality (30%-50% Size Reduction)</option>
+                            <option value="0.7">Extreme Compression (Maximum Size Reduction)</option>
+                        </select>
+                    </div>
+                </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Compress PDF:</strong> Reduces large PDF file size while keeping text and images clear.
                 </small>
             </div>
 
