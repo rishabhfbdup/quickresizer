@@ -157,21 +157,116 @@
     <section class="section-container bg-white" id="pricing">
         <div class="section-heading">
             <h2>Flexible Plans for Everyone</h2>
-            <p>Upgrade to Pro for high-speed processing and unlimited bulk resizing.</p>
+            <p>Choose the plan that fits your workflow and unlock premium features instantly.</p>
         </div>
-        <div class="steps-grid" style="max-width: 800px; margin: 0 auto;">
-            <div class="step-card" style="text-align: left;">
-                <h3>Free Plan</h3>
-                <p>Basic resizing and compression tools.</p>
-                <h2 style="font-size:32px; color:#0f172a; margin: 15px 0;">₹0 <span style="font-size:14px; color:#64748b;">/ forever</span></h2>
-                <button class="btn-primary" style="background:#e2e8f0; color:#334155; width:100%; border:none;" disabled>Current Plan</button>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Subscription</h3>
+                <p class="plan-desc">The flexibility of paying month to month and <strong>save 20%</strong>.</p>
+                <div class="plan-price">
+                    <span class="currency">$</span><span class="amount">3</span><span class="cents">.99</span>
+                    <span class="currency-tag">USD</span>
+                    <span class="duration">per month</span>
+                </div>
+                <button class="btn-select-plan" onclick="buyPlan('Subscription', 299, '$3.99')">Select</button>
+                
+                <div class="top-features">
+                    <h4>Top features</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Resize multiple images at once</li>
+                        <li><i class="fa-solid fa-check"></i> Privacy! Images never leave your device!</li>
+                        <li><i class="fa-solid fa-check"></i> No advertising</li>
+                        <li><i class="fa-solid fa-check"></i> E-mail support</li>
+                    </ul>
+                </div>
             </div>
-            <div class="step-card" style="text-align: left; border: 2px solid #0284c7; position:relative;">
-                <span style="position:absolute; top:-12px; right:20px; background:#0284c7; color:#fff; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:700;">PRO</span>
-                <h3>Pro Plan</h3>
-                <p>Bulk resizing, priority speed & exact KB controls.</p>
-                <h2 style="font-size:32px; color:#0284c7; margin: 15px 0;">₹299 <span style="font-size:14px; color:#64748b;">/ month</span></h2>
-                <button class="btn-primary" style="width:100%;" onclick="buyProSubscription()">Get Pro Now</button>
+
+            <div class="pricing-card">
+                <h3>Simple</h3>
+                <p class="plan-desc">Enjoy all premium features for a whole month.</p>
+                <div class="plan-price">
+                    <span class="currency">$</span><span class="amount">4</span><span class="cents">.99</span>
+                    <span class="currency-tag">USD</span>
+                    <span class="duration">1 month</span>
+                </div>
+                <button class="btn-select-plan" onclick="buyPlan('Simple', 399, '$4.99')">Select</button>
+                
+                <div class="top-features">
+                    <h4>Top features</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Resize multiple images at once</li>
+                        <li><i class="fa-solid fa-check"></i> Privacy! Images never leave your device!</li>
+                        <li><i class="fa-solid fa-check"></i> No advertising</li>
+                        <li><i class="fa-solid fa-check"></i> E-mail support</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Smart</h3>
+                <p class="plan-desc">Get all features for 3 months and <strong>save 33%</strong>.</p>
+                <div class="plan-price">
+                    <span class="currency">$</span><span class="amount">9</span><span class="cents">.99</span>
+                    <span class="currency-tag">USD</span>
+                    <span class="duration">3 months</span>
+                </div>
+                <button class="btn-select-plan" onclick="buyPlan('Smart', 799, '$9.99')">Select</button>
+                
+                <div class="top-features">
+                    <h4>Top features</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Resize multiple images at once</li>
+                        <li><i class="fa-solid fa-check"></i> Privacy! Images never leave your device!</li>
+                        <li><i class="fa-solid fa-check"></i> No advertising</li>
+                        <li><i class="fa-solid fa-check"></i> E-mail support</li>
+                        <li><i class="fa-solid fa-check"></i> You save 33%</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Professional</h3>
+                <p class="plan-desc">Get 6 months of premium features and <strong>save 50%</strong>.</p>
+                <div class="plan-price">
+                    <span class="currency">$</span><span class="amount">14</span><span class="cents">.99</span>
+                    <span class="currency-tag">USD</span>
+                    <span class="duration">6 months</span>
+                </div>
+                <button class="btn-select-plan" onclick="buyPlan('Professional', 1199, '$14.99')">Select</button>
+                
+                <div class="top-features">
+                    <h4>Top features</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Resize multiple images at once</li>
+                        <li><i class="fa-solid fa-check"></i> Privacy! Images never leave your device!</li>
+                        <li><i class="fa-solid fa-check"></i> No advertising</li>
+                        <li><i class="fa-solid fa-check"></i> E-mail support</li>
+                        <li><i class="fa-solid fa-check"></i> You save 50%</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pricing-card highlighted">
+                <h3>Yearly</h3>
+                <p class="plan-desc">Get 1 full year of premium features and <strong>save 65%</strong>.</p>
+                <div class="plan-price">
+                    <span class="currency">$</span><span class="amount">25</span><span class="cents">.99</span>
+                    <span class="currency-tag">USD</span>
+                    <span class="duration">12 months</span>
+                </div>
+                <button class="btn-select-plan primary" onclick="buyPlan('Yearly', 2199, '$25.99')">Select</button>
+                
+                <div class="top-features">
+                    <h4>Top features</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Resize multiple images at once</li>
+                        <li><i class="fa-solid fa-check"></i> Privacy! Images never leave your device!</li>
+                        <li><i class="fa-solid fa-check"></i> No advertising</li>
+                        <li><i class="fa-solid fa-check"></i> VIP E-mail support</li>
+                        <li><i class="fa-solid fa-check"></i> You save 65% (Best Value)</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
@@ -338,7 +433,7 @@
                     <input type="text" id="billing-pincode" pattern="[0-9]{6}" placeholder="e.g. 209625" required>
                 </div>
 
-                <button type="submit" class="btn-primary btn-block"><i class="fa-solid fa-lock"></i> Proceed to Pay ₹299</button>
+                <button type="submit" class="btn-primary btn-block"><i class="fa-solid fa-lock"></i> Proceed to Pay</button>
             </form>
         </div>
     </div>
