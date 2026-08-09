@@ -396,7 +396,8 @@ function buyProSubscription() {
 }
 
 function initiateRazorpayPayment() {
-    const razorpayKey = "rzp_test_YOUR_KEY_HERE"; // Replace with your live Razorpay key ID
+    // Updated with Live Razorpay Key ID
+    const razorpayKey = "rzp_live_TNXhcB0cg4sMeQ"; 
 
     const options = {
         "key": razorpayKey, 
