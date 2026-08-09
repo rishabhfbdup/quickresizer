@@ -47,6 +47,7 @@
             <button class="action-tab" id="tab-crop" onclick="switchMode('crop')"><i class="fa-solid fa-crop-simple"></i> <span data-lang="tab-crop">Crop Image</span></button>
             <button class="action-tab" id="tab-compress" onclick="switchMode('compress')"><i class="fa-solid fa-file-zipper"></i> <span data-lang="tab-compress">Compress KB</span></button>
             <button class="action-tab" id="tab-convert" onclick="switchMode('convert')"><i class="fa-solid fa-arrows-repeat"></i> <span data-lang="tab-convert">Convert Format</span></button>
+            <button class="action-tab" id="tab-namedate" onclick="switchMode('namedate')"><i class="fa-solid fa-id-card"></i> <span>Name & Date Adder</span></button>
         </div>
 
         <h1 class="main-title" id="mode-title" data-lang="hero-title">Resize Image Online</h1>
@@ -136,6 +137,22 @@
                 </div>
             </div>
 
+            <div class="mode-panel hidden" id="panel-namedate">
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-user"></i> Candidate Name:</label>
+                        <input type="text" id="candidate-name" placeholder="e.g. RISHABH RAJPUT">
+                    </div>
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-calendar-days"></i> Date of Photo / DOB:</label>
+                        <input type="date" id="photo-date">
+                    </div>
+                </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Govt Exam Requirement:</strong> Adds a crisp white box at the bottom of your photo with clear black text for SSC, UPSC, and State Govt forms.
+                </small>
+            </div>
+
             <button class="btn-primary btn-block" id="process-btn"><i class="fa-solid fa-download"></i> <span data-lang="btn-download">Process & Download</span></button>
         </div>
     </main>
@@ -154,7 +171,7 @@
             <div class="step-card">
                 <div class="step-num">2</div>
                 <h3 data-lang="step2-title">Choose Tool & Adjust</h3>
-                <p data-lang="step2-desc">Select Resize, Crop, Compress, or Convert and set your target KB, width/height, or format.</p>
+                <p data-lang="step2-desc">Select Resize, Crop, Compress, Convert, or Name & Date and set your target KB, width/height, or format.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">3</div>
