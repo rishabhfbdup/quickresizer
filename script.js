@@ -387,7 +387,7 @@ function logoutUser() {
     }
 }
 
-// Billing Modal & Checkout Flow
+// Billing Modal & Direct Checkout Flow
 function buyProSubscription() {
     if (!currentUser) {
         alert('Please signup or login to your account before purchasing the Pro Plan.');
@@ -431,17 +431,16 @@ function handleBillingSubmit(event) {
 
 function initiateRazorpayPayment() {
     const razorpayKey = "rzp_live_TNXhcB0cg4sMeQ"; 
-    const planId = "plan_TNY6cptmSJ1mY8"; // Your Live Autopay Plan ID
 
     const options = {
         "key": razorpayKey, 
-        "plan_id": planId,
+        "amount": 29900, // Direct ₹299 Charge On-The-Spot (No ₹1 Trial / Verification)
+        "currency": "INR",
         "name": "QuickResizer Pro Plan",
-        "description": "₹299/month (Autopay Subscription)",
+        "description": "Pro Subscription Access (₹299/month)",
         "image": "https://quickresizer.in/favicon.ico",
-        "customer_notify": 1,
         "handler": function (response) {
-            alert(`✅ Payment & Autopay Activated!\nSubscription ID: ${response.razorpay_subscription_id}\nPayment ID: ${response.razorpay_payment_id}\nYour Pro Plan is now ACTIVE!`);
+            alert(`✅ Payment Successful!\nPayment ID: ${response.razorpay_payment_id}\nYour Pro Plan is now ACTIVE!`);
         },
         "prefill": {
             "name": billingDetails.name || (currentUser ? currentUser.name : ""),
