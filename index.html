@@ -49,6 +49,7 @@
             <button class="action-tab" id="tab-convert" onclick="switchMode('convert')"><i class="fa-solid fa-arrows-repeat"></i> <span data-lang="tab-convert">Convert Format</span></button>
             <button class="action-tab" id="tab-namedate" onclick="switchMode('namedate')"><i class="fa-solid fa-id-card"></i> <span>Name & Date Adder</span></button>
             <button class="action-tab" id="tab-signature" onclick="switchMode('signature')"><i class="fa-solid fa-signature"></i> <span>Signature Cleaner</span></button>
+            <button class="action-tab" id="tab-bgcolor" onclick="switchMode('bgcolor')"><i class="fa-solid fa-palette"></i> <span>BG Color Changer</span></button>
         </div>
 
         <h1 class="main-title" id="mode-title" data-lang="hero-title">Resize Image Online</h1>
@@ -170,6 +171,28 @@
                 </small>
             </div>
 
+            <div class="mode-panel hidden" id="panel-bgcolor">
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-fill-drip"></i> Preset Background Color:</label>
+                        <select id="bg-preset-select" onchange="document.getElementById('bg-custom-color').value = this.value">
+                            <option value="#FFFFFF">Pure White (#FFFFFF - Official Forms)</option>
+                            <option value="#2563EB">Royal Blue (#2563EB - Passport Size)</option>
+                            <option value="#38BDF8">Sky Blue (#38BDF8 - Govt ID/Exam)</option>
+                            <option value="#000000">Pure Black (#000000)</option>
+                            <option value="#22C55E">Green Screen (#22C55E)</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-eye-dropper"></i> Custom Color Picker:</label>
+                        <input type="color" id="bg-custom-color" value="#FFFFFF" style="height: 42px; padding: 2px; cursor: pointer; width: 100%;">
+                    </div>
+                </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Passports & Govt Forms:</strong> Instantly replaces transparent or dull photo backgrounds with standard Official White or Passport Blue.
+                </small>
+            </div>
+
             <button class="btn-primary btn-block" id="process-btn"><i class="fa-solid fa-download"></i> <span data-lang="btn-download">Process & Download</span></button>
         </div>
     </main>
@@ -188,7 +211,7 @@
             <div class="step-card">
                 <div class="step-num">2</div>
                 <h3 data-lang="step2-title">Choose Tool & Adjust</h3>
-                <p data-lang="step2-desc">Select Resize, Crop, Compress, Convert, Name & Date, or Signature Cleaner.</p>
+                <p data-lang="step2-desc">Select Resize, Crop, Compress, Convert, Name & Date, Signature, or BG Color.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">3</div>
