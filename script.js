@@ -27,14 +27,16 @@ function switchMode(mode) {
         crop: "Crop Image Online",
         compress: "Compress Image KB Size",
         convert: "Convert Image Format",
-        namedate: "Add Name & Date to Photo"
+        namedate: "Add Name & Date to Photo",
+        signature: "Signature Cleaner & Enhancer"
     };
     const descs = {
         resize: "Change image width and height in pixels easily for free!",
         crop: "Drag and adjust box to visual crop your image precisely.",
         compress: "Set exact target KB (PRO Feature) or adjust compression slider.",
         convert: "Convert images from JPG, PNG, WEBP to desired formats instantly.",
-        namedate: "Add candidate name and photo date/DOB at the bottom for official forms."
+        namedate: "Add candidate name and photo date/DOB at the bottom for official forms.",
+        signature: "Clean background shadows from photo signatures and make ink pitch black."
     };
 
     if (document.getElementById('mode-title')) document.getElementById('mode-title').innerText = titles[mode] || titles.resize;
@@ -61,6 +63,7 @@ function switchMode(mode) {
         else if (mode === 'compress') btn.innerHTML = `<i class="fa-solid fa-file-zipper"></i> Compress KB & Download${countText}`;
         else if (mode === 'convert') btn.innerHTML = `<i class="fa-solid fa-arrows-repeat"></i> Convert & Download${countText}`;
         else if (mode === 'namedate') btn.innerHTML = `<i class="fa-solid fa-id-card"></i> Add Name/Date & Download${countText}`;
+        else if (mode === 'signature') btn.innerHTML = `<i class="fa-solid fa-signature"></i> Clean Signature & Download${countText}`;
     }
 }
 
@@ -180,7 +183,7 @@ document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
 });
 
 // ==========================================
-// 4. IMAGE PROCESSING & NAME/DATE ADDER LOGIC
+// 4. IMAGE PROCESSING, NAME/DATE & SIGNATURE CLEANER LOGIC
 // ==========================================
 document.getElementById('process-btn')?.addEventListener('click', async () => {
     if (!uploadedFiles.length) return;
@@ -204,16 +207,13 @@ function drawNameAndDate(ctx, canvasWidth, canvasHeight, nameText, dateText) {
     const bannerHeight = Math.round(canvasHeight * 0.18);
     const bannerY = canvasHeight - bannerHeight;
 
-    // Draw White Box
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, bannerY, canvasWidth, bannerHeight);
 
-    // Border line on top of banner
     ctx.strokeStyle = "#000000";
     ctx.lineWidth = Math.max(2, Math.round(canvasHeight * 0.005));
     ctx.strokeRect(0, bannerY, canvasWidth, bannerHeight);
 
-    // Text Styling
     ctx.fillStyle = "#000000";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -230,6 +230,30 @@ function drawNameAndDate(ctx, canvasWidth, canvasHeight, nameText, dateText) {
     } else if (dateText) {
         ctx.fillText(`DOP: ${dateText}`, canvasWidth / 2, bannerY + (bannerHeight / 2));
     }
+}
+
+function cleanSignatureBackground(ctx, width, height) {
+    const imgData = ctx.getImageData(0, 0, width, height);
+    const data = imgData.data;
+    
+    const contrastVal = parseInt(document.getElementById('sig-contrast')?.value || 200) / 100;
+    const thresholdVal = parseInt(document.getElementById('sig-threshold')?.value || 180);
+
+    for (let i = 0; i < data.length; i += 4) {
+        let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+        avg = ((avg - 128) * contrastVal) + 128;
+
+        if (avg > thresholdVal) {
+            data[i] = 255;
+            data[i + 1] = 255;
+            data[i + 2] = 255;
+        } else {
+            data[i] = Math.max(0, avg - 40);
+            data[i + 1] = Math.max(0, avg - 40);
+            data[i + 2] = Math.max(0, avg - 40);
+        }
+    }
+    ctx.putImageData(imgData, 0, 0);
 }
 
 function processSingleFile(file, index) {
@@ -257,11 +281,12 @@ function processSingleFile(file, index) {
                 canvas.height = h;
                 ctx.drawImage(img, 0, 0, w, h);
 
-                // Execute Name & Date Drawing if in NameDate Mode
                 if (currentMode === 'namedate') {
                     const candidateName = document.getElementById('candidate-name')?.value.trim();
                     const photoDate = document.getElementById('photo-date')?.value;
                     drawNameAndDate(ctx, w, h, candidateName, photoDate);
+                } else if (currentMode === 'signature') {
+                    cleanSignatureBackground(ctx, w, h);
                 }
 
                 const targetKB = parseFloat(document.getElementById('target-kb-input')?.value);
