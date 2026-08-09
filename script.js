@@ -62,7 +62,7 @@ function switchMode(mode) {
 }
 
 // ==========================================
-// 2. FILE UPLOAD & DRAG-DROP LOGIC (WITH PRO CHECK)
+// 2. FILE UPLOAD & DRAG-DROP LOGIC (WITH PRO & SUBSCRIPTION CHECK)
 // ==========================================
 const dropZone = document.getElementById('drop-zone');
 const imageInput = document.getElementById('image-input');
@@ -87,16 +87,25 @@ if (imageInput) {
 function handleFiles(files) {
     const filesArray = Array.from(files);
     const isPremiumUser = currentUser && currentUser.isPro;
+    const userPlan = currentUser ? currentUser.plan : '';
 
-    // 🔒 PRO FEATURE 1: Bulk Upload Restriction
-    if (filesArray.length > 1 && !isPremiumUser) {
-        alert('⭐ Bulk Upload (multiple files at once) is a PRO Feature!\n\nFree users can process 1 image at a time. Please upgrade to Pro for unlimited bulk processing!');
-        
-        const pricingSection = document.getElementById('pricing');
-        if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
-        
-        uploadedFiles = [filesArray[0]]; // Process only the 1st image
+    // 🔒 PRO FEATURE 1: Bulk Upload Restriction Logic
+    if (!isPremiumUser) {
+        // Free User Restriction (Only 1 File Allowed)
+        if (filesArray.length > 1) {
+            alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process only 1 image at a time. Please upgrade to Pro for bulk processing!');
+            const pricingSection = document.getElementById('pricing');
+            if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
+            uploadedFiles = [filesArray[0]]; // Keep only 1st file
+        } else {
+            uploadedFiles = filesArray;
+        }
+    } else if (userPlan === 'Subscription' && filesArray.length > 10) {
+        // Subscription Plan Limit (Max 10 Files)
+        alert('⚠️ Your Subscription Plan allows up to 10 images at once.\n\nProcessing the first 10 images. Upgrade to Simple, Smart, Professional, or Yearly for Unlimited Bulk Uploads!');
+        uploadedFiles = filesArray.slice(0, 10);
     } else {
+        // Unlimited for Simple, Smart, Professional, Yearly Plans
         uploadedFiles = filesArray;
     }
 
@@ -354,11 +363,11 @@ function handleAuthSubmit(event, type) {
             return;
         }
 
-        const newUser = { name, mobile, email, password, isPro: false };
+        const newUser = { name, mobile, email, password, isPro: false, plan: '' };
         registeredUsers.push(newUser);
         localStorage.setItem('quickresizer_registered_users', JSON.stringify(registeredUsers));
 
-        currentUser = { name, email, mobile, isPro: false };
+        currentUser = { name, email, mobile, isPro: false, plan: '' };
         localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
         
         alert(`✅ Account created successfully! Welcome, ${name}.`);
