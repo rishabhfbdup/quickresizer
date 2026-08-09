@@ -34,7 +34,9 @@ function switchMode(mode) {
         signature: "Signature Cleaner & Enhancer",
         bgcolor: "Change Photo Background Color",
         imgtopdf: "Convert Images to PDF Document",
-        pdftoimg: "Convert PDF Pages to Images (JPG/PNG)"
+        pdftoimg: "Convert PDF Pages to Images (JPG/PNG)",
+        mergepdf: "Merge Multiple PDF Files Online",
+        compresspdf: "Compress PDF File Size"
     };
     const descs = {
         resize: "Change image width and height in pixels easily for free!",
@@ -45,7 +47,9 @@ function switchMode(mode) {
         signature: "Clean background shadows from photo signatures and make ink pitch black.",
         bgcolor: "Fill or replace photo background with official white, passport blue, or custom colors.",
         imgtopdf: "Combine single or multiple images into a clean PDF document instantly.",
-        pdftoimg: "Extract crisp JPG/PNG image files from every page of your PDF file."
+        pdftoimg: "Extract crisp JPG/PNG image files from every page of your PDF file.",
+        mergepdf: "Select 2 or more PDF files to combine them into 1 single document.",
+        compresspdf: "Reduce large PDF document size directly in your browser."
     };
 
     if (document.getElementById('mode-title')) document.getElementById('mode-title').innerText = titles[mode] || titles.resize;
@@ -73,6 +77,8 @@ function switchMode(mode) {
         else if (mode === 'bgcolor') btn.innerHTML = `<i class="fa-solid fa-palette"></i> Apply BG Color & Download${countText}`;
         else if (mode === 'imgtopdf') btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Generate PDF & Download`;
         else if (mode === 'pdftoimg') btn.innerHTML = `<i class="fa-solid fa-file-image"></i> Extract Images & Download`;
+        else if (mode === 'mergepdf') btn.innerHTML = `<i class="fa-solid fa-object-group"></i> Merge PDFs & Download`;
+        else if (mode === 'compresspdf') btn.innerHTML = `<i class="fa-solid fa-file-contract"></i> Compress PDF & Download`;
     }
 }
 
@@ -105,8 +111,8 @@ function handleFiles(files) {
     const userPlan = currentUser ? currentUser.plan : '';
 
     if (!isPremiumUser) {
-        if (filesArray.length > 1) {
-            alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process only 1 file at a time. Please upgrade to Pro for bulk processing!');
+        if (filesArray.length > 1 && currentMode !== 'mergepdf') {
+            alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process 1 file at a time (except Merge PDF). Upgrade to Pro for bulk processing!');
             const pricingSection = document.getElementById('pricing');
             if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
             uploadedFiles = [filesArray[0]];
@@ -122,11 +128,10 @@ function handleFiles(files) {
 
     const firstFile = uploadedFiles[0];
 
-    if (firstFile.type === 'application/pdf') {
-        imagePreview.src = 'https://cdn-icons-png.flaticon.com/512/337/337946.png'; // PDF Icon Preview
+    if (firstFile.type === 'application/pdf' || firstFile.name.endsWith('.pdf')) {
+        imagePreview.src = 'https://cdn-icons-png.flaticon.com/512/337/337946.png';
         if (controlsSection) controlsSection.classList.remove('hidden');
         if (controlsSection) controlsSection.scrollIntoView({ behavior: 'smooth' });
-        if (currentMode !== 'pdftoimg') switchMode('pdftoimg');
     } else {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -208,6 +213,10 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
         await convertImagesToPdf();
     } else if (currentMode === 'pdftoimg') {
         await convertPdfToImages();
+    } else if (currentMode === 'mergepdf') {
+        await mergePdfFiles();
+    } else if (currentMode === 'compresspdf') {
+        await compressPdfFile();
     } else {
         for (let i = 0; i < uploadedFiles.length; i++) {
             const file = uploadedFiles[i];
@@ -297,6 +306,90 @@ async function convertPdfToImages() {
 
         const imgDataUrl = canvas.toDataURL(mimeType, 0.92);
         downloadDataUrl(imgDataUrl, `quickresizer_pdf_page_${pageNum}.${ext}`);
+    }
+}
+
+// MERGE PDF FILES (pdf-lib)
+async function mergePdfFiles() {
+    const pdfFiles = uploadedFiles.filter(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+    if (pdfFiles.length < 2) {
+        alert('Please select at least 2 PDF files to merge!');
+        return;
+    }
+
+    if (typeof PDFLib === 'undefined') {
+        alert('PDF Merger library is loading. Please try again in 3 seconds.');
+        return;
+    }
+
+    const mergedPdf = await PDFLib.PDFDocument.create();
+
+    for (const file of pdfFiles) {
+        const fileBuffer = await file.arrayBuffer();
+        const pdf = await PDFLib.PDFDocument.load(fileBuffer);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+    }
+
+    const mergedPdfBytes = await mergedPdf.save();
+    const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `quickresizer_merged_${Date.now()}.pdf`;
+    link.click();
+}
+
+// COMPRESS PDF FILE (Re-renders pages as optimized PDF)
+async function compressPdfFile() {
+    const pdfFile = uploadedFiles.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+    if (!pdfFile) {
+        alert('Please select a valid PDF file to compress!');
+        return;
+    }
+
+    if (typeof pdfjsLib === 'undefined' || typeof window.jspdf === 'undefined') {
+        alert('PDF compression engines are loading. Please try again in 3 seconds.');
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const fileArrayBuffer = await pdfFile.arrayBuffer();
+    const pdfDoc = await pdfjsLib.getDocument({ data: fileArrayBuffer }).promise;
+    
+    const scaleLevel = parseFloat(document.getElementById('pdf-compress-level')?.value || 1.0);
+    
+    let newPdf = null;
+
+    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+        const page = await pdfDoc.getPage(pageNum);
+        const viewport = page.getViewport({ scale: scaleLevel });
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+        const imgDataUrl = canvas.toDataURL('image/jpeg', 0.65); // Compressed JPEG quality
+
+        const orientation = viewport.width > viewport.height ? 'landscape' : 'portrait';
+
+        if (pageNum === 1) {
+            newPdf = new jsPDF({
+                orientation: orientation,
+                unit: 'px',
+                format: [viewport.width, viewport.height]
+            });
+        } else {
+            newPdf.addPage([viewport.width, viewport.height], orientation);
+        }
+
+        newPdf.addImage(imgDataUrl, 'JPEG', 0, 0, viewport.width, viewport.height);
+    }
+
+    if (newPdf) {
+        newPdf.save(`quickresizer_compressed_${Date.now()}.pdf`);
     }
 }
 
