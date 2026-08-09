@@ -5,6 +5,7 @@ let cropperInstance = null;
 let registeredUsers = JSON.parse(localStorage.getItem('quickresizer_registered_users')) || [];
 let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
 let pendingSubscriptionAfterAuth = false;
+let billingDetails = {};
 
 // ==========================================
 // 1. TOOL MODE SWITCHER LOGIC
@@ -241,7 +242,7 @@ function downloadDataUrl(dataUrl, filename) {
 }
 
 // ==========================================
-// 5. USER AUTHENTICATION & RAZORPAY PAYMENT
+// 5. USER AUTHENTICATION & BILLING LOGIC
 // ==========================================
 function updateAuthUI() {
     const loginBtn = document.querySelector('.btn-login');
@@ -373,7 +374,7 @@ function handleAuthSubmit(event, type) {
     closeAuthModal();
 
     if (pendingSubscriptionAfterAuth) {
-        initiateRazorpayPayment();
+        openBillingModal();
     }
 }
 
@@ -386,17 +387,49 @@ function logoutUser() {
     }
 }
 
+// Billing Modal & Checkout Flow
 function buyProSubscription() {
     if (!currentUser) {
         alert('Please signup or login to your account before purchasing the Pro Plan.');
         openAuthModal('signup', true);
     } else {
-        initiateRazorpayPayment();
+        openBillingModal();
     }
 }
 
+function openBillingModal() {
+    const modal = document.getElementById('billing-modal');
+    if (modal) {
+        if (currentUser) {
+            if (document.getElementById('billing-name')) document.getElementById('billing-name').value = currentUser.name || '';
+            if (document.getElementById('billing-mobile')) document.getElementById('billing-mobile').value = currentUser.mobile || '';
+        }
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeBillingModal() {
+    const modal = document.getElementById('billing-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function handleBillingSubmit(event) {
+    event.preventDefault();
+
+    billingDetails = {
+        name: document.getElementById('billing-name').value,
+        mobile: document.getElementById('billing-mobile').value,
+        city: document.getElementById('billing-city').value,
+        state: document.getElementById('billing-state').value,
+        pincode: document.getElementById('billing-pincode').value,
+        email: currentUser ? currentUser.email : ''
+    };
+
+    closeBillingModal();
+    initiateRazorpayPayment();
+}
+
 function initiateRazorpayPayment() {
-    // Updated with Live Razorpay Key ID
     const razorpayKey = "rzp_live_TNXhcB0cg4sMeQ"; 
 
     const options = {
@@ -407,12 +440,17 @@ function initiateRazorpayPayment() {
         "description": "Unlimited Bulk Resizing & High Speed Access",
         "image": "https://quickresizer.in/favicon.ico",
         "handler": function (response) {
-            alert(`Payment Successful!\nPayment ID: ${response.razorpay_payment_id}\nYour Pro Plan is now ACTIVE!`);
+            alert(`✅ Payment Successful!\nPayment ID: ${response.razorpay_payment_id}\nYour Pro Plan is now ACTIVE!`);
         },
         "prefill": {
-            "name": currentUser ? currentUser.name : "",
-            "email": currentUser ? currentUser.email : "",
-            "contact": currentUser ? currentUser.mobile : ""
+            "name": billingDetails.name || (currentUser ? currentUser.name : ""),
+            "email": billingDetails.email || (currentUser ? currentUser.email : ""),
+            "contact": billingDetails.mobile || (currentUser ? currentUser.mobile : "")
+        },
+        "notes": {
+            "city": billingDetails.city || "",
+            "state": billingDetails.state || "",
+            "pincode": billingDetails.pincode || ""
         },
         "theme": {
             "color": "#0284c7"
