@@ -310,6 +310,39 @@
         </div>
     </div>
 
+    <div id="billing-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeBillingModal()">&times;</button>
+
+            <form id="billing-form" class="auth-form" onsubmit="handleBillingSubmit(event)">
+                <h3>Billing Details</h3>
+                <p>Please enter your billing information to complete purchase.</p>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="billing-name" placeholder="Rishabh Rajput" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="billing-mobile" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+                </div>
+                <div class="form-group">
+                    <label>City & State</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="billing-city" placeholder="City" required style="width: 50%;">
+                        <input type="text" id="billing-state" placeholder="State" required style="width: 50%;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Pincode / Zip Code</label>
+                    <input type="text" id="billing-pincode" pattern="[0-9]{6}" placeholder="e.g. 209625" required>
+                </div>
+
+                <button type="submit" class="btn-primary btn-block"><i class="fa-solid fa-lock"></i> Proceed to Pay ₹299</button>
+            </form>
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="footer-links">
             <div class="footer-brand">
