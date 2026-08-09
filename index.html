@@ -8,7 +8,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8274688603267902"
      crossorigin="anonymous"></script>
 
-    <title>QuickResizer - All-in-One Image, PDF & Micro Tools</title>
+    <title>QuickResizer - All-in-One Image, PDF & Resume Builder Tool</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
@@ -57,7 +57,9 @@
             <button class="action-tab" id="tab-imgtopdf" onclick="switchMode('imgtopdf')"><i class="fa-solid fa-file-pdf"></i> <span>Image to PDF</span></button>
             <button class="action-tab" id="tab-pdftoimg" onclick="switchMode('pdftoimg')"><i class="fa-solid fa-file-image"></i> <span>PDF to Image</span></button>
             <button class="action-tab" id="tab-mergepdf" onclick="switchMode('mergepdf')"><i class="fa-solid fa-object-group"></i> <span>Merge PDF</span></button>
+            <button class="action-tab" id="tab-splitpdf" onclick="switchMode('splitpdf')"><i class="fa-solid fa-scissors"></i> <span>Split PDF</span></button>
             <button class="action-tab" id="tab-compresspdf" onclick="switchMode('compresspdf')"><i class="fa-solid fa-file-contract"></i> <span>Compress PDF</span></button>
+            <button class="action-tab" id="tab-resume" onclick="switchMode('resume')"><i class="fa-solid fa-file-user"></i> <span>Resume Builder</span></button>
             <button class="action-tab" id="tab-wordcounter" onclick="switchMode('wordcounter')"><i class="fa-solid fa-font"></i> <span>Word Counter</span></button>
             <button class="action-tab" id="tab-wa-chat" onclick="switchMode('wa-chat')"><i class="fa-brands fa-whatsapp"></i> <span>WhatsApp Direct</span></button>
             <button class="action-tab" id="tab-svgtopng" onclick="switchMode('svgtopng')"><i class="fa-solid fa-file-code"></i> <span>SVG to PNG</span></button>
@@ -263,6 +265,22 @@
                 </small>
             </div>
 
+            <div class="mode-panel hidden" id="panel-splitpdf">
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-scissors"></i> Page Start:</label>
+                        <input type="number" id="split-start" placeholder="e.g. 1" min="1" value="1">
+                    </div>
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-scissors"></i> Page End:</label>
+                        <input type="number" id="split-end" placeholder="e.g. 3" min="1" value="1">
+                    </div>
+                </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Split PDF:</strong> Extract specific pages (e.g. Page 1 to 3) into a separate new PDF file.
+                </small>
+            </div>
+
             <div class="mode-panel hidden" id="panel-compresspdf">
                 <div class="settings-grid">
                     <div class="setting-group full-width">
@@ -275,6 +293,42 @@
                 </div>
                 <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Compress PDF:</strong> Reduces large PDF document size while keeping text and images clear.
+                </small>
+            </div>
+
+            <div class="mode-panel hidden" id="panel-resume">
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-user"></i> Full Name:</label>
+                        <input type="text" id="res-name" placeholder="e.g. Rishabh Rajput">
+                    </div>
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-briefcase"></i> Job Title / Designation:</label>
+                        <input type="text" id="res-title" placeholder="e.g. Software Engineer / Student">
+                    </div>
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-envelope"></i> Email Address:</label>
+                        <input type="email" id="res-email" placeholder="e.g. rishabh@example.com">
+                    </div>
+                    <div class="setting-group">
+                        <label><i class="fa-solid fa-phone"></i> Phone Number:</label>
+                        <input type="tel" id="res-phone" placeholder="e.g. +91 9876543210">
+                    </div>
+                    <div class="setting-group full-width">
+                        <label><i class="fa-solid fa-graduation-cap"></i> Education & Degree:</label>
+                        <input type="text" id="res-edu" placeholder="e.g. B.Tech Computer Science - ABC University (2022-2026)">
+                    </div>
+                    <div class="setting-group full-width">
+                        <label><i class="fa-solid fa-gears"></i> Key Skills (Comma Separated):</label>
+                        <input type="text" id="res-skills" placeholder="e.g. JavaScript, HTML/CSS, Python, Problem Solving">
+                    </div>
+                    <div class="setting-group full-width">
+                        <label><i class="fa-solid fa-building"></i> Work Experience / Projects:</label>
+                        <textarea id="res-exp" rows="3" placeholder="e.g. Developed QuickResizer web application with 15+ micro tools." style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:10px; font-family:'Poppins',sans-serif;"></textarea>
+                    </div>
+                </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>1-Click Professional Resume:</strong> Generates a clean, ATS-friendly PDF Resume instantly.
                 </small>
             </div>
 
