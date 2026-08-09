@@ -109,7 +109,7 @@ function switchMode(mode) {
 }
 
 // ==========================================
-// 2. FILE UPLOAD & DRAG-DROP LOGIC
+// 2. PLAN RULES & MB SIZE LIMIT CHECKING
 // ==========================================
 const dropZone = document.getElementById('drop-zone');
 const imageInput = document.getElementById('image-input');
@@ -131,14 +131,40 @@ if (imageInput) {
     });
 }
 
+// Get Max MB Allowed as per User Plan
+function getMaxMbLimit() {
+    if (!currentUser || !currentUser.isPro) return 5; // Free: 5 MB
+    const plan = currentUser.plan || '';
+    if (plan === 'Subscription') return 10;
+    if (plan === 'Simple') return 15;
+    if (plan === 'Smart') return 20;
+    if (plan === 'Professional') return 30;
+    if (plan === 'Yearly') return Infinity; // Yearly: Unlimited MB
+    return 5;
+}
+
 function handleFiles(files) {
     const filesArray = Array.from(files);
     const isPremiumUser = currentUser && currentUser.isPro;
     const userPlan = currentUser ? currentUser.plan : '';
+    const maxMbLimit = getMaxMbLimit();
 
+    // 🔒 Rule 1: File Size MB Check
+    for (let i = 0; i < filesArray.length; i++) {
+        const fileSizeMb = filesArray[i].size / (1024 * 1024);
+        if (fileSizeMb > maxMbLimit) {
+            const limitText = maxMbLimit === Infinity ? 'Unlimited' : `${maxMbLimit}MB`;
+            alert(`⚠️ File size exceeds your plan limit!\n\nYour current plan allows files up to ${limitText}. The uploaded file "${filesArray[i].name}" is ${fileSizeMb.toFixed(1)}MB.\n\nPlease upgrade your plan to upload larger files!`);
+            const pricingSection = document.getElementById('pricing');
+            if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
+            return;
+        }
+    }
+
+    // 🔒 Rule 2: Bulk Upload File Count Limits
     if (!isPremiumUser) {
         if (filesArray.length > 1 && currentMode !== 'mergepdf') {
-            alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process 1 file at a time (except Merge PDF). Upgrade to Pro for bulk processing!');
+            alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process only 1 file at a time (Max 5MB). Please upgrade to Pro for bulk processing!');
             const pricingSection = document.getElementById('pricing');
             if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
             uploadedFiles = [filesArray[0]];
@@ -146,7 +172,7 @@ function handleFiles(files) {
             uploadedFiles = filesArray;
         }
     } else if (userPlan === 'Subscription' && filesArray.length > 10) {
-        alert('⚠️ Your Subscription Plan allows up to 10 files at once.\n\nProcessing first 10 files. Upgrade to Simple, Smart, Professional, or Yearly for Unlimited Bulk Uploads!');
+        alert('⚠️ Your Subscription Plan allows up to 10 files at once.\n\nProcessing the first 10 files. Upgrade to Simple, Smart, Professional, or Yearly for Unlimited Bulk Uploads!');
         uploadedFiles = filesArray.slice(0, 10);
     } else {
         uploadedFiles = filesArray;
@@ -224,11 +250,12 @@ document.getElementById('quality-slider')?.addEventListener('input', (e) => {
     }
 });
 
+// 🔒 Rule 3: Target KB Restriction (Pro Only)
 document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
     const isPremiumUser = currentUser && currentUser.isPro;
     if (!isPremiumUser) {
         e.target.blur();
-        alert('⭐ Exact Target KB Compression (e.g. 20KB for govt forms) is a PRO Feature!\n\nUpgrade to Pro to set exact file size limits.');
+        alert('⭐ Exact Target KB Compression (e.g. 20KB for SSC/UPSC forms) is a PRO Feature!\n\nUpgrade to Pro to set exact file size limits.');
         const pricingSection = document.getElementById('pricing');
         if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -247,48 +274,97 @@ document.getElementById('word-input-text')?.addEventListener('input', (e) => {
 });
 
 // ==========================================
-// 4. MAIN PROCESSOR & SPECIAL TOOLS LOGIC
+// 4. MAIN PROCESSOR WITH SPEED DELAY & PAGE LIMITS
 // ==========================================
+function getProcessingDelay() {
+    if (!currentUser || !currentUser.isPro) return 3500; // Free: 3.5 sec slow delay
+    const plan = currentUser.plan || '';
+    if (plan === 'Subscription' || plan === 'Simple') return 1500; // Fast: 1.5 sec
+    if (plan === 'Smart') return 800; // Ultra Fast: 0.8 sec
+    if (plan === 'Professional' || plan === 'Yearly') return 0; // High Speed: Instant 0 sec delay
+    return 3500;
+}
+
 document.getElementById('process-btn')?.addEventListener('click', async () => {
-    if (currentMode === 'imgtopdf') {
-        await convertImagesToPdf();
-    } else if (currentMode === 'pdftoimg') {
-        await convertPdfToImages();
-    } else if (currentMode === 'mergepdf') {
-        await mergePdfFiles();
-    } else if (currentMode === 'splitpdf') {
-        await splitPdfFile();
-    } else if (currentMode === 'compresspdf') {
-        await compressPdfFile();
-    } else if (currentMode === 'resume') {
-        generateResumePdf();
-    } else if (currentMode === 'wordcounter') {
-        const text = document.getElementById('word-input-text')?.value;
-        navigator.clipboard.writeText(text);
-        alert('✅ Text copied to clipboard!');
-    } else if (currentMode === 'wa-chat') {
-        let phone = document.getElementById('wa-phone')?.value.replace(/[^0-9]/g, '');
-        const msg = encodeURIComponent(document.getElementById('wa-msg')?.value || '');
-        if (!phone) {
-            alert('Please enter a valid mobile number with country code!');
+    const btn = document.getElementById('process-btn');
+    const originalText = btn ? btn.innerHTML : '';
+    const isPremiumUser = currentUser && currentUser.isPro;
+
+    // 🔒 Rule 4: PDF Page Count Limit (Max 3 Pages for Free Users)
+    if (!isPremiumUser && (currentMode === 'imgtopdf' || currentMode === 'splitpdf')) {
+        if (currentMode === 'imgtopdf' && uploadedFiles.length > 3) {
+            alert('⭐ Free Plan allows converting up to 3 image pages to PDF!\n\nUpgrade to Pro for Unlimited PDF pages!');
+            document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
             return;
         }
-        window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-    } else if (currentMode === 'svgtopng') {
-        await convertSvgToPng();
-    } else if (currentMode === 'jsonformat') {
-        formatJsonText();
-    } else {
-        if (!uploadedFiles.length) return;
-        for (let i = 0; i < uploadedFiles.length; i++) {
-            const file = uploadedFiles[i];
-            if (currentMode === 'crop' && cropperInstance) {
-                const croppedCanvas = cropperInstance.getCroppedCanvas();
-                const dataUrl = croppedCanvas.toDataURL('image/jpeg', 0.9);
-                downloadDataUrl(dataUrl, `quickresizer_cropped_${i + 1}.jpg`);
-            } else {
-                await processSingleFile(file, i);
+        if (currentMode === 'splitpdf') {
+            const start = parseInt(document.getElementById('split-start')?.value || 1);
+            const end = parseInt(document.getElementById('split-end')?.value || 1);
+            if ((end - start + 1) > 3) {
+                alert('⭐ Free Plan allows splitting up to 3 pages at once!\n\nUpgrade to Pro for Unlimited PDF Page Splitting!');
+                document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                return;
             }
+        }
+    }
+
+    const delay = getProcessingDelay();
+    
+    if (btn) {
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing File... Please Wait`;
+        btn.disabled = true;
+    }
+
+    if (delay > 0) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+    }
+
+    try {
+        if (currentMode === 'imgtopdf') {
+            await convertImagesToPdf();
+        } else if (currentMode === 'pdftoimg') {
+            await convertPdfToImages();
+        } else if (currentMode === 'mergepdf') {
+            await mergePdfFiles();
+        } else if (currentMode === 'splitpdf') {
+            await splitPdfFile();
+        } else if (currentMode === 'compresspdf') {
+            await compressPdfFile();
+        } else if (currentMode === 'resume') {
+            generateResumePdf();
+        } else if (currentMode === 'wordcounter') {
+            const text = document.getElementById('word-input-text')?.value;
+            navigator.clipboard.writeText(text);
+            alert('✅ Text copied to clipboard!');
+        } else if (currentMode === 'wa-chat') {
+            let phone = document.getElementById('wa-phone')?.value.replace(/[^0-9]/g, '');
+            const msg = encodeURIComponent(document.getElementById('wa-msg')?.value || '');
+            if (!phone) {
+                alert('Please enter a valid mobile number with country code!');
+                return;
+            }
+            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+        } else if (currentMode === 'svgtopng') {
+            await convertSvgToPng();
+        } else if (currentMode === 'jsonformat') {
+            formatJsonText();
+        } else {
+            if (!uploadedFiles.length) return;
+            for (let i = 0; i < uploadedFiles.length; i++) {
+                const file = uploadedFiles[i];
+                if (currentMode === 'crop' && cropperInstance) {
+                    const croppedCanvas = cropperInstance.getCroppedCanvas();
+                    const dataUrl = croppedCanvas.toDataURL('image/jpeg', 0.9);
+                    downloadDataUrl(dataUrl, `quickresizer_cropped_${i + 1}.jpg`);
+                } else {
+                    await processSingleFile(file, i);
+                }
+            }
+        }
+    } finally {
+        if (btn) {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
         }
     }
 });
@@ -355,8 +431,7 @@ function generateResumePdf() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('portrait', 'mm', 'a4');
 
-    // Header Banner Style
-    doc.setFillColor(15, 23, 42); // Dark slate
+    doc.setFillColor(15, 23, 42);
     doc.rect(0, 0, 210, 40, 'F');
 
     doc.setTextColor(255, 255, 255);
@@ -371,13 +446,11 @@ function generateResumePdf() {
     doc.setFontSize(9);
     doc.text(`Email: ${email} | Phone: ${phone}`, 15, 34);
 
-    // Body Styling
     doc.setTextColor(15, 23, 42);
     let y = 55;
 
-    // Helper Heading Function
     function addSectionHeader(heading) {
-        doc.setFillColor(56, 189, 248); // Sky blue line
+        doc.setFillColor(56, 189, 248);
         doc.rect(15, y, 180, 0.8, 'F');
         doc.setFont('Poppins', 'bold');
         doc.setFontSize(13);
@@ -385,7 +458,6 @@ function generateResumePdf() {
         y += 8;
     }
 
-    // Education
     addSectionHeader('EDUCATION');
     doc.setFont('Poppins', 'normal');
     doc.setFontSize(10);
@@ -393,7 +465,6 @@ function generateResumePdf() {
     doc.text(splitEdu, 15, y);
     y += (splitEdu.length * 6) + 10;
 
-    // Skills
     addSectionHeader('KEY SKILLS');
     doc.setFont('Poppins', 'normal');
     doc.setFontSize(10);
@@ -401,14 +472,12 @@ function generateResumePdf() {
     doc.text(splitSkills, 15, y);
     y += (splitSkills.length * 6) + 10;
 
-    // Experience / Projects
     addSectionHeader('EXPERIENCE & PROJECTS');
     doc.setFont('Poppins', 'normal');
     doc.setFontSize(10);
     const splitExp = doc.splitTextToSize(exp, 175);
     doc.text(splitExp, 15, y);
 
-    // Save Resume PDF
     doc.save(`Resume_${name.replace(/\s+/g, '_')}.pdf`);
 }
 
