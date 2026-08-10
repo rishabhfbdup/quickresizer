@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Text Extractor (OCR) - Extract Text from Photos Free | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">Image Text Extractor (OCR)</h1>
+        <p class="sub-title">Extract readable text from photos, documents and handwritten notes instantly</p>
+        <div style="max-width:600px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            <input type="file" id="imgInput" accept="image/*" style="margin-bottom:15px;">
+            <button onclick="extractText()" id="btn" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Extract Text</button>
+            <div id="status" style="margin-top:10px; font-size:14px; color:#64748b; font-weight:bold;"></div>
+            <textarea id="output" rows="8" placeholder="Extracted text will appear here..." style="width:100%; margin-top:15px; padding:10px; border-radius:6px; border:1px solid #ccc;"></textarea>
+        </div>
+    </main>
+    <script>
+        async function extractText() {
+            let file = document.getElementById('imgInput').files[0];
+            if(!file) { alert("Please select an image first!"); return; }
+            let status = document.getElementById('status');
+            status.innerText = "Extracting text... Please wait...";
+            let worker = await Tesseract.createWorker('eng');
+            let ret = await worker.recognize(file);
+            document.getElementById('output').value = ret.data.text;
+            status.innerText = "Extraction Complete!";
+            await worker.terminate();
+        }
+    </script>
+</body>
+</html>
