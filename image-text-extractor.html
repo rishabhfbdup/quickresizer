@@ -17,28 +17,108 @@
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+
     <main class="hero-section">
         <h1 class="main-title">Image Text Extractor (OCR)</h1>
         <p class="sub-title">Extract readable text from photos, documents and handwritten notes instantly</p>
+        
         <div style="max-width:600px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
-            <input type="file" id="imgInput" accept="image/*" style="margin-bottom:15px;">
-            <button onclick="extractText()" id="btn" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Extract Text</button>
-            <div id="status" style="margin-top:10px; font-size:14px; color:#64748b; font-weight:bold;"></div>
-            <textarea id="output" rows="8" placeholder="Extracted text will appear here..." style="width:100%; margin-top:15px; padding:10px; border-radius:6px; border:1px solid #ccc;"></textarea>
+            
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:12px; font-weight:bold; color:#64748b;">
+                <span>Select Image File (JPG/PNG):</span>
+                <span>Max File Size: 5MB (Free)</span>
+            </div>
+
+            <input type="file" id="imgInput" accept="image/*" style="width:100%; margin-bottom:15px; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+            
+            <button onclick="extractText()" id="btn" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
+                <i class="fa-solid fa-file-lines"></i> Extract Text Now
+            </button>
+            
+            <div id="status" style="margin-top:12px; font-size:14px; color:#2563eb; font-weight:bold; text-align:center;"></div>
+            
+            <textarea id="output" rows="8" placeholder="Extracted text will appear here..." style="width:100%; margin-top:15px; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:15px; box-sizing:border-box; background:#f8fafc;"></textarea>
+            
+            <button onclick="copyOcrText()" style="width:100%; margin-top:12px; padding:10px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                <i class="fa-solid fa-copy"></i> Copy Extracted Text
+            </button>
         </div>
     </main>
+
     <script>
         async function extractText() {
-            let file = document.getElementById('imgInput').files[0];
-            if(!file) { alert("Please select an image first!"); return; }
+            let fileInput = document.getElementById('imgInput');
+            let file = fileInput.files[0];
+            
+            if(!file) { 
+                alert("Please select an image file first!"); 
+                return; 
+            }
+
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 FILE SIZE CHECK (Max 5MB for Free Users) -> Smart Plan ($9.99) Required
+            if (!isProUser && file.size > 5 * 1024 * 1024) {
+                alert("🔒 PRO LOCK: 5MB से बड़ी भारी इमेजेस और डॉक्युमेंट्स से OCR टेक्स्ट निकालना केवल Smart / PRO मेंबर्स के लिए उपलब्ध है। कृपया अपग्रेड करें!");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            // 2. 🔒 DAILY 2 USAGE LIMIT CHECK
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { ocrExtract: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { ocrExtract: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.ocrExtract >= 2) {
+                alert("🔒 Daily Limit Reached: आपके आज के 2 मुफ़्त OCR टेक्स्ट एक्सट्रैक्शन चांस समाप्त हो चुके हैं! असीमित इस्तेमाल के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            let btn = document.getElementById('btn');
             let status = document.getElementById('status');
-            status.innerText = "Extracting text... Please wait...";
-            let worker = await Tesseract.createWorker('eng');
-            let ret = await worker.recognize(file);
-            document.getElementById('output').value = ret.data.text;
-            status.innerText = "Extraction Complete!";
-            await worker.terminate();
+            
+            btn.disabled = true;
+            btn.style.opacity = "0.6";
+            status.innerText = "⏳ Reading image and extracting text... Please wait...";
+
+            try {
+                let worker = await Tesseract.createWorker('eng');
+                let ret = await worker.recognize(file);
+                document.getElementById('output').value = ret.data.text;
+                status.innerText = "✅ Extraction Complete!";
+                await worker.terminate();
+
+                // Increment count for free users
+                if (!isProUser) {
+                    usageCounters.ocrExtract++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+            } catch(e) {
+                status.innerText = "❌ Failed to extract text from image!";
+            } finally {
+                btn.disabled = false;
+                btn.style.opacity = "1";
+            }
+        }
+
+        function copyOcrText() {
+            let out = document.getElementById('output');
+            if(!out.value.trim()) {
+                alert("Nothing to copy!");
+                return;
+            }
+            navigator.clipboard.writeText(out.value);
+            alert("📋 Extracted text copied to clipboard!");
         }
     </script>
 </body>
