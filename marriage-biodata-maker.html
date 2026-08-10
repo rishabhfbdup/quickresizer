@@ -14,20 +14,108 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Print Stylesheet for Marriage Bio-Data PDF */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #biodataPaper, #biodataPaper * {
+                visibility: visible;
+            }
+            #biodataPaper {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 40px !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .watermark-line {
+                display: block !important;
+                text-align: center;
+                margin-top: 50px;
+                font-size: 13px;
+                color: #64748b;
+                border-top: 1px dashed #cbd5e1;
+                padding-top: 12px;
+                font-family: 'Poppins', sans-serif;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+
     <main class="hero-section">
         <h1 class="main-title">Marriage Bio-Data Maker</h1>
         <p class="sub-title">Create attractive marriage biodata online for print or PDF download</p>
-        <div style="max-width:600px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
-            <label><b>Full Name:</b></label><input type="text" id="name" style="width:100%; padding:8px; margin:5px 0 15px; border:1px solid #ccc; border-radius:4px;">
-            <label><b>Date of Birth:</b></label><input type="text" id="dob" style="width:100%; padding:8px; margin:5px 0 15px; border:1px solid #ccc; border-radius:4px;">
-            <label><b>Height & Qualification:</b></label><input type="text" id="edu" style="width:100%; padding:8px; margin:5px 0 15px; border:1px solid #ccc; border-radius:4px;">
-            <label><b>Job / Occupation:</b></label><input type="text" id="job" style="width:100%; padding:8px; margin:5px 0 15px; border:1px solid #ccc; border-radius:4px;">
-            <label><b>Contact / Phone:</b></label><input type="text" id="phone" style="width:100%; padding:8px; margin:5px 0 15px; border:1px solid #ccc; border-radius:4px;">
-            <button onclick="window.print()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px;">Generate & Print Bio-Data</button>
+        
+        <div style="max-width:600px; margin:20px auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;" id="biodataPaper">
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="color:#2563eb; margin:0;"><i class="fa-solid fa-heart" style="color:#ef4444;"></i> BIO-DATA</h2>
+                <span id="statusBadge" style="background:#e2e8f0; color:#475569; font-size:11px; font-weight:bold; padding:4px 8px; border-radius:4px;">FREE VERSION</span>
+            </div>
+            
+            <label><b>Full Name:</b></label>
+            <input type="text" id="name" placeholder="e.g. Suresh Kumar" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box; font-size:15px;">
+            
+            <label><b>Date of Birth:</b></label>
+            <input type="text" id="dob" placeholder="e.g. 15 August 1998" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box; font-size:15px;">
+            
+            <label><b>Height & Qualification:</b></label>
+            <input type="text" id="edu" placeholder="e.g. 5'8\" | B.Tech in Computer Science" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box; font-size:15px;">
+            
+            <label><b>Job / Occupation:</b></label>
+            <input type="text" id="job" placeholder="e.g. Software Engineer at Kryzex" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box; font-size:15px;">
+            
+            <label><b>Contact / Phone:</b></label>
+            <input type="text" id="phone" placeholder="e.g. +91 9876543210" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box; font-size:15px;">
+            
+            <div id="biodataWatermark" class="watermark-line" style="margin-top:30px; text-align:center; font-size:13px; color:#64748b; border-top:1px dashed #cbd5e1; padding-top:10px;">
+                Created via <b>QuickResizer Marriage Bio-Data Maker</b> (quickresizer.in)
+            </div>
+
+            <button class="no-print" onclick="generateBiodataPrint()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:20px; font-size:16px;">
+                <i class="fa-solid fa-print"></i> Generate & Print Bio-Data
+            </button>
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            if (user && user.isPro) {
+                document.getElementById('statusBadge').innerText = "PRO PREMIUM";
+                document.getElementById('statusBadge').style.background = "#dcfce7";
+                document.getElementById('statusBadge').style.color = "#15803d";
+                document.getElementById('biodataWatermark').style.display = "none";
+            }
+        });
+
+        function generateBiodataPrint() {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            if (!user || !user.isPro) {
+                let agree = confirm("📢 Free Version Notice:\n\nफ्री प्लान में आपके शादी के बायोडाटा PDF के नीचे 'Created via QuickResizer' वाटरमार्क प्रिंट होगा।\n\nबिना किसी वाटरमार्क के बिल्कुल क्लीन और प्रीमियम बायोडाटा निकालने के लिए PRO प्लान लें।\n\nक्या आप वाटरमार्क के साथ प्रिंट जारी रखना चाहते हैं?");
+                if (!agree) {
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+            }
+            window.print();
+        }
+    </script>
 </body>
 </html>
