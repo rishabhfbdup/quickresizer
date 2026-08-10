@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI Calculator - Home, Personal & Car Loan EMI | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">Loan EMI Calculator</h1>
+        <p class="sub-title">Calculate monthly EMI, total interest & loan repayment for Home, Personal or Auto Loans</p>
+        <div style="max-width:500px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            <label><b>Loan Amount (₹):</b></label>
+            <input type="number" id="loanAmt" placeholder="e.g. 500000" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px;">
+            
+            <label><b>Interest Rate (% p.a.):</b></label>
+            <input type="number" id="loanRate" step="0.1" placeholder="e.g. 8.5" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px;">
+            
+            <label><b>Tenure (Years):</b></label>
+            <input type="number" id="loanTenure" placeholder="e.g. 5" style="width:100%; padding:10px; margin:5px 0 20px; border:1px solid #ccc; border-radius:6px;">
+            
+            <button onclick="calcEMI()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Calculate EMI</button>
+            
+            <div id="emiResult" style="margin-top:20px; text-align:center;"></div>
+        </div>
+    </main>
+    <script>
+        function calcEMI() {
+            let P = parseFloat(document.getElementById('loanAmt').value);
+            let r = parseFloat(document.getElementById('loanRate').value) / 12 / 100;
+            let n = parseFloat(document.getElementById('loanTenure').value) * 12;
+            if(!P || !r || !n) { alert("Please fill all fields!"); return; }
+            
+            let emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            let totalPay = emi * n;
+            let totalInterest = totalPay - P;
+
+            document.getElementById('emiResult').innerHTML = `
+                <div style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
+                    <p style="margin:5px 0; font-size:18px;">Monthly EMI: <b style="color:#2563eb;">₹${Math.round(emi).toLocaleString('en-IN')}</b></p>
+                    <p style="margin:5px 0;">Total Interest: <b style="color:#ef4444;">₹${Math.round(totalInterest).toLocaleString('en-IN')}</b></p>
+                    <p style="margin:5px 0;">Total Amount Payable: <b>₹${Math.round(totalPay).toLocaleString('en-IN')}</b></p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
