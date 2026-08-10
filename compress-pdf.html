@@ -36,7 +36,7 @@
         </nav>
 
         <div class="nav-right">
-            <button class="btn-primary" onclick="window.location.href='index.html#panel-compresspdf'">Use PDF Compressor 🚀</button>
+            <button class="btn-primary" onclick="usePdfCompressor('basic')">Use PDF Compressor 🚀</button>
         </div>
     </header>
 
@@ -44,10 +44,34 @@
         <h1 class="main-title">Compress PDF File Size Online</h1>
         <p class="sub-title">Shrink large PDF documents quickly and securely without compromising document clarity or formatting.</p>
 
-        <div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;">
+        <div class="upload-container" onclick="usePdfCompressor('basic')" style="cursor:pointer; margin-bottom: 20px;">
             <i class="fa-solid fa-file-contract upload-icon" style="color:#38bdf8;"></i>
-            <p class="upload-text"><span class="browse-text">Click here to Open PDF Compressor Tool</span></p>
-            <span class="file-limits">100% Free | Ultra Fast Processing | Zero Cloud Uploads</span>
+            <p class="upload-text"><span class="browse-text">Click here to Upload & Compress Text/Line PDF (5 Free Daily)</span></p>
+            <span class="file-limits">Ultra Fast Processing | Zero Cloud Uploads</span>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-sliders" style="color: #38bdf8;"></i> Advanced Compression & Custom Fill Settings</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Adjust advanced compression ratio layers or fill specific output size targets below.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Compression Level:</label>
+                    <select id="adv-level" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                        <option>Extreme Compression (Max Size Reduction)</option>
+                        <option selected>Recommended Quality (Balanced)</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Target PDF Size (KB):</label>
+                    <input type="number" placeholder="e.g. 100" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155; box-sizing: border-box;">
+                </div>
+            </div>
+            
+            <button onclick="usePdfCompressor('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Advanced Fill & Compress
+            </button>
         </div>
     </main>
 
@@ -69,6 +93,43 @@
             <div class="powered-by">Powered by :- <span>Kryzex Technologies</span></div>
         </div>
     </footer>
+
+    <script>
+        function usePdfCompressor(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. अगर यूज़र 'Advanced Fill Settings' पर क्लिक करता है -> 100% FULL LOCK (No free chances)
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO LOCK: एडवांस कम्प्रेशन सेटिंग्स और कस्टम साइज फिल ऑप्शंस केवल पेड मेंबर्स के लिए हैं। कृपया आगे बढ़ने के लिए प्रो प्लान लें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-compresspdf";
+                return;
+            }
+
+            // 2. अगर यूज़र 'Basic / Line PDF' पर क्लिक करता है -> Give 5 Free Daily Chances
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { pdfCompress: 0, date: new Date().toDateString() };
+
+            // नए दिन पर काउंट रीसेट
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { pdfCompress: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.pdfCompress >= 5) {
+                alert("🔒 Free Limit Reached: आज के 5 मुफ़्त बेसिक PDF कम्प्रेशन चांस समाप्त हो गए हैं! अनलिमिटेड एक्सेस के लिए Pro प्लान चुनें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.pdfCompress++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-compresspdf";
+            }
+        }
+    </script>
 
 </body>
 </html>
