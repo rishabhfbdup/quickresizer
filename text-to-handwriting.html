@@ -15,26 +15,132 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
+    
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #paper, #paper * {
+                visibility: visible;
+            }
+            #paper {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100% !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+
     <main class="hero-section">
         <h1 class="main-title">Text to Handwriting Converter</h1>
         <p class="sub-title">Convert typed text into realistic handwritten notebook pages for assignments</p>
-        <div style="max-width:700px; margin:20px auto; text-align:left;">
-            <textarea id="inputText" rows="5" placeholder="Type or paste your text here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc;"></textarea>
-            <button onclick="generateHandwriting()" style="width:100%; padding:12px; margin-top:10px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Generate Handwritten Image</button>
+        
+        <div style="max-width:700px; margin:20px auto; text-align:left; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
             
-            <div id="paper" style="display:none; margin-top:20px; padding:30px; background:#fff; background-image: repeating-linear-gradient(white, white 29px, #93c5fd 30px); font-family: 'Caveat', cursive; font-size:24px; line-height:30px; color:#1e3a8a; border-left:2px solid #ef4444; box-shadow:0 4px 15px rgba(0,0,0,0.1); border-radius:6px; min-height:300px; white-space:pre-wrap;"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <label><b>Type or Paste Text Here:</b></label>
+                <span id="charCountBadge" style="font-size:12px; font-weight:bold; color:#64748b;">Chars: 0 / 1000 (Free Limit)</span>
+            </div>
+
+            <textarea id="inputText" rows="5" placeholder="Type or paste your text here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; font-size:15px;" oninput="updateCounter()"></textarea>
+            
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:8px; margin:15px 0; position:relative;">
+                <span style="position:absolute; top:8px; right:8px; background:#eab308; color:#0f172a; font-size:10px; font-weight:700; padding:2px 5px; border-radius:4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+                <label style="font-size:12px; color:#475569; display:block; margin-bottom:5px;">Pen Ink Color & Page Type:</label>
+                <div style="display:flex; gap:10px;">
+                    <select disabled style="flex:1; padding:6px; background:#e2e8f0; color:#94a3b8; border:1px solid #cbd5e1; border-radius:4px;">
+                        <option selected>Standard Blue Gel Ink</option>
+                        <option>Dark Black Fountain Pen Ink</option>
+                        <option>Red Marking Ink</option>
+                    </select>
+                    <select disabled style="flex:1; padding:6px; background:#e2e8f0; color:#94a3b8; border:1px solid #cbd5e1; border-radius:4px;">
+                        <option selected>Blue Line Notebook Paper</option>
+                        <option>Plain Blank White Page</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="generateHandwriting()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
+                <i class="fa-solid fa-pen-fancy"></i> Generate Handwritten Image
+            </button>
+            
+            <div id="outputContainer" style="display:none; margin-top:20px;">
+                <div id="paper" style="padding:30px; background:#fff; background-image: repeating-linear-gradient(white, white 29px, #93c5fd 30px); font-family: 'Caveat', cursive; font-size:24px; line-height:30px; color:#1e3a8a; border-left:2px solid #ef4444; box-shadow:0 4px 15px rgba(0,0,0,0.1); border-radius:6px; min-height:300px; white-space:pre-wrap; text-align:left;"></div>
+                
+                <button onclick="window.print()" style="width:100%; padding:10px; margin-top:15px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:15px;">
+                    <i class="fa-solid fa-print"></i> Print / Save Page as PDF
+                </button>
+            </div>
         </div>
     </main>
+
     <script>
+        function updateCounter() {
+            let len = document.getElementById('inputText').value.length;
+            let badge = document.getElementById('charCountBadge');
+            badge.innerText = `Chars: ${len} / 1000 (Free Limit)`;
+            
+            if (len > 1000) {
+                badge.style.color = '#ef4444';
+            } else {
+                badge.style.color = '#64748b';
+            }
+        }
+
         function generateHandwriting() {
             let txt = document.getElementById('inputText').value;
-            if(!txt) { alert("Please enter some text!"); return; }
+            if(!txt.trim()) { 
+                alert("Please enter some text first!"); 
+                return; 
+            }
+
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 LENGTH LIMIT CHECK (Max 1,000 Chars for Free) -> Subscription Plan ($3.99)
+            if (!isProUser && txt.length > 1000) {
+                alert("🔒 PRO LOCK: 1,000 कैरेक्टर्स से अधिक लंबे असाइनमेंट टेक्स्ट को हस्तलिखित पेज में बदलना केवल प्रो मेंबर्स के लिए उपलब्ध है। कृपया अपग्रेड करें!");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            // 2. 🔒 DAILY 3 REQUESTS LIMIT CHECK
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { handwriting: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { handwriting: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.handwriting >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त टेक्स्ट-टू-हैंडराइटिंग चांस समाप्त हो चुके हैं! असीमित इस्तेमाल और कस्टम इंक कलर्स के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            // Generation Process
             let paper = document.getElementById('paper');
-            paper.style.display = "block";
+            let outputContainer = document.getElementById('outputContainer');
+            
+            outputContainer.style.display = "block";
             paper.innerText = txt;
+
+            // Increment count for free users
+            if (!isProUser) {
+                usageCounters.handwriting++;
+                localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+            }
         }
     </script>
 </body>
