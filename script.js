@@ -7,6 +7,14 @@ let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
 let pendingSubscriptionAfterAuth = false;
 let billingDetails = {};
 
+// Free Usage Counters (for limiting free users daily)
+let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { age: 0, cgpa: 0, date: new Date().toDateString() };
+// Daily reset check
+if (usageCounters.date !== new Date().toDateString()) {
+    usageCounters = { age: 0, cgpa: 0, date: new Date().toDateString() };
+    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+}
+
 // Initialize PDF.js worker
 if (typeof pdfjsLib !== 'undefined') {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
@@ -83,6 +91,14 @@ function switchMode(mode) {
         initCropper();
     } else {
         destroyCropper();
+    }
+
+    // 🔒 PRO LOCK: Developer & Privacy tools gate for free plans
+    const devTools = ['jsonformat', 'password-generator', 'base64-encoder-decoder', 'url-encoder-decoder', 'html-minifier'];
+    if (devTools.includes(mode) && (!currentUser || !currentUser.isPro)) {
+        alert("🔒 PRO FEATURE: Developer & Privacy tools require a PRO subscription. Please choose a plan below!");
+        document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+        return;
     }
 
     const btn = document.getElementById('process-btn');
@@ -285,6 +301,28 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
     const originalText = btn ? btn.innerHTML : '';
     const isPremiumUser = currentUser && currentUser.isPro;
 
+    // 🔒 PRO LOCK: Check high resolution restrictions for SVG
+    if (currentMode === 'svgtopng' && !isPremiumUser) {
+        const scale = parseFloat(document.getElementById('svg-scale')?.value || 1);
+        if (scale > 1) {
+            alert("🔒 PRO GATE: Ultra HD (2x/4x) rendering is a Smart Plan feature. Downscaling to standard 1x resolution.");
+            document.getElementById('svg-scale').value = "1";
+        }
+    }
+
+    // 🔒 PRO LOCK: Check and enforce daily usage rate-limits for Calculators
+    if (!isPremiumUser) {
+        if (currentMode === 'age-calculator' || window.location.href.includes('age-calculator')) {
+            if (usageCounters.age >= 3) {
+                alert("🔒 Limit Exceeded: Free users can process age calculations up to 3 times daily. Upgrade to Pro for unlimited calculations!");
+                document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            usageCounters.age++;
+            localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+        }
+    }
+
     if (!isPremiumUser && (currentMode === 'imgtopdf' || currentMode === 'splitpdf')) {
         if (currentMode === 'imgtopdf' && uploadedFiles.length > 3) {
             alert('⭐ Free Plan allows converting up to 3 image pages to PDF!\n\nUpgrade to Pro for Unlimited PDF pages!');
@@ -468,6 +506,13 @@ function generateResumePdf() {
     doc.setFontSize(10);
     const splitExp = doc.splitTextToSize(exp, 175);
     doc.text(splitExp, 15, y);
+
+    // Append QuickResizer Branding Free Watermark dynamically for document files
+    if (!currentUser || !currentUser.isPro) {
+        doc.setFontSize(9);
+        doc.setTextColor(200, 200, 200);
+        doc.text("Powered by QuickResizer.in", 15, doc.internal.pageSize.getHeight() - 10);
+    }
 
     doc.save(`Resume_${name.replace(/\s+/g, '_')}.pdf`);
 }
@@ -804,6 +849,14 @@ function processSingleFile(file, index) {
                 let ext = 'jpg';
                 if (mimeType === 'image/png') ext = 'png';
                 else if (mimeType === 'image/webp') ext = 'webp';
+
+                // Add branding watermark text over free canvas generated items (Invoices, Bills, etc)
+                if (!isPremiumUser && (currentMode === 'invoice-maker' || currentMode === 'marriage-biodata-maker')) {
+                    ctx.fillStyle = "rgba(200, 200, 200, 0.5)";
+                    ctx.font = "14px 'Poppins', Arial, sans-serif";
+                    ctx.fillText("Powered by QuickResizer.in", w - 200, h - 15);
+                    resultDataUrl = canvas.toDataURL(mimeType, quality);
+                }
 
                 downloadDataUrl(resultDataUrl, `quickresizer_${currentMode}_${index + 1}.${ext}`);
                 resolve();
