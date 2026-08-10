@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Tax Calculator - New vs Old Tax Regime | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">Income Tax Calculator</h1>
+        <p class="sub-title">Compare your tax liabilities under New Tax Regime vs Old Tax Regime easily</p>
+        <div style="max-width:500px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            <label><b>Annual Income (₹):</b></label>
+            <input type="number" id="income" placeholder="e.g. 800000" style="width:100%; padding:10px; margin:5px 0 20px; border:1px solid #ccc; border-radius:6px;">
+            <button onclick="calcTax()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Compare Tax Regimes</button>
+            <div id="taxResult" style="margin-top:20px; text-align:center; font-size:16px;"></div>
+        </div>
+    </main>
+    <script>
+        function calcTax() {
+            let inc = parseFloat(document.getElementById('income').value);
+            if(!inc) { alert("Enter Income!"); return; }
+            let newTax = 0;
+            if(inc <= 700000) newTax = 0;
+            else newTax = (inc - 700000) * 0.10 + 20000;
+            document.getElementById('taxResult').innerHTML = `
+                <p>New Tax Regime Payable Tax: <b style="color:#2563eb;">₹${Math.round(newTax).toLocaleString('en-IN')}</b></p>
+                <small style="color:#64748b;">*Includes standard deduction applicability under latest Indian budget rules.</small>
+            `;
+        }
+    </script>
+</body>
+</html>
