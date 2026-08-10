@@ -16,18 +16,116 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+
     <main class="hero-section">
         <h1 class="main-title">URL Encoder / Decoder</h1>
         <p class="sub-title">Safely encode URLs with special characters or decode URL-encoded parameters.</p>
-        <div style="max-width:700px; margin:20px auto; text-align:left;">
-            <textarea id="urlIn" rows="5" placeholder="Enter URL or text here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc;"></textarea>
-            <div style="margin:10px 0; display:flex; gap:10px;">
-                <button onclick="document.getElementById('urlOut').value = encodeURIComponent(document.getElementById('urlIn').value);" style="padding:10px 20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Encode URL</button>
-                <button onclick="document.getElementById('urlOut').value = decodeURIComponent(document.getElementById('urlIn').value);" style="padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Decode URL</button>
+        
+        <div style="max-width:700px; margin:20px auto; text-align:left; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <label><b>Enter URL or Text Here:</b></label>
+                <span id="charCountBadge" style="font-size:12px; font-weight:bold; color:#64748b;">Chars: 0 / 1000 (Free Limit)</span>
             </div>
-            <textarea id="urlOut" rows="5" readonly placeholder="Result will appear here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; background:#f8fafc;"></textarea>
+
+            <textarea id="urlIn" rows="5" placeholder="Enter URL or string here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; font-size:15px;" oninput="updateCharCount()"></textarea>
+            
+            <div style="margin:15px 0; display:flex; gap:10px;">
+                <button onclick="processUrl('encode')" style="flex:1; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:15px;">
+                    <i class="fa-solid fa-lock"></i> Encode URL
+                </button>
+                <button onclick="processUrl('decode')" style="flex:1; padding:12px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:15px;">
+                    <i class="fa-solid fa-unlock"></i> Decode URL
+                </button>
+            </div>
+            
+            <div style="margin-top:15px;">
+                <label><b>Result Output:</b></label>
+                <textarea id="urlOut" rows="5" readonly placeholder="Result will appear here..." style="width:100%; margin-top:5px; padding:15px; border-radius:8px; border:1px solid #ccc; background:#f8fafc; box-sizing:border-box; font-size:15px; font-family:monospace;"></textarea>
+            </div>
+
+            <button onclick="copyUrlResult()" style="width:100%; margin-top:12px; padding:10px; background:#64748b; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                <i class="fa-solid fa-copy"></i> Copy Output Result
+            </button>
         </div>
     </main>
+
+    <script>
+        function updateCharCount() {
+            let len = document.getElementById('urlIn').value.length;
+            let badge = document.getElementById('charCountBadge');
+            badge.innerText = `Chars: ${len} / 1000 (Free Limit)`;
+            
+            if (len > 1000) {
+                badge.style.color = '#ef4444';
+            } else {
+                badge.style.color = '#64748b';
+            }
+        }
+
+        function processUrl(action) {
+            let src = document.getElementById('urlIn').value;
+            if(!src.trim()) { 
+                alert("Please enter a URL or text string first!"); 
+                return; 
+            }
+
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 LENGTH LIMIT CHECK (Max 1,000 Chars for Free) -> Professional Plan ($19.99)
+            if (!isProUser && src.length > 1000) {
+                alert("🔒 PRO LOCK: 1,000 कैरेक्टर्स से अधिक लंबी URL स्ट्रिंग या पेलोड को एन्कोड/डीकोड करना केवल Professional डेवलपर्स प्लान में उपलब्ध है। कृपया अपग्रेड करें!");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            // 2. 🔒 DAILY 3 REQUESTS LIMIT CHECK
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { urlEncode: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { urlEncode: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.urlEncode >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त URL एन्कोडर/डीकोडर चांस समाप्त हो चुके हैं! असीमित इस्तेमाल के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            // Processing Action
+            try {
+                if(action === 'encode') {
+                    document.getElementById('urlOut').value = encodeURIComponent(src);
+                } else if(action === 'decode') {
+                    document.getElementById('urlOut').value = decodeURIComponent(src);
+                }
+
+                // Increment count for free users on success
+                if (!isProUser) {
+                    usageCounters.urlEncode++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+            } catch(e) {
+                alert("❌ Invalid URL string structure for decoding!");
+            }
+        }
+
+        function copyUrlResult() {
+            let out = document.getElementById('urlOut');
+            if(!out.value.trim()) {
+                alert("Nothing to copy!");
+                return;
+            }
+            navigator.clipboard.writeText(out.value);
+            alert("📋 Output copied to clipboard!");
+        }
+    </script>
 </body>
 </html>
