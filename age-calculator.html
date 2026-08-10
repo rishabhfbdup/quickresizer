@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator Online - Calculate Exact Age in Years, Months, Days | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">Online Age Calculator</h1>
+        <p class="sub-title">Calculate your exact age in years, months, days for Govt Exams & Admission Forms</p>
+        <div style="max-width:500px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            <label><b>Date of Birth:</b></label>
+            <input type="date" id="dob" style="width:100%; padding:10px; margin:10px 0 20px; border:1px solid #ccc; border-radius:6px;">
+            <label><b>Calculate Age As Of Date:</b></label>
+            <input type="date" id="asOfDate" style="width:100%; padding:10px; margin:10px 0 20px; border:1px solid #ccc; border-radius:6px;">
+            <button onclick="calculateAge()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Calculate Age</button>
+            <div id="result" style="margin-top:20px; font-size:18px; font-weight:bold; color:#1e293b; text-align:center;"></div>
+        </div>
+    </main>
+    <script>
+        document.getElementById('asOfDate').valueAsDate = new Date();
+        function calculateAge() {
+            let dob = new Date(document.getElementById('dob').value);
+            let asOf = new Date(document.getElementById('asOfDate').value);
+            if (!dob.getTime()) { alert("Please select Date of Birth"); return; }
+            let y = asOf.getFullYear() - dob.getFullYear();
+            let m = asOf.getMonth() - dob.getMonth();
+            let d = asOf.getDate() - dob.getDate();
+            if (d < 0) { m--; d += new Date(asOf.getFullYear(), asOf.getMonth(), 0).getDate(); }
+            if (m < 0) { y--; m += 12; }
+            document.getElementById('result').innerHTML = `Your Age: <span style="color:#2563eb;">${y}</span> Years, <span style="color:#2563eb;">${m}</span> Months, <span style="color:#2563eb;">${d}</span> Days`;
+        }
+    </script>
+</body>
+</html>
