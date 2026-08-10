@@ -31,7 +31,53 @@
     </main>
     <script>
         document.getElementById('asOfDate').valueAsDate = new Date();
-        function calculateAge() {
+        function calculateAge() 
+        <script>
+    function calculateAge() {
+        // 🔒 1. सबसे ऊपर यह लिमिट चेक जोड़ें
+        let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+        let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { age: 0, date: new Date().toDateString() };
+        
+        if (usageCounters.date !== new Date().toDateString()) {
+            usageCounters = { age: 0, date: new Date().toDateString() };
+        }
+
+        if ((!user || !user.isPro) && usageCounters.age >= 3) {
+            alert("🔒 Daily Limit Reached: फ्री यूज़र्स दिन में सिर्फ 3 बार एज कैलकुलेट कर सकते हैं। अनलिमिटेड एक्सेस के लिए प्रो प्लान लें!");
+            window.location.href = "index.html#pricing";
+            return; // कोड यहीं रुक जाएगा
+        }
+
+        // 2. इसके नीचे आपका पुराना कैलकुलेशन का कोड रहेगा
+        let dobInput = document.getElementById('dob') || document.getElementById('birthDate');
+        if(!dobInput || !dobInput.value) { alert("Please select Date of Birth!"); return; }
+        
+        let dob = new Date(dobInput.value);
+        let today = new Date();
+        let years = today.getFullYear() - dob.getFullYear();
+        let months = today.getMonth() - dob.getMonth();
+        let days = today.getDate() - dob.getDate();
+
+        if (days < 0) {
+            months--;
+            days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+        }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        // फ्री यूज़र का काउंट +1 करें
+        if (!user || !user.isPro) {
+            usageCounters.age++;
+            localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+        }
+
+        let resBox = document.getElementById('ageResult') || document.getElementById('result');
+        if(resBox) resBox.innerHTML = `Your Age is: <b>${years} Years, ${months} Months, ${days} Days</b>`;
+    }
+</script>
+        {
             let dob = new Date(document.getElementById('dob').value);
             let asOf = new Date(document.getElementById('asOfDate').value);
             if (!dob.getTime()) { alert("Please select Date of Birth"); return; }
