@@ -16,10 +16,89 @@
     <title>Live Word & Character Counter Online - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-wordcounter'">Use Word Counter 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">Online Word & Character Counter</h1><p class="sub-title">Count words, characters, and calculate estimated reading time live as you type or paste content.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-font upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open Word Counter Tool</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="useWordCounter('basic')">Use Word Counter 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">Online Word & Character Counter</h1>
+        <p class="sub-title">Count words, characters, and calculate estimated reading time live as you type or paste content.</p>
+        
+        <div class="upload-container" onclick="useWordCounter('basic')" style="cursor:pointer; margin-bottom: 20px;">
+            <i class="fa-solid fa-font upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text"><span class="browse-text">Click to Open Standard Word Counter (5 Free Daily | Max 1000 Words)</span></p>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-chart-simple" style="color: #38bdf8;"></i> Keyword Density Analytics & Unlimited Articles</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Analyze full-length ebooks, SEO keyword density ratios, paragraph stats, and reading complexity scores.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Word Limit Allowed:</label>
+                    <input type="text" value="Unlimited Long Articles" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #eab308; border: 1px solid #334155; font-weight: 600;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">SEO Keyword Density:</label>
+                    <input type="text" value="Enabled (Live Ratios)" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                </div>
+            </div>
+            
+            <button onclick="useWordCounter('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Unlimited Words & SEO Analytics
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function useWordCounter(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 एडवांस्ड एनालिटिक्स/अनलिमिटेड मोड चुनने पर 100% HARD LOCK -> Subscription Plan ($3.99)
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: लंबे आर्टिकल्स का एनालिसिस और SEO कीवर्ड डेंसिटी रिपोर्ट केवल प्रो मेंबर्स के लिए उपलब्ध है। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-wordcounter";
+                return;
+            }
+
+            // 2. 🔒 बेसिक वर्ड काउंटर पर 5 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { wordCount: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { wordCount: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.wordCount >= 5) {
+                alert("🔒 Limit Reached: आपके आज के 5 मुफ़्त सामान्य वर्ड काउंटर चांस समाप्त हो चुके हैं! असीमित इस्तेमाल और SEO एनालिटिक्स के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.wordCount++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-wordcounter";
+            }
+        }
+    </script>
 </body>
 </html>
