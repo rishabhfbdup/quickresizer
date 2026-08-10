@@ -16,10 +16,94 @@
     <title>Add Candidate Name & Date on Photo for Govt Forms - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-namedate'">Use Name/Date Adder 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">Photo Name & Date Adder for Govt Exam Forms</h1><p class="sub-title">Add candidate name and date of photo (DOP) box automatically at the bottom for official SSC and UPSC uploads.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-id-card upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open Name & Date Adder Tool</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="useNameDate('basic')">Use Name/Date Adder 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">Photo Name & Date Adder for Govt Exam Forms</h1>
+        <p class="sub-title">Add candidate name and date of photo (DOP) box automatically at the bottom for official SSC and UPSC uploads.</p>
+        
+        <div class="upload-container" onclick="useNameDate('basic')" style="cursor:pointer; margin-bottom: 20px;">
+            <i class="fa-solid fa-id-card upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text"><span class="browse-text">Click to Open Standard Name & Date Adder (3 Free Daily)</span></p>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-font" style="color: #38bdf8;"></i> Advanced Typography & Custom Text Layouts</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Customize text font families, exact pixel spacing adjustments, or select custom background boxes to meet special state govt requirements.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Font Style:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                        <option>Official Arial Bold</option>
+                        <option>Official Poppins Medium</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Text Padding Box Scale:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                        <option>Auto Standard (18% Height)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button onclick="useNameDate('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Advanced Layout Customizer
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function useNameDate(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. एडवांस कस्टमाइजेशन चुनने पर 100% LOCK -> Subscription Plan ($3.99) Required
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: कस्टम फॉन्ट स्टाइलिंग और एडवांस लेआउट ऑप्शंस केवल प्रीमियम सब्सक्रिप्शन प्लान में उपलब्ध हैं। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-namedate";
+                return;
+            }
+
+            // 2. बेसिक एडर पर 3 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { nameDate: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { nameDate: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.nameDate >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त फ़ोटो नाम-तारीख एडर चांस समाप्त हो चुके हैं! असीमित एक्सेस के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.nameDate++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-namedate";
+            }
+        }
+    </script>
 </body>
 </html>
