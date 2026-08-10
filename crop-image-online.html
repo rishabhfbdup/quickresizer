@@ -16,10 +16,89 @@
     <title>Visual Image Cropper Online | Aspect Ratio Presets - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-crop'">Use Cropper Tool 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">Visual Image Cropper Online</h1><p class="sub-title">Crop photo dimensions with custom aspect ratio presets for social media, passports, and official documents.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-crop-simple upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open Image Cropper Tool</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="useCropper('basic')">Use Cropper Tool 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">Visual Image Cropper Online</h1>
+        <p class="sub-title">Crop photo dimensions with custom aspect ratio presets for social media, passports, and official documents.</p>
+        
+        <div class="upload-container" onclick="useCropper('basic')" style="cursor:pointer; margin-bottom: 20px;">
+            <i class="fa-solid fa-crop-simple upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text"><span class="browse-text">Click to Open Custom Free Crop (5 Free Daily)</span></p>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-shapes" style="color: #38bdf8;"></i> Professional Aspect Ratio Presets</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Instantly apply absolute perfect dimensions using industry-standard auto-locking drag crops.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Select Preset Box Ratio:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                        <option>Passport / Stamp Size (1:1 / 3.5x4.5)</option>
+                        <option>YouTube Thumbnail / Desktop (16:9)</option>
+                        <option>Instagram / Facebook Post (4:5 / 1:1)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button onclick="useCropper('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Auto Aspect Ratio Presets
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function useCropper(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. फिक्स/प्रीसेट रेशियो चुनने पर 100% HARD LOCK -> Subscription Plan ($3.99)
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: पासपोर्ट साइज, इंस्टाग्राम या यूट्यूब जैसे फिक्स एस्पेक्ट रेशियो प्रीसेट्स का इस्तेमाल केवल प्रीमियम प्लान्स में उपलब्ध है। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-crop";
+                return;
+            }
+
+            // 2. बेसिक फ्री क्रॉप पर 5 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { imgCrop: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { imgCrop: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.imgCrop >= 5) {
+                alert("🔒 Limit Reached: आपके आज के 5 मुफ़्त सामान्य इमेज क्रॉप चांस समाप्त हो चुके हैं! असीमित इस्तेमाल और फिक्स प्रीसेट्स के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.imgCrop++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-crop";
+            }
+        }
+    </script>
 </body>
 </html>
