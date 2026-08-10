@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Encoder & Decoder Online | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">URL Encoder / Decoder</h1>
+        <p class="sub-title">Safely encode URLs with special characters or decode URL-encoded parameters.</p>
+        <div style="max-width:700px; margin:20px auto; text-align:left;">
+            <textarea id="urlIn" rows="5" placeholder="Enter URL or text here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc;"></textarea>
+            <div style="margin:10px 0; display:flex; gap:10px;">
+                <button onclick="document.getElementById('urlOut').value = encodeURIComponent(document.getElementById('urlIn').value);" style="padding:10px 20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Encode URL</button>
+                <button onclick="document.getElementById('urlOut').value = decodeURIComponent(document.getElementById('urlIn').value);" style="padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Decode URL</button>
+            </div>
+            <textarea id="urlOut" rows="5" readonly placeholder="Result will appear here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; background:#f8fafc;"></textarea>
+        </div>
+    </main>
+</body>
+</html>
