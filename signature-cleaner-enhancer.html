@@ -16,10 +16,95 @@
     <title>Online Signature Cleaner & Background Shadow Remover - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-signature'">Use Signature Cleaner 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">Signature Cleaner & Shadow Remover</h1><p class="sub-title">Clean mobile phone photo shadows from paper signatures and turn ink high-contrast pitch black on pure white paper.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-signature upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open Signature Cleaner Tool</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="useSigCleaner('basic')">Use Signature Cleaner 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">Signature Cleaner & Shadow Remover</h1>
+        <p class="sub-title">Clean mobile phone photo shadows from paper signatures and turn ink high-contrast pitch black on pure white paper.</p>
+        
+        <div class="upload-container" onclick="useSigCleaner('basic')" style="cursor:pointer; margin-bottom: 20px;">
+            <i class="fa-solid fa-signature upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text"><span class="browse-text">Click to Open Standard Signature Cleaner (3 Free Daily)</span></p>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-pen-nib" style="color: #38bdf8;"></i> Transparent Signature & Ink Color Converter</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Convert blue pen ink to dark black, adjust custom contrast thresholds, or extract transparent PNG signatures for legal PDF signing.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Output Background:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                        <option>Pure White Paper (Govt Forms)</option>
+                        <option selected>Transparent Background PNG</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Ink Target Color:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #eab308; border: 1px solid #334155; font-weight: 600;">
+                        <option>Pitch Dark Black</option>
+                        <option>Official Royal Blue</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button onclick="useSigCleaner('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Transparent & Ink Color Converter
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function useSigCleaner(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 ट्रांसपेरेंट BG या इंक कस्टमाइजेशन चुनने पर 100% HARD LOCK -> Subscription Plan ($3.99)
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: ट्रांसपेरेंट सिग्नेचर PNG बनाना और इंक कलर बदलना केवल प्रो सब्सक्रिप्शन प्लान में उपलब्ध है। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-signature";
+                return;
+            }
+
+            // 2. 🔒 बेसिक ऑटो-क्लीनर पर 3 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { sigClean: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { sigClean: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.sigClean >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त सिग्नेचर क्लीनर चांस समाप्त हो चुके हैं! असीमित इस्तेमाल और ट्रांसपेरेंट PNG एक्सपोर्ट के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.sigClean++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-signature";
+            }
+        }
+    </script>
 </body>
 </html>
