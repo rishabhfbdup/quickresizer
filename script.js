@@ -131,15 +131,14 @@ if (imageInput) {
     });
 }
 
-// Get Max MB Allowed as per User Plan
 function getMaxMbLimit() {
-    if (!currentUser || !currentUser.isPro) return 5; // Free: 5 MB
+    if (!currentUser || !currentUser.isPro) return 5;
     const plan = currentUser.plan || '';
     if (plan === 'Subscription') return 10;
     if (plan === 'Simple') return 15;
     if (plan === 'Smart') return 20;
     if (plan === 'Professional') return 30;
-    if (plan === 'Yearly') return Infinity; // Yearly: Unlimited MB
+    if (plan === 'Yearly') return Infinity;
     return 5;
 }
 
@@ -149,7 +148,6 @@ function handleFiles(files) {
     const userPlan = currentUser ? currentUser.plan : '';
     const maxMbLimit = getMaxMbLimit();
 
-    // 🔒 Rule 1: File Size MB Check
     for (let i = 0; i < filesArray.length; i++) {
         const fileSizeMb = filesArray[i].size / (1024 * 1024);
         if (fileSizeMb > maxMbLimit) {
@@ -161,7 +159,6 @@ function handleFiles(files) {
         }
     }
 
-    // 🔒 Rule 2: Bulk Upload File Count Limits
     if (!isPremiumUser) {
         if (filesArray.length > 1 && currentMode !== 'mergepdf') {
             alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process only 1 file at a time (Max 5MB). Please upgrade to Pro for bulk processing!');
@@ -250,7 +247,6 @@ document.getElementById('quality-slider')?.addEventListener('input', (e) => {
     }
 });
 
-// 🔒 Rule 3: Target KB Restriction (Pro Only)
 document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
     const isPremiumUser = currentUser && currentUser.isPro;
     if (!isPremiumUser) {
@@ -261,7 +257,6 @@ document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
     }
 });
 
-// WORD COUNTER LIVE LOGIC
 document.getElementById('word-input-text')?.addEventListener('input', (e) => {
     const text = e.target.value.trim();
     const words = text ? text.split(/\s+/).length : 0;
@@ -277,11 +272,11 @@ document.getElementById('word-input-text')?.addEventListener('input', (e) => {
 // 4. MAIN PROCESSOR WITH SPEED DELAY & PAGE LIMITS
 // ==========================================
 function getProcessingDelay() {
-    if (!currentUser || !currentUser.isPro) return 3500; // Free: 3.5 sec slow delay
+    if (!currentUser || !currentUser.isPro) return 3500;
     const plan = currentUser.plan || '';
-    if (plan === 'Subscription' || plan === 'Simple') return 1500; // Fast: 1.5 sec
-    if (plan === 'Smart') return 800; // Ultra Fast: 0.8 sec
-    if (plan === 'Professional' || plan === 'Yearly') return 0; // High Speed: Instant 0 sec delay
+    if (plan === 'Subscription' || plan === 'Simple') return 1500;
+    if (plan === 'Smart') return 800;
+    if (plan === 'Professional' || plan === 'Yearly') return 0;
     return 3500;
 }
 
@@ -290,7 +285,6 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
     const originalText = btn ? btn.innerHTML : '';
     const isPremiumUser = currentUser && currentUser.isPro;
 
-    // 🔒 Rule 4: PDF Page Count Limit (Max 3 Pages for Free Users)
     if (!isPremiumUser && (currentMode === 'imgtopdf' || currentMode === 'splitpdf')) {
         if (currentMode === 'imgtopdf' && uploadedFiles.length > 3) {
             alert('⭐ Free Plan allows converting up to 3 image pages to PDF!\n\nUpgrade to Pro for Unlimited PDF pages!');
@@ -369,14 +363,12 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
     }
 });
 
-// SPLIT PDF FILE (pdf-lib)
 async function splitPdfFile() {
     const pdfFile = uploadedFiles.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
     if (!pdfFile) {
         alert('Please upload a PDF file to split!');
         return;
     }
-
     if (typeof PDFLib === 'undefined') {
         alert('PDF library is loading. Please try again in 3 seconds.');
         return;
@@ -413,7 +405,6 @@ async function splitPdfFile() {
     link.click();
 }
 
-// 1-CLICK RESUME / CV GENERATOR (jsPDF)
 function generateResumePdf() {
     if (typeof window.jspdf === 'undefined') {
         alert('PDF generator engine is loading. Please try again in 3 seconds.');
@@ -481,7 +472,6 @@ function generateResumePdf() {
     doc.save(`Resume_${name.replace(/\s+/g, '_')}.pdf`);
 }
 
-// SVG TO PNG CONVERTER
 async function convertSvgToPng() {
     const svgFile = uploadedFiles.find(f => f.name.endsWith('.svg'));
     if (!svgFile) {
@@ -511,7 +501,6 @@ async function convertSvgToPng() {
     img.src = url;
 }
 
-// JSON FORMATTER & VALIDATOR
 function formatJsonText() {
     const textarea = document.getElementById('json-input');
     const val = textarea?.value.trim();
@@ -528,7 +517,6 @@ function formatJsonText() {
     }
 }
 
-// IMAGE TO PDF CONVERTER (jsPDF)
 async function convertImagesToPdf() {
     if (typeof window.jspdf === 'undefined') {
         alert('PDF generator library is loading. Please try again in 3 seconds.');
@@ -569,14 +557,12 @@ async function convertImagesToPdf() {
     pdf.save(`quickresizer_document_${Date.now()}.pdf`);
 }
 
-// PDF TO IMAGE EXTRACTOR (pdf.js)
 async function convertPdfToImages() {
     const pdfFile = uploadedFiles.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
     if (!pdfFile) {
         alert('Please select a valid PDF file to convert to images!');
         return;
     }
-
     if (typeof pdfjsLib === 'undefined') {
         alert('PDF reader library is loading. Please try again in 3 seconds.');
         return;
@@ -605,14 +591,12 @@ async function convertPdfToImages() {
     }
 }
 
-// MERGE PDF FILES (pdf-lib)
 async function mergePdfFiles() {
     const pdfFiles = uploadedFiles.filter(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
     if (pdfFiles.length < 2) {
         alert('Please select at least 2 PDF files to merge!');
         return;
     }
-
     if (typeof PDFLib === 'undefined') {
         alert('PDF Merger library is loading. Please try again in 3 seconds.');
         return;
@@ -635,14 +619,12 @@ async function mergePdfFiles() {
     link.click();
 }
 
-// COMPRESS PDF FILE
 async function compressPdfFile() {
     const pdfFile = uploadedFiles.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
     if (!pdfFile) {
         alert('Please select a valid PDF file to compress!');
         return;
     }
-
     if (typeof pdfjsLib === 'undefined' || typeof window.jspdf === 'undefined') {
         alert('PDF compression engines are loading. Please try again in 3 seconds.');
         return;
@@ -653,7 +635,6 @@ async function compressPdfFile() {
     const pdfDoc = await pdfjsLib.getDocument({ data: fileArrayBuffer }).promise;
     
     const scaleLevel = parseFloat(document.getElementById('pdf-compress-level')?.value || 1.0);
-    
     let newPdf = null;
 
     for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
@@ -668,7 +649,6 @@ async function compressPdfFile() {
         await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
         const imgDataUrl = canvas.toDataURL('image/jpeg', 0.65);
-
         const orientation = viewport.width > viewport.height ? 'landscape' : 'portrait';
 
         if (pageNum === 1) {
@@ -1021,6 +1001,46 @@ function buyPlan(planName, inrAmount, usdText) {
     }
 }
 
+// 🌐 Dynamic Billing Modal Updates (Fees & Taxes for Global Countries)
+function updateBillingPrices() {
+    const country = document.getElementById('billing-country')?.value || 'IN';
+    const baseUsd = parseFloat(selectedPlan.usdDisplay.replace('$', '')) || 9.99;
+    
+    let transferFee = 0;
+    let tax = 0;
+    let total = 0;
+
+    if (country === 'IN') {
+        // India (IN): Display in INR Summary & standard 18% GST calculation
+        document.getElementById('intl-fee-row').style.display = 'none';
+        document.getElementById('summary-base').innerText = `₹${selectedPlan.inrPrice}`;
+        
+        tax = selectedPlan.inrPrice * 0.18;
+        total = selectedPlan.inrPrice + tax;
+        
+        document.getElementById('summary-tax').innerText = `₹${Math.round(tax)}`;
+        document.getElementById('summary-total').innerText = `₹${Math.round(total)}`;
+        
+        const payBtn = document.querySelector('#billing-form button[type="submit"]');
+        if (payBtn) payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay ₹${Math.round(total)}`;
+    } else {
+        // International Countries: Display USD with 3.5% Gateway Transfer Fee + 18% Local Taxes/VAT
+        document.getElementById('intl-fee-row').style.display = 'flex';
+        document.getElementById('summary-base').innerText = `$${baseUsd.toFixed(2)}`;
+        
+        transferFee = (baseUsd * 0.035) + 0.30; // 3.5% + $0.30 base gateway processing charge
+        tax = (baseUsd + transferFee) * 0.18;
+        total = baseUsd + transferFee + tax;
+        
+        document.getElementById('summary-fee').innerText = `$${transferFee.toFixed(2)}`;
+        document.getElementById('summary-tax').innerText = `$${tax.toFixed(2)}`;
+        document.getElementById('summary-total').innerText = `$${total.toFixed(2)}`;
+        
+        const payBtn = document.querySelector('#billing-form button[type="submit"]');
+        if (payBtn) payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay $${total.toFixed(2)}`;
+    }
+}
+
 function openBillingModal() {
     const modal = document.getElementById('billing-modal');
     if (modal) {
@@ -1029,12 +1049,15 @@ function openBillingModal() {
             if (document.getElementById('billing-mobile')) document.getElementById('billing-mobile').value = currentUser.mobile || '';
         }
         
-        const payBtn = document.querySelector('#billing-form button[type="submit"]');
-        if (payBtn) {
-            payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay ₹${selectedPlan.inrPrice} (${selectedPlan.usdDisplay})`;
-        }
-        
         modal.classList.remove('hidden');
+        
+        // Listen to Country Dropdown changes to update global transaction taxes/fees dynamically
+        const countrySelect = document.getElementById('billing-country');
+        if (countrySelect) {
+            countrySelect.removeEventListener('change', updateBillingPrices);
+            countrySelect.addEventListener('change', updateBillingPrices);
+        }
+        updateBillingPrices();
     }
 }
 
@@ -1048,6 +1071,7 @@ function handleBillingSubmit(event) {
 
     billingDetails = {
         name: document.getElementById('billing-name').value,
+        country: document.getElementById('billing-country').value,
         mobile: document.getElementById('billing-mobile').value,
         city: document.getElementById('billing-city').value,
         state: document.getElementById('billing-state').value,
@@ -1062,12 +1086,29 @@ function handleBillingSubmit(event) {
 function initiateRazorpayPayment() {
     const razorpayKey = "rzp_live_TNXhcB0cg4sMeQ"; 
 
+    // Handle price structure dynamically based on user country during gateway launch
+    let finalAmountPayable = selectedPlan.inrPrice * 100; // Razorpay takes paise
+    let currencySelected = "INR";
+
+    if (billingDetails.country !== "IN") {
+        const baseUsd = parseFloat(selectedPlan.usdDisplay.replace('$', '')) || 9.99;
+        const transferFee = (baseUsd * 0.035) + 0.30;
+        const tax = (baseUsd + transferFee) * 0.18;
+        const totalUsd = baseUsd + transferFee + tax;
+        
+        // Convert dynamic global checkout values into dynamic gateway values
+        finalAmountPayable = Math.round(totalUsd * 84 * 100); // 1 USD = ~84 INR conversion for Razorpay architecture mapping
+    } else {
+        const taxInr = selectedPlan.inrPrice * 0.18;
+        finalAmountPayable = Math.round((selectedPlan.inrPrice + taxInr) * 100);
+    }
+
     const options = {
         "key": razorpayKey, 
-        "amount": selectedPlan.inrPrice * 100,
-        "currency": "INR",
+        "amount": finalAmountPayable,
+        "currency": currencySelected,
         "name": "QuickResizer",
-        "description": `${selectedPlan.name} Plan (${selectedPlan.usdDisplay})`,
+        "description": `${selectedPlan.name} Plan - Global Secure Checkout`,
         "image": "https://quickresizer.in/favicon.ico",
         "handler": function (response) {
             if (currentUser) {
@@ -1100,6 +1141,7 @@ function initiateRazorpayPayment() {
         "notes": {
             "plan_name": selectedPlan.name,
             "usd_price": selectedPlan.usdDisplay,
+            "billing_country": billingDetails.country || "IN",
             "city": billingDetails.city || "",
             "state": billingDetails.state || "",
             "pincode": billingDetails.pincode || ""
