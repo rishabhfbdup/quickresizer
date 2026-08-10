@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA to Percentage Converter - CBSE & College Formula | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">CGPA to Percentage Converter</h1>
+        <p class="sub-title">Convert CGPA to Percentage (%) for CBSE, VTU, Mumbai University & College Exams</p>
+        <div style="max-width:500px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            <label><b>Select Board / Formula:</b></label>
+            <select id="formula" style="width:100%; padding:10px; margin:10px 0 20px; border:1px solid #ccc; border-radius:6px;">
+                <option value="9.5">CBSE / Standard (CGPA × 9.5)</option>
+                <option value="10">Standard 10 Point Scale (CGPA × 10)</option>
+                <option value="7.1">VTU / Engineering ( (CGPA - 0.75) × 10 )</option>
+            </select>
+            <label><b>Enter Your CGPA:</b></label>
+            <input type="number" id="cgpaInput" step="0.01" min="0" max="10" placeholder="e.g. 8.5" style="width:100%; padding:10px; margin:10px 0 20px; border:1px solid #ccc; border-radius:6px;">
+            <button onclick="convertCGPA()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Convert to Percentage</button>
+            <div id="result" style="margin-top:20px; font-size:22px; font-weight:bold; color:#1e293b; text-align:center;"></div>
+        </div>
+    </main>
+    <script>
+        function convertCGPA() {
+            let cgpa = parseFloat(document.getElementById('cgpaInput').value);
+            let formula = document.getElementById('formula').value;
+            if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) { alert("Please enter valid CGPA between 0 and 10"); return; }
+            let percentage = (formula === "7.1") ? ((cgpa - 0.75) * 10) : (cgpa * parseFloat(formula));
+            document.getElementById('result').innerHTML = `Percentage: <span style="color:#2563eb;">${percentage.toFixed(2)}%</span>`;
+        }
+    </script>
+</body>
+</html>
