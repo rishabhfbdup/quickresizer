@@ -16,18 +16,62 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+    
     <main class="hero-section">
         <h1 class="main-title">Base64 Encoder / Decoder</h1>
         <p class="sub-title">Convert plain text string to Base64 code or decode Base64 back to normal text.</p>
-        <div style="max-width:700px; margin:20px auto; text-align:left;">
-            <textarea id="b64In" rows="5" placeholder="Enter text or Base64 code here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc;"></textarea>
-            <div style="margin:10px 0; display:flex; gap:10px;">
-                <button onclick="document.getElementById('b64Out').value = btoa(document.getElementById('b64In').value);" style="padding:10px 20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Encode to Base64</button>
-                <button onclick="try{document.getElementById('b64Out').value = atob(document.getElementById('b64In').value);}catch(e){alert('Invalid Base64!');}" style="padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Decode Base64</button>
+        <div style="max-width:700px; margin:20px auto; text-align:left; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+            <textarea id="b64In" rows="5" placeholder="Enter text or Base64 code here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; font-size:15px;"></textarea>
+            
+            <div style="margin:15px 0; display:flex; gap:10px;">
+                <button onclick="handleBase64('encode')" style="padding:12px 20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:15px;">
+                    <i class="fa-solid fa-code"></i> Encode to Base64
+                </button>
+                <button onclick="handleBase64('decode')" style="padding:12px 20px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:15px;">
+                    <i class="fa-solid fa-key"></i> Decode Base64
+                </button>
             </div>
-            <textarea id="b64Out" rows="5" readonly placeholder="Result will appear here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; background:#f8fafc;"></textarea>
+            
+            <textarea id="b64Out" rows="5" readonly placeholder="Result will appear here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; background:#f8fafc; box-sizing:border-box; font-size:15px;"></textarea>
         </div>
     </main>
+
+    <script>
+        function handleBase64(action) {
+            // 🔒 PRO ONLY LOCK GATE
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            if (!user || !user.isPro) {
+                alert("🔒 PRO FEATURE: Base64 Encoder/Decoder एक डेवलपर टूल है और यह केवल प्रीमियम यूज़र्स के लिए उपलब्ध है। आगे बढ़ने के लिए प्रो प्लान लें!");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            let inputVal = document.getElementById('b64In').value;
+            if (!inputVal.trim()) {
+                alert("Please enter some text or code first!");
+                return;
+            }
+
+            if (action === 'encode') {
+                try {
+                    document.getElementById('b64Out').value = btoa(inputVal);
+                } catch (e) {
+                    alert("Error encoding string to Base64!");
+                }
+            } else if (action === 'decode') {
+                try {
+                    document.getElementById('b64Out').value = atob(inputVal);
+                } catch (e) {
+                    alert("❌ Invalid Base64: पेस्ट किया गया कोड सही Base64 फॉर्मेट में नहीं है!");
+                }
+            }
+        }
+    </script>
 </body>
 </html>
