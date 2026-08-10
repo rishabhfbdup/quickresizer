@@ -14,6 +14,39 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Print Stylesheet for Invoice PDF */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #invoicePaper, #invoicePaper * {
+                visibility: visible;
+            }
+            #invoicePaper {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .watermark-text {
+                display: block !important;
+                text-align: center;
+                margin-top: 30px;
+                font-size: 12px;
+                color: #64748b;
+                border-top: 1px dashed #cbd5e1;
+                padding-top: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="navbar">
@@ -25,34 +58,38 @@
 
     <main class="hero-section">
         <h1 class="main-title">Online Invoice & Bill Maker</h1>
-        <p class="sub-title">Generate professional PDF invoices and bills instantly. 100% Free & Printable.</p>
+        <p class="sub-title">Generate professional PDF invoices and bills instantly. Fast, Easy & Printable.</p>
         
-        <div style="max-width:700px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;" id="invoicePaper">
-            <h2 style="color:#2563eb; margin-bottom:15px;"><i class="fa-solid fa-file-invoice-dollar"></i> INVOICE</h2>
+        <div style="max-width:700px; margin:20px auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;" id="invoicePaper">
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="color:#2563eb; margin:0;"><i class="fa-solid fa-file-invoice-dollar"></i> INVOICE</h2>
+                <span id="planBadge" style="background:#e2e8f0; color:#475569; font-size:12px; font-weight:bold; padding:4px 8px; border-radius:4px;">FREE PLAN (WITH WATERMARK)</span>
+            </div>
             
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:15px;">
                 <div>
-                    <label><b>Your Business Name:</b></label>
-                    <input type="text" id="busName" placeholder="e.g. Kryzex Enterprises" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px;">
+                    <label style="font-size:13px;"><b>Your Business Name:</b></label>
+                    <input type="text" id="busName" placeholder="e.g. Kryzex Enterprises" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
                 </div>
                 <div>
-                    <label><b>Client Name:</b></label>
-                    <input type="text" id="cliName" placeholder="e.g. Rahul Sharma" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px;">
+                    <label style="font-size:13px;"><b>Client Name:</b></label>
+                    <input type="text" id="cliName" placeholder="e.g. Rahul Sharma" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
                 </div>
             </div>
 
             <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:15px;">
                 <div>
-                    <label><b>Item Description:</b></label>
-                    <input type="text" id="itemDesc" placeholder="e.g. Web Design Service" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px;">
+                    <label style="font-size:13px;"><b>Item Description:</b></label>
+                    <input type="text" id="itemDesc" placeholder="e.g. Web Design Service" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
                 </div>
                 <div>
-                    <label><b>Amount (₹):</b></label>
-                    <input type="number" id="itemAmt" placeholder="e.g. 5000" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px;" oninput="calcInv()">
+                    <label style="font-size:13px;"><b>Amount (₹):</b></label>
+                    <input type="number" id="itemAmt" placeholder="e.g. 5000" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" oninput="calcInv()">
                 </div>
                 <div>
-                    <label><b>GST Rate (%):</b></label>
-                    <select id="gstRate" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px;" onchange="calcInv()">
+                    <label style="font-size:13px;"><b>GST Rate (%):</b></label>
+                    <select id="gstRate" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" onchange="calcInv()">
                         <option value="0">0% (Non-GST)</option>
                         <option value="5">5%</option>
                         <option value="12">12%</option>
@@ -63,18 +100,32 @@
             </div>
 
             <div style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0; margin-top:20px; font-size:16px;">
-                <p style="margin:5px 0;">Subtotal: <b>₹<span id="subTotal">0</span></b></p>
-                <p style="margin:5px 0;">GST Amount: <b>₹<span id="gstTotal">0</span></b></p>
-                <h3 style="color:#2563eb; margin:10px 0 0;">Total Payable: ₹<span id="grandTotal">0</span></h3>
+                <p style="margin:5px 0;">Subtotal: <b>₹<span id="subTotal">0.00</span></b></p>
+                <p style="margin:5px 0;">GST Amount: <b>₹<span id="gstTotal">0.00</span></b></p>
+                <h3 style="color:#2563eb; margin:10px 0 0;">Total Payable: ₹<span id="grandTotal">0.00</span></h3>
             </div>
 
-            <button onclick="window.print()" style="width:100%; padding:12px; margin-top:20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
+            <div id="wmNotice" class="watermark-text" style="margin-top:20px; text-align:center; font-size:13px; color:#64748b; border-top:1px dashed #cbd5e1; padding-top:10px;">
+                Generated via <b>QuickResizer Invoice Maker</b> (quickresizer.in)
+            </div>
+
+            <button class="no-print" onclick="processPrint()" style="width:100%; padding:12px; margin-top:20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
                 <i class="fa-solid fa-print"></i> Print / Save as PDF
             </button>
         </div>
     </main>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            if (user && user.isPro) {
+                document.getElementById('planBadge').innerText = "PRO MEMBER (NO WATERMARK)";
+                document.getElementById('planBadge').style.background = "#dcfce7";
+                document.getElementById('planBadge').style.color = "#15803d";
+                document.getElementById('wmNotice').style.display = "none";
+            }
+        });
+
         function calcInv() {
             let amt = parseFloat(document.getElementById('itemAmt').value) || 0;
             let gst = parseFloat(document.getElementById('gstRate').value) || 0;
@@ -84,6 +135,18 @@
             document.getElementById('subTotal').innerText = amt.toFixed(2);
             document.getElementById('gstTotal').innerText = gstVal.toFixed(2);
             document.getElementById('grandTotal').innerText = total.toFixed(2);
+        }
+
+        function processPrint() {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            if (!user || !user.isPro) {
+                let proceed = confirm("📢 Free Plan Notice: फ्री प्लान में बिल के नीचे 'Generated via QuickResizer' वाटरमार्क रहेगा।\n\nबिना वाटरमार्क के क्लीन पीडीएफ डाउनलोड करने के लिए PRO सब्सक्रिप्शन लें।\n\nक्या आप वाटरमार्क के साथ प्रिंट जारी रखना चाहते हैं?");
+                if (!proceed) {
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+            }
+            window.print();
         }
     </script>
 </body>
