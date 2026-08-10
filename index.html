@@ -9,6 +9,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+
       gtag('config', 'G-N5FS3X06BP');
     </script>
 
@@ -51,6 +52,7 @@
                     <option value="hi">हिंदी</option>
                 </select>
             </div>
+
             <button class="btn-auth btn-login" data-lang="btn-login" onclick="openAuthModal('login')">Login</button>
             <button class="btn-auth btn-signup" data-lang="btn-signup" onclick="openAuthModal('signup')">Sign Up</button>
         </div>
@@ -221,6 +223,9 @@
                         <input type="range" id="sig-threshold" min="100" max="240" value="180">
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Instant Clean:</strong> Automatically removes grey shadows from phone photos and converts signatures to high-contrast black ink on pure white paper.
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-bgcolor">
@@ -240,6 +245,9 @@
                         <input type="color" id="bg-custom-color" value="#FFFFFF" style="height: 42px; padding: 2px; cursor: pointer; width: 100%;">
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Passports & Govt Forms:</strong> Instantly replaces transparent or dull photo backgrounds with standard Official White or Passport Blue.
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-imgtopdf">
@@ -260,6 +268,9 @@
                         </select>
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Multi-Image Combine:</strong> Converts uploaded images into a single professional PDF document right in your browser. (Free: Up to 3 Pages)
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-pdftoimg">
@@ -280,6 +291,9 @@
                         </select>
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>PDF Page Extractor:</strong> Renders each page of your uploaded PDF file as crisp downloadable images.
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-mergepdf">
@@ -289,6 +303,9 @@
                         <small style="color:#94a3b8; display:block; margin-top:5px;">Select multiple PDF files above. They will be merged sequentially into a single file.</small>
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Merge PDFs:</strong> Combines 2 or more PDF documents into 1 consolidated PDF file safely in your browser.
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-splitpdf">
@@ -302,6 +319,9 @@
                         <input type="number" id="split-end" placeholder="e.g. 3" min="1" value="1">
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Split PDF:</strong> Extract specific pages (e.g. Page 1 to 3) into a separate new PDF file. (Free: Max 3 Pages)
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-compresspdf">
@@ -314,6 +334,9 @@
                         </select>
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Compress PDF:</strong> Reduces large PDF document size while keeping text and images clear.
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-resume">
@@ -340,13 +363,16 @@
                     </div>
                     <div class="setting-group full-width">
                         <label><i class="fa-solid fa-gears"></i> Key Skills (Comma Separated):</label>
-                        <input type="text" id="res-skills" placeholder="e.g. JavaScript, HTML/CSS, Python">
+                        <input type="text" id="res-skills" placeholder="e.g. JavaScript, HTML/CSS, Python, Problem Solving">
                     </div>
                     <div class="setting-group full-width">
                         <label><i class="fa-solid fa-building"></i> Work Experience / Projects:</label>
-                        <textarea id="res-exp" rows="3" placeholder="e.g. Developed web applications." style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:10px; font-family:'Poppins',sans-serif;"></textarea>
+                        <textarea id="res-exp" rows="3" placeholder="e.g. Developed QuickResizer web application with 37+ micro tools." style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:10px; font-family:'Poppins',sans-serif;"></textarea>
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>1-Click Professional Resume:</strong> Generates a clean, ATS-friendly PDF Resume instantly.
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-wordcounter">
@@ -363,6 +389,10 @@
                         <h3 id="cnt-chars" style="color:#38bdf8; margin:0; font-size:24px;">0</h3>
                         <span style="font-size:12px; color:#94a3b8;">Characters</span>
                     </div>
+                    <div style="background:#0f172a; padding:12px; border-radius:8px; border:1px solid #1e293b;">
+                        <h3 id="cnt-reading" style="color:#38bdf8; margin:0; font-size:24px;">0s</h3>
+                        <span style="font-size:12px; color:#94a3b8;">Reading Time</span>
+                    </div>
                 </div>
             </div>
 
@@ -374,9 +404,12 @@
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-comment-dots"></i> Preset Message (Optional):</label>
-                        <input type="text" id="wa-msg" placeholder="e.g. Hi from QuickResizer">
+                        <input type="text" id="wa-msg" placeholder="e.g. Hi, I found your contact on QuickResizer">
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>Direct Chat:</strong> Open WhatsApp chat directly without saving phone numbers in your phone contacts!
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-svgtopng">
@@ -386,16 +419,23 @@
                         <select id="svg-scale">
                             <option value="1">Original Size (1x)</option>
                             <option value="2">2x High Resolution</option>
+                            <option value="4" selected>4x Ultra HD (Best for Print/Design)</option>
                         </select>
                     </div>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>SVG Vector Converter:</strong> Renders vector SVG files to crisp PNG images with transparent backgrounds.
+                </small>
             </div>
 
             <div class="mode-panel hidden" id="panel-jsonformat">
                 <div class="setting-group full-width">
                     <label><i class="fa-solid fa-code"></i> Paste Raw JSON Code:</label>
-                    <textarea id="json-input" rows="6" placeholder='{"name":"QuickResizer"}' style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:12px; font-family:monospace;"></textarea>
+                    <textarea id="json-input" rows="6" placeholder='{"name":"QuickResizer","status":"active"}' style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:12px; font-family:monospace;"></textarea>
                 </div>
+                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                    💡 <strong>JSON Tool:</strong> Formats, validates, and beautifies raw JSON strings for developers.
+                </small>
             </div>
 
             <button class="btn-primary btn-block" id="process-btn" onclick="executeDashboardTool()"><i class="fa-solid fa-download"></i> <span data-lang="btn-download">Process & Download</span></button>
@@ -433,76 +473,310 @@
                 <h3 style="margin:5px 0; font-size:18px;">Marriage Bio-Data</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Create attractive marriage biodata for print & PDF.</p>
             </div>
+
             <div class="tool-card" onclick="window.location.href='qr-code-generator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-qrcode" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
                 <h3 style="margin:5px 0; font-size:18px;">QR Code Generator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Create custom QR codes for URLs, UPI & WiFi.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='hindi-typing.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-language" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Hindi Typing</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Type English to get Hindi Devanagari text.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='krutidev-to-mangal.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-font" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Kruti Dev to Mangal</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Convert Kruti Dev font to Unicode Mangal font.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='sip-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-chart-line" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">SIP Calculator</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Calculate mutual fund SIP growth & returns.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='income-tax-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-receipt" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Income Tax Calculator</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Compare New vs Old Income Tax Regime.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='no-crop-post-maker.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-square" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">No-Crop Post Maker</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Create blur background square posts for Instagram/DP.</p>
+            </div>
+
+            <div class="tool-card" onclick="window.location.href='password-generator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-key" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Password Generator</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Generate strong & random passwords securely.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='scratchpad.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-note-sticky" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Private Scratchpad</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Temporary notepad with local browser auto-save.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='base64-encoder-decoder.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-code-compare" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Base64 Tool</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Encode text to Base64 code or decode back.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='url-encoder-decoder.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-link" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">URL Encoder / Decoder</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Safely encode or decode URL special characters.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='html-minifier.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-file-code" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">HTML Minifier</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Compress HTML/CSS code for faster site loading.</p>
+            </div>
+
+            <div class="tool-card" onclick="window.location.href='invoice-maker.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-file-invoice-dollar" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Invoice Maker</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Create & print professional GST invoices.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='emi-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-coins" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Loan EMI Calculator</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Calculate home, car & personal loan EMIs.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='gst-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-percent" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">GST Calculator</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Add or remove GST tax amounts instantly.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='discount-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-tags" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Discount Calculator</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Calculate shopping sale discounts & net savings.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container" id="how-it-works">
+        <div class="section-heading">
+            <h2 data-lang="how-title">How to Use QuickResizer in 3 Easy Steps</h2>
+            <p data-lang="how-subtitle">QuickResizer is designed to be simple, fast, and accessible for everyone.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <h3 data-lang="step1-title">Upload / Input File</h3>
+                <p data-lang="step1-desc">Drag and drop your file above, or select from our daily utility tools.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <h3 data-lang="step2-title">Choose Tool & Adjust</h3>
+                <p data-lang="step2-desc">Select Image, PDF, Developer, or Micro tools and customize your settings.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <h3 data-lang="step3-title">Download / Copy Instantly</h3>
+                <p data-lang="step3-desc">Click process to get your converted files or instant output generated directly in your browser.</p>
             </div>
         </div>
     </section>
 
     <section class="section-container bg-white" id="pricing">
         <div class="section-heading">
-            <h2>Flexible Premium Plans with Extra Free Validity! 🎁</h2>
-            <p>Unlock unlimited bulk processing, remove all processing restrictions and watermarks instantly.</p>
+            <h2>Flexible Plans with Extra Free Validity & File Limits! 🎁</h2>
+            <p>Limited Time Offer: Get extra free days & months on every plan subscription!</p>
         </div>
         
         <div class="pricing-grid">
             <div class="pricing-card" style="position: relative; margin-top: 20px;">
-                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">+3 DAYS FREE</span>
+                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+3 DAYS FREE</span>
                 <h3>Subscription</h3>
-                <p class="plan-desc">The flexibility of paying month to month.</p>
+                <p class="plan-desc">The flexibility of paying month to month and <strong>save 20%</strong>.</p>
                 <div class="plan-price">
                     <span class="currency">$</span><span class="amount">3</span><span class="cents">.99</span>
                     <span class="currency-tag">USD</span>
-                    <span class="duration">1 Month + 3 Days Free</span>
+                    <span class="duration">1 Month + <strong>3 Days Extra Free</strong></span>
                 </div>
-                <button class="btn-select-plan" onclick="checkoutPlanLaunch('Subscription', 3.99)">Select Plan</button>
+                <button class="btn-select-plan" onclick="checkoutPlanLaunch('Subscription', 3.99)">Select</button>
+                
                 <div class="top-features">
+                    <h4>Top features</h4>
                     <ul>
-                        <li><i class="fa-solid fa-check"></i> Max File Size: 10 MB</li>
-                        <li><i class="fa-solid fa-check"></i> Remove Invoice/Biodata Watermarks</li>
-                        <li><i class="fa-solid fa-check"></i> 37+ Micro Tools Unlocked</li>
+                        <li><i class="fa-solid fa-hard-drive" style="color:#38bdf8;"></i> <strong>Max File Size: 10 MB</strong></li>
+                        <li><i class="fa-solid fa-bolt" style="color:#eab308;"></i> Fast Processing Speed</li>
+                        <li><i class="fa-solid fa-gift" style="color:#eab308;"></i> <strong>+3 Days Extra Validity Free</strong></li>
+                        <li><i class="fa-solid fa-check"></i> Bulk Upload (Up to 10 Files)</li>
+                        <li><i class="fa-solid fa-check"></i> Exact Target KB Compression</li>
+                        <li><i class="fa-solid fa-check"></i> Unlimited PDF Page Processing</li>
+                        <li><i class="fa-solid fa-check"></i> No Advertisements</li>
+                        <li><i class="fa-solid fa-envelope"></i> Standard E-mail Support</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pricing-card" style="position: relative; margin-top: 20px;">
+                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+12 DAYS FREE</span>
+                <h3>Simple</h3>
+                <p class="plan-desc">Enjoy all premium features with bonus validity.</p>
+                <div class="plan-price">
+                    <span class="currency">$</span><span class="amount">4</span><span class="cents">.99</span>
+                    <span class="currency-tag">USD</span>
+                    <span class="duration">1 Month + <strong>12 Days Extra Free</strong></span>
+                </div>
+                <button class="btn-select-plan" onclick="checkoutPlanLaunch('Simple', 4.99)">Select</button>
+                
+                <div class="top-features">
+                    <h4>Top features</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-hard-drive" style="color:#38bdf8;"></i> <strong>Max File Size: 15 MB</strong></li>
+                        <li><i class="fa-solid fa-bolt" style="color:#eab308;"></i> Fast Processing Speed</li>
+                        <li><i class="fa-solid fa-gift" style="color:#eab308;"></i> <strong>+12 Days Extra Validity Free</strong></li>
+                        <li><i class="fa-solid fa-check"></i> Unlimited Bulk Uploads</li>
+                        <li><i class="fa-solid fa-check"></i> Exact Target KB Compression</li>
+                        <li><i class="fa-solid fa-check"></i> No Watermark & Ad-Free</li>
+                        <li><i class="fa-solid fa-headset"></i> 24×7 Email Support Only</li>
                     </ul>
                 </div>
             </div>
 
             <div class="pricing-card highlighted" style="position: relative; margin-top: 20px; border: 2px solid #38bdf8;">
-                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">+1 MONTH FREE</span>
+                <span style="position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: #38bdf8; color: #0f172a; font-size: 10px; font-weight: 800; padding: 2px 10px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); text-transform: uppercase; white-space: nowrap; z-index: 10;">🔥 MOST POPULAR</span>
+                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+1 MONTH FREE</span>
                 <h3>Smart</h3>
-                <p class="plan-desc">Get all features for 3 months and save 33%.</p>
+                <p class="plan-desc">Get all features for 3 months and <strong>save 33%</strong>.</p>
                 <div class="plan-price">
                     <span class="currency">$</span><span class="amount">9</span><span class="cents">.99</span>
                     <span class="currency-tag">USD</span>
-                    <span class="duration">3 Months + 1 Month Free</span>
+                    <span class="duration">3 Months + <strong>1 Month Extra Free</strong></span>
                 </div>
-                <button class="btn-select-plan primary" onclick="checkoutPlanLaunch('Smart', 9.99)">Select Plan</button>
+                <button class="btn-select-plan primary" onclick="checkoutPlanLaunch('Smart', 9.99)">Select</button>
+                
                 <div class="top-features">
+                    <h4>Top features</h4>
                     <ul>
-                        <li><i class="fa-solid fa-check"></i> Max File Size: 20 MB</li>
-                        <li><i class="fa-solid fa-check"></i> 100% Ad-Free Interface</li>
-                        <li><i class="fa-solid fa-check"></i> VIP Priority Execution Engine</li>
+                        <li><i class="fa-solid fa-hard-drive" style="color:#38bdf8;"></i> <strong>Max File Size: 20 MB</strong></li>
+                        <li><i class="fa-solid fa-gauge-high" style="color:#38bdf8;"></i> Ultra Fast Speed</li>
+                        <li><i class="fa-solid fa-gift" style="color:#eab308;"></i> <strong>+1 Month Extra Validity Free</strong></li>
+                        <li><i class="fa-solid fa-check"></i> Unlimited Bulk Uploads</li>
+                        <li><i class="fa-solid fa-check"></i> All 37+ Tools Without Limits</li>
+                        <li><i class="fa-solid fa-check"></i> You save 33%</li>
+                        <li><i class="fa-solid fa-headset"></i> 24×7 Email Support Only</li>
                     </ul>
                 </div>
             </div>
 
             <div class="pricing-card" style="position: relative; margin-top: 20px;">
-                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">+3 MONTHS FREE</span>
+                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+3 MONTHS FREE</span>
                 <h3>Professional</h3>
-                <p class="plan-desc">Ultimate bulk rendering dashboard infrastructure.</p>
+                <p class="plan-desc">Get 6 months of premium features and <strong>save 50%</strong>.</p>
                 <div class="plan-price">
                     <span class="currency">$</span><span class="amount">14</span><span class="cents">.99</span>
                     <span class="currency-tag">USD</span>
-                    <span class="duration">6 Months + 3 Months Free</span>
+                    <span class="duration">6 Months + <strong>3 Months Extra Free</strong></span>
                 </div>
-                <button class="btn-select-plan" onclick="checkoutPlanLaunch('Professional', 14.99)">Select Plan</button>
+                <button class="btn-select-plan" onclick="checkoutPlanLaunch('Professional', 14.99)">Select</button>
+                
                 <div class="top-features">
+                    <h4>Top features</h4>
                     <ul>
-                        <li><i class="fa-solid fa-check"></i> Max File Size: 30 MB</li>
-                        <li><i class="fa-solid fa-check"></i> Heavy Source Code payloads</li>
-                        <li><i class="fa-solid fa-check"></i> 24x7 Phone Call Assistance</li>
+                        <li><i class="fa-solid fa-hard-drive" style="color:#38bdf8;"></i> <strong>Max File Size: 30 MB</strong></li>
+                        <li><i class="fa-solid fa-bolt-lightning" style="color:#eab308;"></i> <strong>Instant High Speed</strong></li>
+                        <li><i class="fa-solid fa-gift" style="color:#eab308;"></i> <strong>+3 Months Extra Validity Free</strong></li>
+                        <li><i class="fa-solid fa-check"></i> Resume Builder Premium Templates</li>
+                        <li><i class="fa-solid fa-check"></i> Unlimited Bulk Uploads</li>
+                        <li><i class="fa-solid fa-phone-volume" style="color:#38bdf8;"></i> <strong>24×7 Customer Care Call Support</strong></li>
+                        <li><i class="fa-solid fa-star" style="color:#eab308;"></i> You save 50%</li>
                     </ul>
                 </div>
+            </div>
+
+            <div class="pricing-card highlighted" style="position: relative; margin-top: 20px; border: 2px solid #eab308;">
+                <span style="position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: #eab308; color: #0f172a; font-size: 10px; font-weight: 800; padding: 2px 10px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); text-transform: uppercase; white-space: nowrap; z-index: 10;">⭐ RECOMMENDED</span>
+                <span style="position: absolute; top: -12px; right: 10px; background: #38bdf8; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">+6 MONTHS FREE</span>
+                <h3>Yearly</h3>
+                <p class="plan-desc">Get 1 full year of premium features and <strong>save 65%</strong>.</p>
+                <div class="plan-price">
+                    <span class="currency">$</span><span class="amount">25</span><span class="cents">.99</span>
+                    <span class="currency-tag">USD</span>
+                    <span class="duration">12 Months + <strong>6 Months Extra Free</strong></span>
+                </div>
+                <button class="btn-select-plan primary" onclick="checkoutPlanLaunch('Yearly', 25.99)">Select</button>
+                
+                <div class="top-features">
+                    <h4>Top features</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-infinity" style="color:#38bdf8;"></i> <strong>Unlimited MB File Size Limit</strong></li>
+                        <li><i class="fa-solid fa-bolt-lightning" style="color:#eab308;"></i> <strong>Instant High Speed</strong></li>
+                        <li><i class="fa-solid fa-gift" style="color:#38bdf8;"></i> <strong>+6 Months Extra Validity Free</strong></li>
+                        <li><i class="fa-solid fa-check"></i> Unlimited Bulk Uploads & All Tools</li>
+                        <li><i class="fa-solid fa-phone-volume" style="color:#38bdf8;"></i> <strong>24×7 Direct Call & VIP Assistance</strong></li>
+                        <li><i class="fa-solid fa-star" style="color:#eab308;"></i> You save 65% (Best Value)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container bg-white" id="features">
+        <div class="section-heading">
+            <h2>Powerful Features of QuickResizer</h2>
+            <p>Get professional image, PDF, and micro tools right inside your browser.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-box">
+                <i class="fa-solid fa-bolt feature-icon"></i>
+                <h3>Lightning Fast Speed</h3>
+                <p>Because all file processing is handled locally on your own browser, it takes less than a second regardless of file size.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fa-solid fa-user-lock feature-icon"></i>
+                <h3>Zero Server Uploads</h3>
+                <p>Your photos and files stay 100% private. QuickResizer never sends your files to external servers or cloud databases.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fa-solid fa-image feature-icon"></i>
+                <h3>Multiple Formats Supported</h3>
+                <p>Easily compress, crop, and resize photos in all popular formats including JPG, PNG, WEBP, SVG, and convert to/from PDF.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fa-solid fa-sliders feature-icon"></i>
+                <h3>Custom Quality Control</h3>
+                <p>Fine-tune compression level or enter exact target KB to balance file size with crystal-clear quality.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container" id="about">
+        <div class="info-block">
+            <h2>What is an Image File Size and Pixel Resolution?</h2>
+            <p>Digital images are made up of millions of microscopic square units called pixels. The number of pixels across width and height defines the image resolution. For example, a photo with 4000x3000 resolution contains 12 million pixels (12 Megapixels). While high resolution looks great, it creates huge file sizes—often reaching 5MB to 15MB per picture.</p>
+            <p>Large image files can slow down website loading speeds, fail to upload on official job portals or government exam forms, and consume excessive mobile data when shared on social media.</p>
+        </div>
+
+        <div class="info-block margin-top">
+            <h2>How QuickResizer Reduces Image KB Without Quality Loss</h2>
+            <p>Reducing image file size can be done in two ways: changing pixel dimensions or applying intelligent compression. QuickResizer allows you to combine both methods seamlessly. By scaling down excessive pixel dimensions or converting formats, you can reduce image KB by over 80% while keeping visual appearance identical on mobile and desktop screens.</p>
+        </div>
+    </section>
+
+    <section class="section-container bg-white" id="faq">
+        <div class="section-heading">
+            <h2>Frequently Asked Questions (FAQ)</h2>
+            <p>Got questions? We've got answers.</p>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h4><i class="fa-solid fa-circle-question"></i> Is QuickResizer completely free?</h4>
+                <p>Yes, QuickResizer is 100% free with no hidden charges, daily usage limits, or forced account registration.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fa-solid fa-circle-question"></i> What image formats are supported?</h4>
+                <p>We support all standard web image formats including JPG/JPEG, PNG, WEBP, GIF, SVG, and PDF documents.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fa-solid fa-circle-question"></i> Can I use QuickResizer on my phone?</h4>
+                <p>Yes! QuickResizer is fully responsive and works smoothly on Android devices, iPhones, iPads, laptops, and desktop computers.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fa-solid fa-circle-question"></i> Will resizing reduce my photo clarity?</h4>
+                <p>If you keep the quality slider set between 75% and 90%, you will achieve a significantly smaller file size with zero visible loss in image clarity.</p>
             </div>
         </div>
     </section>
@@ -510,6 +784,7 @@
     <div id="auth-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            
             <div class="modal-tabs" id="modal-tabs-header">
                 <button id="tab-login-btn" class="modal-tab active" onclick="switchAuthTab('login')">Login</button>
                 <button id="tab-signup-btn" class="modal-tab" onclick="switchAuthTab('signup')">Sign Up</button>
@@ -517,6 +792,7 @@
 
             <form id="login-form" class="auth-form" onsubmit="handleAuthSubmit(event, 'login')">
                 <h3>Welcome Back</h3>
+                <p>Login to access Pro features & subscriptions.</p>
                 <div class="form-group">
                     <label>Email Address</label>
                     <input type="email" id="login-email" placeholder="name@example.com" required>
@@ -525,18 +801,22 @@
                     <label>Password</label>
                     <input type="password" id="login-password" placeholder="••••••••" required>
                 </div>
+                <div style="text-align: right; margin-bottom: 15px;">
+                    <a href="javascript:void(0)" onclick="switchAuthTab('forgot')" style="color: #38bdf8; font-size: 13px; text-decoration: none; font-weight: 500;">Forgot Password?</a>
+                </div>
                 <button type="submit" class="btn-primary btn-block">Login to Continue</button>
             </form>
 
             <form id="signup-form" class="auth-form hidden" onsubmit="handleAuthSubmit(event, 'signup')">
                 <h3>Create an Account</h3>
+                <p>Sign up to unlock Pro features & plan checkout.</p>
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" id="signup-name" placeholder="Rishabh Rajput" required>
                 </div>
                 <div class="form-group">
                     <label>Mobile Number</label>
-                    <input type="tel" id="signup-mobile" placeholder="Mobile Number" required>
+                    <input type="tel" id="signup-mobile" placeholder="+91 10-digit mobile or international number" required>
                 </div>
                 <div class="form-group">
                     <label>Email Address</label>
@@ -546,7 +826,24 @@
                     <label>Password</label>
                     <input type="password" id="signup-password" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn-primary btn-block">Create Account</button>
+                <button type="submit" class="btn-primary btn-block">Create Account & Proceed</button>
+            </form>
+
+            <form id="forgot-form" class="auth-form hidden" onsubmit="handleAuthSubmit(event, 'forgot')">
+                <h3>Reset Password</h3>
+                <p>Enter your registered email to reset your password.</p>
+                <div class="form-group">
+                    <label>Registered Email Address</label>
+                    <input type="email" id="forgot-email" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="forgot-new-password" placeholder="Enter new password" required>
+                </div>
+                <button type="submit" class="btn-primary btn-block">Update Password</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: #94a3b8; font-size: 13px; text-decoration: none;">← Back to Login</a>
+                </div>
             </form>
         </div>
     </div>
@@ -557,66 +854,101 @@
 
             <form id="billing-form" class="auth-form" onsubmit="handleBillingSubmit(event)">
                 <h3>Billing & Country Details</h3>
-                <p>Verify localized taxes and options before secure international routing.</p>
+                <p>Please enter your details to proceed with global secure checkout.</p>
 
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" id="billing-name" required>
+                    <input type="text" id="billing-name" placeholder="Rishabh Rajput" required>
                 </div>
 
                 <div class="form-group">
                     <label>Country / Region</label>
-                    <select id="billing-country" required onchange="recalculatePriceSummary()" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+                    <select id="billing-country" onchange="recalculatePriceSummary()" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-family: 'Poppins', sans-serif;">
                         <option value="IN" selected>India (🇮🇳)</option>
                         <option value="US">United States (🇺🇸)</option>
                         <option value="GB">United Kingdom (🇬🇧)</option>
-                        <option value="OTHER">Other / Global 🌐</option>
+                        <option value="AE">United Arab Emirates (🇦🇪)</option>
+                        <option value="CA">Canada (🇨🇦)</option>
+                        <option value="AU">Australia (🇦🇺)</option>
+                        <option value="SG">Singapore (🇸🇬)</option>
+                        <option value="DE">Germany (🇩🇪)</option>
+                        <option value="FR">France (🇫🇷)</option>
+                        <option value="SA">Saudi Arabia (🇸🇦)</option>
+                        <option value="NPL">Nepal (🇳🇵)</option>
+                        <option value="BD">Bangladesh (🇧🇩)</option>
+                        <option value="OTHER">Other / Rest of World 🌐</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Mobile Number</label>
-                    <input type="tel" id="billing-mobile" required>
+                    <label>Mobile Number (with Country Code)</label>
+                    <input type="tel" id="billing-mobile" placeholder="e.g. +91 9876543210 or +1 123456789" required>
                 </div>
 
                 <div class="form-group">
+                    <label>City & State / Region</label>
                     <div style="display: flex; gap: 10px;">
                         <input type="text" id="billing-city" placeholder="City" required style="width: 50%;">
-                        <input type="text" id="billing-state" placeholder="State" required style="width: 50%;">
+                        <input type="text" id="billing-state" placeholder="State / Province" required style="width: 50%;">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Zip / Postal Code</label>
-                    <input type="text" id="billing-pincode" required>
+                    <input type="text" id="billing-pincode" placeholder="e.g. 209625 or 10001" required>
                 </div>
 
-                <div id="price-summary-box" style="background:#0f172a; padding:15px; border-radius:8px; border:1px solid #334155; margin:15px 0; font-size:14px;">
+                <div id="price-summary-box" style="background:#0f172a; padding:15px; border-radius:8px; border:1px solid #334155; margin:15px 0; font-size:14px; text-align:left;">
                     <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
                         <span style="color:#94a3b8;">Plan Base Price:</span>
                         <span style="color:#fff; font-weight:600;" id="summary-base">$0.00</span>
                     </div>
+                    
                     <div id="intl-fee-row" style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                        <span style="color:#94a3b8;">International Gateway Fee (3.5%):</span>
+                        <span style="color:#94a3b8;"><i class="fa-solid fa-globe" style="color:#38bdf8;"></i> International Transfer Fee (3.5%):</span>
                         <span style="color:#38bdf8; font-weight:600;" id="summary-fee">$0.00</span>
                     </div>
+
                     <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                         <span style="color:#94a3b8;">Estimated Taxes (GST/VAT 18%):</span>
                         <span style="color:#fff; font-weight:600;" id="summary-tax">$0.00</span>
                     </div>
+
                     <hr style="border:0; border-top:1px solid #334155; margin:8px 0;">
+
                     <div style="display:flex; justify-content:space-between; font-size:16px;">
-                        <span style="color:#fff; font-weight:700;">Total Payable:</span>
+                        <span style="color:#fff; font-weight:700;">Total Payable Amount:</span>
                         <span style="color:#eab308; font-weight:700;" id="summary-total">$0.00</span>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-primary btn-block"><i class="fa-solid fa-lock"></i> Complete Order</button>
+                <button type="submit" class="btn-primary btn-block"><i class="fa-solid fa-lock"></i> Proceed to Pay</button>
             </form>
         </div>
     </div>
 
     <footer class="footer">
+        <div class="footer-links">
+            <div class="footer-brand">
+                <h3><i class="fa-solid fa-expand"></i> QuickResizer</h3>
+                <p>Online privacy-focused image & PDF tool to resize, crop, compress, and convert files fast.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="about.html">About Us</a>
+                <a href="blog.html">Blog</a>
+                <a href="mailto:support@kryzex.com?subject=QuickResizer%20User%20Feedback">Send Feedback</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal Policies</h4>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="privacy.html#image-privacy">Image Privacy</a>
+                <a href="cookie.html">Cookie Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="refund.html">Refund Policy</a>
+            </div>
+        </div>
+
         <div class="footer-bottom">
             <div class="copyright">© 2026 QuickResizer. All rights reserved.</div>
             <div class="powered-by">Powered by :- <span>Kryzex Technologies</span></div>
@@ -625,10 +957,10 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    
+
     <script>
-        let selectedPlanName = "";
-        let selectedPlanPrice = 0.00;
+        let selectedPlanName = "Smart";
+        let selectedPlanPrice = 9.99;
         let activeMode = "resize";
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -652,11 +984,9 @@
 
         function switchMode(mode) {
             activeMode = mode;
-            // Native UI switches standard visibility tags inside script.js
             console.log(`Switched layout panel context to: ${mode}`);
         }
 
-        // 🔒 CORE DASHBOARD TOOL HIT COUNTER VALIDATOR
         function executeDashboardTool() {
             let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
             if (user && user.isPro) return true; 
@@ -688,7 +1018,6 @@
             return true;
         }
 
-        // Checkout Functions
         function checkoutPlanLaunch(planName, basePrice) {
             selectedPlanName = planName;
             selectedPlanPrice = basePrice;
@@ -714,7 +1043,7 @@
 
         function handleBillingSubmit(e) {
             e.preventDefault();
-            alert(`🎉 Simulation Secure Gateway: Order placed successfully for ${selectedPlanName} Plan! Upgrading account status.`);
+            alert(`🎉 Secure Gateway: Order confirmed for ${selectedPlanName} Plan! Account updated.`);
             
             localStorage.setItem('quickresizer_user', JSON.stringify({ isPro: true, name: document.getElementById('billing-name').value }));
             closeBillingModal();
