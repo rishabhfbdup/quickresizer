@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Temporary Scratchpad / Notes Online | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">Private Temporary Scratchpad</h1>
+        <p class="sub-title">Quick online notepad to paste text. Auto-saves in local browser and clears with 1-click.</p>
+        <div style="max-width:700px; margin:20px auto; text-align:left;">
+            <textarea id="noteArea" rows="12" placeholder="Paste your temporary text, code snippet, or notes here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; font-size:16px;" oninput="localStorage.setItem('tempNote', this.value)"></textarea>
+            <div style="margin-top:10px; display:flex; gap:10px;">
+                <button onclick="navigator.clipboard.writeText(document.getElementById('noteArea').value); alert('Notes Copied!');" style="padding:10px 20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Copy Text</button>
+                <button onclick="document.getElementById('noteArea').value=''; localStorage.removeItem('tempNote');" style="padding:10px 20px; background:#ef4444; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Clear Scratchpad</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.getElementById('noteArea').value = localStorage.getItem('tempNote') || "";
+    </script>
+</body>
+</html>
