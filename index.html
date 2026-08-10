@@ -810,7 +810,7 @@
                 </div>
                 <div class="form-group">
                     <label>Mobile Number</label>
-                    <input type="tel" id="signup-mobile" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+                    <input type="tel" id="signup-mobile" placeholder="+91 10-digit mobile or international number" required>
                 </div>
                 <div class="form-group">
                     <label>Email Address</label>
@@ -847,27 +847,73 @@
             <button class="modal-close" onclick="closeBillingModal()">&times;</button>
 
             <form id="billing-form" class="auth-form" onsubmit="handleBillingSubmit(event)">
-                <h3>Billing Details</h3>
-                <p>Please enter your billing information to complete purchase.</p>
+                <h3>Billing & Country Details</h3>
+                <p>Please enter your details to proceed with global secure checkout.</p>
 
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" id="billing-name" placeholder="Rishabh Rajput" required>
                 </div>
+
                 <div class="form-group">
-                    <label>Mobile Number</label>
-                    <input type="tel" id="billing-mobile" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+                    <label>Country / Region</label>
+                    <select id="billing-country" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-family: 'Poppins', sans-serif;">
+                        <option value="IN" selected>India (🇮🇳)</option>
+                        <option value="US">United States (🇺🇸)</option>
+                        <option value="GB">United Kingdom (🇬🇧)</option>
+                        <option value="AE">United Arab Emirates (🇦🇪)</option>
+                        <option value="CA">Canada (🇨🇦)</option>
+                        <option value="AU">Australia (🇦🇺)</option>
+                        <option value="SG">Singapore (🇸🇬)</option>
+                        <option value="DE">Germany (🇩🇪)</option>
+                        <option value="FR">France (🇫🇷)</option>
+                        <option value="SA">Saudi Arabia (🇸🇦)</option>
+                        <option value="NPL">Nepal (🇳🇵)</option>
+                        <option value="BD">Bangladesh (🇧🇩)</option>
+                        <option value="OTHER">Other / Rest of World 🌐</option>
+                    </select>
                 </div>
+
                 <div class="form-group">
-                    <label>City & State</label>
+                    <label>Mobile Number (with Country Code)</label>
+                    <input type="tel" id="billing-mobile" placeholder="e.g. +91 9876543210 or +1 123456789" required>
+                </div>
+
+                <div class="form-group">
+                    <label>City & State / Region</label>
                     <div style="display: flex; gap: 10px;">
                         <input type="text" id="billing-city" placeholder="City" required style="width: 50%;">
-                        <input type="text" id="billing-state" placeholder="State" required style="width: 50%;">
+                        <input type="text" id="billing-state" placeholder="State / Province" required style="width: 50%;">
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <label>Pincode / Zip Code</label>
-                    <input type="text" id="billing-pincode" pattern="[0-9]{6}" placeholder="e.g. 209625" required>
+                    <label>Zip / Postal Code</label>
+                    <input type="text" id="billing-pincode" placeholder="e.g. 209625 or 10001" required>
+                </div>
+
+                <div id="price-summary-box" style="background:#0f172a; padding:15px; border-radius:8px; border:1px solid #334155; margin:15px 0; font-size:14px; text-align:left;">
+                    <div style="display:flex; justify-space-between; margin-bottom:5px;">
+                        <span style="color:#94a3b8;">Plan Base Price:</span>
+                        <span style="color:#fff; font-weight:600;" id="summary-base">$9.99</span>
+                    </div>
+                    
+                    <div id="intl-fee-row" style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <span style="color:#94a3b8;"><i class="fa-solid fa-globe" style="color:#38bdf8;"></i> International Transfer Fee (3.5%):</span>
+                        <span style="color:#38bdf8; font-weight:600;" id="summary-fee">$0.35</span>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                        <span style="color:#94a3b8;">Estimated Taxes (GST/VAT 18%):</span>
+                        <span style="color:#fff; font-weight:600;" id="summary-tax">$1.86</span>
+                    </div>
+
+                    <hr style="border:0; border-top:1px solid #334155; margin:8px 0;">
+
+                    <div style="display:flex; justify-content:space-between; font-size:16px;">
+                        <span style="color:#fff; font-weight:700;">Total Payable Amount:</span>
+                        <span style="color:#eab308; font-weight:700;" id="summary-total">$12.20</span>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-primary btn-block"><i class="fa-solid fa-lock"></i> Proceed to Pay</button>
