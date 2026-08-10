@@ -1074,10 +1074,18 @@
             return true;
         }
 
+        // 🔒 FIXED: Security Check - Must login before launching plan checkout
         function checkoutPlanLaunch(planName, basePrice) {
             selectedPlanName = planName;
             selectedPlanPrice = basePrice;
             
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            if (!user || !user.email) {
+                alert(`🔒 Login Required: ${planName} प्लान खरीदने के लिए कृपया पहले अपने अकाउंट में Login या Sign Up करें!`);
+                openAuthModal('login');
+                return;
+            }
+
             document.getElementById('billing-modal').classList.remove('hidden');
             recalculatePriceSummary();
         }
