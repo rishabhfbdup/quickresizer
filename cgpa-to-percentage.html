@@ -16,7 +16,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+    
     <main class="hero-section">
         <h1 class="main-title">CGPA to Percentage Converter</h1>
         <p class="sub-title">Convert CGPA to Percentage (%) for CBSE, VTU, Mumbai University & College Exams</p>
@@ -27,18 +33,51 @@
                 <option value="10">Standard 10 Point Scale (CGPA × 10)</option>
                 <option value="7.1">VTU / Engineering ( (CGPA - 0.75) × 10 )</option>
             </select>
+            
             <label><b>Enter Your CGPA:</b></label>
-            <input type="number" id="cgpaInput" step="0.01" min="0" max="10" placeholder="e.g. 8.5" style="width:100%; padding:10px; margin:10px 0 20px; border:1px solid #ccc; border-radius:6px;">
-            <button onclick="convertCGPA()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Convert to Percentage</button>
+            <input type="number" id="cgpaInput" step="0.01" min="0" max="10" placeholder="e.g. 8.5" style="width:100%; padding:10px; margin:10px 0 20px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+            
+            <button onclick="convertCGPA()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
+                Convert to Percentage
+            </button>
+            
             <div id="result" style="margin-top:20px; font-size:22px; font-weight:bold; color:#1e293b; text-align:center;"></div>
         </div>
     </main>
+
     <script>
         function convertCGPA() {
+            // 🔒 FREE LIMIT CHECK
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { age: 0, cgpa: 0, date: new Date().toDateString() };
+            
+            // तारीख बदलने पर काउंट रीसेट करें
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { age: 0, cgpa: 0, date: new Date().toDateString() };
+            }
+
+            if ((!user || !user.isPro) && usageCounters.cgpa >= 3) {
+                alert("🔒 Daily Limit Reached: फ्री यूज़र्स दिन में सिर्फ 3 बार CGPA कन्वर्ट कर सकते हैं। अनलिमिटेड एक्सेस के लिए प्रो प्लान लें!");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
             let cgpa = parseFloat(document.getElementById('cgpaInput').value);
             let formula = document.getElementById('formula').value;
-            if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) { alert("Please enter valid CGPA between 0 and 10"); return; }
+            
+            if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) { 
+                alert("Please enter valid CGPA between 0 and 10"); 
+                return; 
+            }
+            
             let percentage = (formula === "7.1") ? ((cgpa - 0.75) * 10) : (cgpa * parseFloat(formula));
+            
+            // काउंट बढ़ाएं और केवल फ्री यूज़र्स के लिए सेव करें
+            if (!user || !user.isPro) {
+                usageCounters.cgpa++;
+                localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+            }
+
             document.getElementById('result').innerHTML = `Percentage: <span style="color:#2563eb;">${percentage.toFixed(2)}%</span>`;
         }
     </script>
