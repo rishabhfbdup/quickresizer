@@ -7,11 +7,11 @@ let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
 let pendingSubscriptionAfterAuth = false;
 let billingDetails = {};
 
-// Free Usage Counters (for limiting free users daily)
+// Free Usage Counters (for limiting free users daily across all tools)
 let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { age: 0, cgpa: 0, date: new Date().toDateString() };
 // Daily reset check
 if (usageCounters.date !== new Date().toDateString()) {
-    usageCounters = { age: 0, cgpa: 0, date: new Date().toDateString() };
+    usageCounters = { date: new Date().toDateString() };
     localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
 }
 
@@ -93,7 +93,7 @@ function switchMode(mode) {
         destroyCropper();
     }
 
-    // 🔒 PRO LOCK: Developer & Privacy tools gate for free plans
+    // 🔒 PRO LOCK: Developer & Privacy tools hard gate for free plans
     const devTools = ['jsonformat', 'password-generator', 'base64-encoder-decoder', 'url-encoder-decoder', 'html-minifier'];
     if (devTools.includes(mode) && (!currentUser || !currentUser.isPro)) {
         alert("🔒 PRO FEATURE: Developer & Privacy tools require a PRO subscription. Please choose a plan below!");
@@ -297,29 +297,22 @@ function getProcessingDelay() {
 }
 
 document.getElementById('process-btn')?.addEventListener('click', async () => {
+    // 🔒 Dashboard Hook integration with index.html validator
+    if (typeof executeDashboardTool === 'function') {
+        const canProceed = executeDashboardTool();
+        if (!canProceed) return;
+    }
+
     const btn = document.getElementById('process-btn');
     const originalText = btn ? btn.innerHTML : '';
     const isPremiumUser = currentUser && currentUser.isPro;
 
-    // 🔒 PRO LOCK: Check high resolution restrictions for SVG
+    // 🔒 PRO LOCK: Check high resolution scaling rules for SVG
     if (currentMode === 'svgtopng' && !isPremiumUser) {
         const scale = parseFloat(document.getElementById('svg-scale')?.value || 1);
         if (scale > 1) {
             alert("🔒 PRO GATE: Ultra HD (2x/4x) rendering is a Smart Plan feature. Downscaling to standard 1x resolution.");
             document.getElementById('svg-scale').value = "1";
-        }
-    }
-
-    // 🔒 PRO LOCK: Check and enforce daily usage rate-limits for Calculators
-    if (!isPremiumUser) {
-        if (currentMode === 'age-calculator' || window.location.href.includes('age-calculator')) {
-            if (usageCounters.age >= 3) {
-                alert("🔒 Limit Exceeded: Free users can process age calculations up to 3 times daily. Upgrade to Pro for unlimited calculations!");
-                document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
-            usageCounters.age++;
-            localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
         }
     }
 
@@ -850,7 +843,7 @@ function processSingleFile(file, index) {
                 if (mimeType === 'image/png') ext = 'png';
                 else if (mimeType === 'image/webp') ext = 'webp';
 
-                // Add branding watermark text over free canvas generated items (Invoices, Bills, etc)
+                // Add branding watermark text over free canvas generated items
                 if (!isPremiumUser && (currentMode === 'invoice-maker' || currentMode === 'marriage-biodata-maker')) {
                     ctx.fillStyle = "rgba(200, 200, 200, 0.5)";
                     ctx.font = "14px 'Poppins', Arial, sans-serif";
@@ -1054,7 +1047,6 @@ function buyPlan(planName, inrAmount, usdText) {
     }
 }
 
-// 🌐 Dynamic Billing Modal Updates (Fees & Taxes for Global Countries)
 function updateBillingPrices() {
     const country = document.getElementById('billing-country')?.value || 'IN';
     const baseUsd = parseFloat(selectedPlan.usdDisplay.replace('$', '')) || 9.99;
@@ -1064,7 +1056,6 @@ function updateBillingPrices() {
     let total = 0;
 
     if (country === 'IN') {
-        // India (IN): Display in INR Summary & standard 18% GST calculation
         document.getElementById('intl-fee-row').style.display = 'none';
         document.getElementById('summary-base').innerText = `₹${selectedPlan.inrPrice}`;
         
@@ -1077,11 +1068,10 @@ function updateBillingPrices() {
         const payBtn = document.querySelector('#billing-form button[type="submit"]');
         if (payBtn) payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay ₹${Math.round(total)}`;
     } else {
-        // International Countries: Display USD with 3.5% Gateway Transfer Fee + 18% Local Taxes/VAT
         document.getElementById('intl-fee-row').style.display = 'flex';
         document.getElementById('summary-base').innerText = `$${baseUsd.toFixed(2)}`;
         
-        transferFee = (baseUsd * 0.035) + 0.30; // 3.5% + $0.30 base gateway processing charge
+        transferFee = (baseUsd * 0.035) + 0.30; 
         tax = (baseUsd + transferFee) * 0.18;
         total = baseUsd + transferFee + tax;
         
@@ -1104,7 +1094,6 @@ function openBillingModal() {
         
         modal.classList.remove('hidden');
         
-        // Listen to Country Dropdown changes to update global transaction taxes/fees dynamically
         const countrySelect = document.getElementById('billing-country');
         if (countrySelect) {
             countrySelect.removeEventListener('change', updateBillingPrices);
@@ -1139,8 +1128,7 @@ function handleBillingSubmit(event) {
 function initiateRazorpayPayment() {
     const razorpayKey = "rzp_live_TNXhcB0cg4sMeQ"; 
 
-    // Handle price structure dynamically based on user country during gateway launch
-    let finalAmountPayable = selectedPlan.inrPrice * 100; // Razorpay takes paise
+    let finalAmountPayable = selectedPlan.inrPrice * 100; 
     let currencySelected = "INR";
 
     if (billingDetails.country !== "IN") {
@@ -1149,8 +1137,7 @@ function initiateRazorpayPayment() {
         const tax = (baseUsd + transferFee) * 0.18;
         const totalUsd = baseUsd + transferFee + tax;
         
-        // Convert dynamic global checkout values into dynamic gateway values
-        finalAmountPayable = Math.round(totalUsd * 84 * 100); // 1 USD = ~84 INR conversion for Razorpay architecture mapping
+        finalAmountPayable = Math.round(totalUsd * 84 * 100); 
     } else {
         const taxInr = selectedPlan.inrPrice * 0.18;
         finalAmountPayable = Math.round((selectedPlan.inrPrice + taxInr) * 100);
@@ -1177,6 +1164,9 @@ function initiateRazorpayPayment() {
                 }
                 
                 updateAuthUI();
+                if (typeof syncUserSessionUI === 'function') {
+                    syncUserSessionUI();
+                }
             }
 
             let supportMsg = "24×7 Email Support";
