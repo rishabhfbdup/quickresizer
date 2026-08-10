@@ -16,10 +16,94 @@
     <title>PDF to Image Converter | Extract PDF Pages to JPG/PNG - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-pdftoimg'">Use PDF to Image Tool 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">PDF to Image Converter</h1><p class="sub-title">Extract every page of your PDF document as crisp, high-resolution JPG or PNG images.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-file-image upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open PDF to Image Extractor</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="usePdfToImg('basic')">Use PDF to Image Tool 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">PDF to Image Converter</h1>
+        <p class="sub-title">Extract every page of your PDF document as crisp, high-resolution JPG or PNG images.</p>
+        
+        <div class="upload-container" onclick="usePdfToImg('basic')" style="cursor:pointer; margin-bottom: 20px;">
+            <i class="fa-solid fa-file-image upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text"><span class="browse-text">Click to Open Standard Extractor (5 Free Daily | 150 DPI JPG)</span></p>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-gauge-high" style="color: #38bdf8;"></i> Ultra HD (300 DPI) & Lossless PNG Extraction</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Extract PDF pages into professional high-resolution crystal clear graphics, perfect for official documents, prints, and clear text sharpness.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Output Format:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #eab308; border: 1px solid #334155; font-weight: 600;">
+                        <option>PNG High Quality</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Resolution Limit:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                        <option>Ultra HD (300 DPI)</option>
+                        <option>High Quality (200 DPI)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button onclick="usePdfToImg('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock High-Res 300 DPI / PNG Extractor
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function usePdfToImg(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. हाई-रिज़ॉल्यूशन या PNG मोड चुनने पर 100% HARD LOCK -> Smart Plan ($9.99) Required
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: PDF को 300 DPI (Ultra HD) या PNG फॉर्मेट में एक्सट्रैक्ट करना केवल Smart और उसके ऊपर के प्लान्स में उपलब्ध है। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-pdftoimg";
+                return;
+            }
+
+            // 2. बेसिक एक्सट्रैक्ट पर 5 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { pdfToImg: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { pdfToImg: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.pdfToImg >= 5) {
+                alert("🔒 Limit Reached: आपके आज के 5 मुफ़्त सामान्य PDF to Image चांस समाप्त हो चुके हैं! असीमित और उच्च गुणवत्ता वाले एक्सट्रैक्शन के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.pdfToImg++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-pdftoimg";
+            }
+        }
+    </script>
 </body>
 </html>
