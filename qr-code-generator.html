@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator Online - Free Custom QR Generator | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.min.js" integrity="sha512-CNgIRecGo7BOdn48NLNkqVIxUDAwgLX2pZX42Xm8TtrZ2E85y44L43eGTF+A92LGHZA8AcHNdp17Cbc8fAD+DQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">QR Code Generator</h1>
+        <p class="sub-title">Create free custom QR codes for Website URLs, UPI IDs, WiFi, Text & Contact Details</p>
+        <div style="max-width:500px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            <label><b>Enter Text, URL or UPI ID:</b></label>
+            <input type="text" id="qrText" placeholder="https://quickresizer.in or UPI ID" style="width:100%; padding:10px; margin:10px 0 20px; border:1px solid #ccc; border-radius:6px;">
+            <button onclick="makeQR()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Generate QR Code</button>
+            <div id="qrcode" style="margin-top:20px; display:flex; justify-content:center;"></div>
+        </div>
+    </main>
+    <script>
+        let qrcodeObj = null;
+        function makeQR() {
+            let txt = document.getElementById('qrText').value;
+            if(!txt) { alert("Please enter URL or Text!"); return; }
+            let box = document.getElementById('qrcode');
+            box.innerHTML = "";
+            new QRCode(box, { text: txt, width: 180, height: 180 });
+        }
+    </script>
+</body>
+</html>
