@@ -18,10 +18,10 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8274688603267902"
      crossorigin="anonymous"></script>
     
-<link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
     
-    <title>QuickResizer - All-in-One Image, PDF & Resume Builder Tool</title>
+    <title>QuickResizer - All-in-One Image, PDF, Utility & Micro Tools</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
@@ -34,7 +34,7 @@
 <body>
 
     <header class="navbar">
-        <div class="logo">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
             <i class="fa-solid fa-expand logo-icon"></i>
             <span>QuickResizer</span>
         </div>
@@ -77,6 +77,12 @@
             <button class="action-tab" id="tab-wa-chat" onclick="switchMode('wa-chat')"><i class="fa-brands fa-whatsapp"></i> <span>WhatsApp Direct</span></button>
             <button class="action-tab" id="tab-svgtopng" onclick="switchMode('svgtopng')"><i class="fa-solid fa-file-code"></i> <span>SVG to PNG</span></button>
             <button class="action-tab" id="tab-jsonformat" onclick="switchMode('jsonformat')"><i class="fa-solid fa-code"></i> <span>JSON Formatter</span></button>
+            
+            <button class="action-tab" onclick="window.location.href='age-calculator.html'"><i class="fa-solid fa-calculator"></i> <span>Age Calculator</span></button>
+            <button class="action-tab" onclick="window.location.href='cgpa-to-percentage.html'"><i class="fa-solid fa-graduation-cap"></i> <span>CGPA to %</span></button>
+            <button class="action-tab" onclick="window.location.href='text-to-handwriting.html'"><i class="fa-solid fa-pen-fancy"></i> <span>Text to Handwriting</span></button>
+            <button class="action-tab" onclick="window.location.href='image-text-extractor.html'"><i class="fa-solid fa-file-contract"></i> <span>OCR Text Extractor</span></button>
+            <button class="action-tab" onclick="window.location.href='marriage-biodata-maker.html'"><i class="fa-solid fa-address-card"></i> <span>Marriage Biodata</span></button>
         </div>
 
         <h1 class="main-title" id="mode-title" data-lang="hero-title">Resize Image Online</h1>
@@ -337,7 +343,7 @@
                     </div>
                     <div class="setting-group full-width">
                         <label><i class="fa-solid fa-building"></i> Work Experience / Projects:</label>
-                        <textarea id="res-exp" rows="3" placeholder="e.g. Developed QuickResizer web application with 17+ micro tools." style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:10px; font-family:'Poppins',sans-serif;"></textarea>
+                        <textarea id="res-exp" rows="3" placeholder="e.g. Developed QuickResizer web application with 22+ micro tools." style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:10px; font-family:'Poppins',sans-serif;"></textarea>
                     </div>
                 </div>
                 <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
@@ -411,6 +417,40 @@
             <button class="btn-primary btn-block" id="process-btn"><i class="fa-solid fa-download"></i> <span data-lang="btn-download">Process & Download</span></button>
         </div>
     </main>
+
+    <section class="section-container bg-white">
+        <div class="section-heading">
+            <h2>Explore Our Featured Utility Tools</h2>
+            <p>Select any tool to directly jump and start processing instantly.</p>
+        </div>
+        <div class="tools-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; text-align: left;">
+            <div class="tool-card" onclick="window.location.href='age-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-calculator" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Age Calculator</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Calculate exact age in years, months & days for govt exams.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='cgpa-to-percentage.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-graduation-cap" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">CGPA to Percentage</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Convert CBSE & College CGPA to percentage instantly.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='text-to-handwriting.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-pen-fancy" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Text to Handwriting</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Convert typed text into handwritten notebook style.</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='image-text-extractor.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-file-contract" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Image Text Extractor</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Extract text from photos and notes (OCR tool).</p>
+            </div>
+            <div class="tool-card" onclick="window.location.href='marriage-biodata-maker.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+                <i class="fa-solid fa-address-card" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
+                <h3 style="margin:5px 0; font-size:18px;">Marriage Bio-Data</h3>
+                <p style="font-size:13px; color:#64748b; margin:0;">Create attractive marriage biodata for print & PDF.</p>
+            </div>
+        </div>
+    </section>
 
     <section class="section-container" id="how-it-works">
         <div class="section-heading">
@@ -513,7 +553,7 @@
                         <li><i class="fa-solid fa-gauge-high" style="color:#38bdf8;"></i> Ultra Fast Speed</li>
                         <li><i class="fa-solid fa-gift" style="color:#eab308;"></i> <strong>+1 Month Extra Validity Free</strong></li>
                         <li><i class="fa-solid fa-check"></i> Unlimited Bulk Uploads</li>
-                        <li><i class="fa-solid fa-check"></i> All 17 Tools Without Limits</li>
+                        <li><i class="fa-solid fa-check"></i> All 22+ Tools Without Limits</li>
                         <li><i class="fa-solid fa-check"></i> You save 33%</li>
                         <li><i class="fa-solid fa-headset"></i> 24×7 Email Support Only</li>
                     </ul>
