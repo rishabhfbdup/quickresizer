@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GST Calculator Online - Add or Remove GST Tax | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">Online GST Calculator</h1>
+        <p class="sub-title">Add GST (Exclusive) or Remove GST (Inclusive) tax amounts instantly</p>
+        <div style="max-width:500px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            <label><b>Initial Amount (₹):</b></label>
+            <input type="number" id="gstAmt" placeholder="e.g. 1000" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px;">
+            
+            <label><b>GST Rate (%):</b></label>
+            <select id="gstPct" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px;">
+                <option value="5">5%</option>
+                <option value="12">12%</option>
+                <option value="18" selected>18%</option>
+                <option value="28">28%</option>
+            </select>
+            
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button onclick="calcGST(true)" style="width:50%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Add GST (+)</button>
+                <button onclick="calcGST(false)" style="width:50%; padding:12px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Remove GST (-)</button>
+            </div>
+            
+            <div id="gstRes" style="margin-top:20px; text-align:center;"></div>
+        </div>
+    </main>
+    <script>
+        function calcGST(isAdd) {
+            let P = parseFloat(document.getElementById('gstAmt').value);
+            let R = parseFloat(document.getElementById('gstPct').value);
+            if(!P) { alert("Enter Amount!"); return; }
+            
+            let gstVal = isAdd ? (P * R / 100) : (P - (P * (100 / (100 + R))));
+            let total = isAdd ? (P + gstVal) : (P - gstVal);
+
+            document.getElementById('gstRes').innerHTML = `
+                <div style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
+                    <p style="margin:5px 0;">GST Tax Amount: <b style="color:#ef4444;">₹${gstVal.toFixed(2)}</b></p>
+                    <p style="margin:5px 0; font-size:18px;">Final Net Amount: <b style="color:#2563eb;">₹${total.toFixed(2)}</b></p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
