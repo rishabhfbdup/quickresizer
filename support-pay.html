@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support QuickResizer - Pay What You Want | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title"><i class="fa-solid fa-heart" style="color:#ef4444;"></i> Support QuickResizer</h1>
+        <p class="sub-title">Found our tools helpful? Pay what you wish to support server maintenance and free updates!</p>
+        
+        <div style="max-width:500px; margin:20px auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            
+            <div style="margin-bottom:15px;">
+                <label><b>Your Name (Optional):</b></label>
+                <input type="text" id="suppName" placeholder="e.g. Rishabh" style="width:100%; padding:10px; margin-top:5px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label><b>Enter Support Amount (₹):</b></label>
+                <input type="number" id="suppAmount" min="10" placeholder="e.g. 50, 100, 500" style="width:100%; padding:12px; margin-top:5px; border:1px solid #2563eb; border-radius:6px; box-sizing:border-box; font-size:18px; font-weight:bold; color:#2563eb;">
+            </div>
+
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <button type="button" onclick="setAmt(20)" style="flex:1; padding:8px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; font-weight:bold;">₹20</button>
+                <button type="button" onclick="setAmt(50)" style="flex:1; padding:8px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; font-weight:bold;">₹50</button>
+                <button type="button" onclick="setAmt(100)" style="flex:1; padding:8px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; font-weight:bold;">₹100</button>
+                <button type="button" onclick="setAmt(500)" style="flex:1; padding:8px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; font-weight:bold;">₹500</button>
+            </div>
+
+            <button onclick="paySupportAmount()" style="width:100%; padding:12px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
+                <i class="fa-solid fa-shield-heart"></i> Pay & Support Now ❤️
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function setAmt(val) {
+            document.getElementById('suppAmount').value = val;
+        }
+
+        function paySupportAmount() {
+            let amt = parseFloat(document.getElementById('suppAmount').value);
+            if (!amt || amt < 10) {
+                alert("Please enter a minimum support amount of ₹10.");
+                return;
+            }
+
+            let name = document.getElementById('suppName').value || "Supporter";
+            let razorpayKey = "rzp_live_TNXhcB0cg4sMeQ";
+
+            const options = {
+                "key": razorpayKey,
+                "amount": Math.round(amt * 100), // Paise
+                "currency": "INR",
+                "name": "QuickResizer Support",
+                "description": "Voluntary Support / Donation",
+                "image": "https://quickresizer.in/favicon.ico",
+                "handler": function (response) {
+                    alert(`🎉 Thank you so much, ${name}!\nYour payment of ₹${amt} was successful.\nPayment ID: ${response.razorpay_payment_id}`);
+                },
+                "prefill": {
+                    "name": name
+                },
+                "theme": {
+                    "color": "#10b981"
+                }
+            };
+
+            if (typeof Razorpay !== 'undefined') {
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } else {
+                alert('Razorpay gateway is loading. Please try again in 3 seconds.');
+            }
+        }
+    </script>
+</body>
+</html>
