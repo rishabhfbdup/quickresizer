@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML & CSS Minifier Online - Compress Code Speed | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">HTML & CSS Minifier</h1>
+        <p class="sub-title">Compress HTML and CSS code by removing extra spaces, new lines & comments to boost website speed.</p>
+        
+        <div style="max-width:800px; margin:20px auto; text-align:left; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+            <label><b>Paste Your Raw HTML / CSS Code Here:</b></label>
+            <textarea id="codeIn" rows="8" placeholder="<!DOCTYPE html>&#10;<html>&#10;  <head>&#10;    &#10;    <title>Test</title>&#10;  </head>&#10;</html>" style="width:100%; padding:12px; margin-top:8px; border-radius:8px; border:1px solid #ccc; font-family:monospace; font-size:14px; box-sizing:border-box;"></textarea>
+            
+            <button onclick="minifyCode()" style="width:100%; padding:12px; margin-top:15px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
+                <i class="fa-solid fa-bolt"></i> Minify Code Now
+            </button>
+            
+            <div style="margin-top:20px;">
+                <label><b>Minified Code Result:</b></label>
+                <textarea id="codeOut" rows="8" readonly placeholder="Minified result will appear here..." style="width:100%; padding:12px; margin-top:8px; border-radius:8px; border:1px solid #ccc; background:#f8fafc; font-family:monospace; font-size:14px; box-sizing:border-box;"></textarea>
+            </div>
+
+            <div style="margin-top:15px; display:flex; gap:10px;">
+                <button onclick="copyResult()" style="padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                    <i class="fa-solid fa-copy"></i> Copy Minified Code
+                </button>
+                <button onclick="clearAll()" style="padding:10px 20px; background:#ef4444; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                    <i class="fa-solid fa-trash"></i> Clear
+                </button>
+            </div>
+            <div id="statusMsg" style="margin-top:10px; font-size:14px; font-weight:bold; color:#10b981;"></div>
+        </div>
+    </main>
+
+    <script>
+        function minifyCode() {
+            let input = document.getElementById('codeIn').value;
+            if(!input.trim()) {
+                alert("Please paste some HTML or CSS code first!");
+                return;
+            }
+
+            // Advanced Minification Regex (Removes comments, newlines, and extra spaces safely)
+            let minified = input
+                .replace(//g, '') // Remove HTML comments
+                .replace(/\/\*[\s\S]*?\*\//g, '') // Remove CSS comments
+                .replace(/\n+/g, ' ') // Remove line breaks
+                .replace(/\s+/g, ' ') // Remove multiple spaces
+                .replace(/>\s+</g, '><') // Remove spaces between tags
+                .trim();
+
+            document.getElementById('codeOut').value = minified;
+            document.getElementById('statusMsg').innerText = "Code successfully minified!";
+        }
+
+        function copyResult() {
+            let out = document.getElementById('codeOut');
+            if(!out.value) {
+                alert("Nothing to copy!");
+                return;
+            }
+            out.select();
+            navigator.clipboard.writeText(out.value);
+            alert("Minified code copied to clipboard!");
+        }
+
+        function clearAll() {
+            document.getElementById('codeIn').value = "";
+            document.getElementById('codeOut').value = "";
+            document.getElementById('statusMsg').innerText = "";
+        }
+    </script>
+</body>
+</html>
