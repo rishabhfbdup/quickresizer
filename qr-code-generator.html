@@ -14,28 +14,129 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.min.js" integrity="sha512-CNgIRecGo7BOdn48NLNkqVIxUDAwgLX2pZX42Xm8TtrZ2E85y44L43eGTF+A92LGHZA8AcHNdp17Cbc8fAD+DQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7BOdn48NLNkqVIxUDAwgLX2pZX42Xm8TtrZ2E85y44L43eGTF+A92LGHZA8AcHNdp17Cbc8fAD+DQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+
     <main class="hero-section">
         <h1 class="main-title">QR Code Generator</h1>
         <p class="sub-title">Create free custom QR codes for Website URLs, UPI IDs, WiFi, Text & Contact Details</p>
+        
         <div style="max-width:500px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
-            <label><b>Enter Text, URL or UPI ID:</b></label>
-            <input type="text" id="qrText" placeholder="https://quickresizer.in or UPI ID" style="width:100%; padding:10px; margin:10px 0 20px; border:1px solid #ccc; border-radius:6px;">
-            <button onclick="makeQR()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Generate QR Code</button>
-            <div id="qrcode" style="margin-top:20px; display:flex; justify-content:center;"></div>
+            
+            <label><b>Enter Text or URL:</b></label>
+            <input type="text" id="qrText" placeholder="e.g. https://quickresizer.in" style="width:100%; padding:10px; margin:8px 0 15px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;" oninput="checkAdvancedContent()">
+            
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:8px; margin-bottom:15px; position:relative;">
+                <span style="position:absolute; top:8px; right:8px; background:#eab308; color:#0f172a; font-size:10px; font-weight:700; padding:2px 5px; border-radius:4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+                <label style="font-size:12px; color:#475569; display:block; margin-bottom:5px;">QR Code Custom Style & Type:</label>
+                <select id="qrType" disabled style="width:100%; padding:6px; background:#e2e8f0; color:#94a3b8; border:1px solid #cbd5e1; border-radius:4px;">
+                    <option selected>Standard Website / Plain Text</option>
+                    <option>Premium UPI Payment QR (Paytm/PhonePe/GPay)</option>
+                    <option>Instant WiFi Auto-Connect Security QR</option>
+                </select>
+            </div>
+
+            <button onclick="makeQR()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
+                <i class="fa-solid fa-qrcode"></i> Generate QR Code
+            </button>
+            
+            <div id="resultContainer" style="margin-top:20px; text-align:center; display:none;">
+                <div id="qrcode" style="display:flex; justify-content:center; margin-bottom:15px;"></div>
+                <button id="downloadBtn" onclick="downloadQR()" style="width:100%; padding:10px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                    <i class="fa-solid fa-download"></i> Download QR Code Image
+                </button>
+            </div>
         </div>
     </main>
+
     <script>
-        let qrcodeObj = null;
+        function checkAdvancedContent() {
+            let txt = document.getElementById('qrText').value.toLowerCase();
+            let selectBox = document.getElementById('qrType');
+            
+            // अगर यूज़र UPI स्ट्रिंग या WiFi लिखने की कोशिश करे तो ड्रॉपडाउन विजुअली चेंज हो
+            if(txt.includes('upi://') || txt.includes('@ybl') || txt.includes('@paytm') || txt.includes('@oksbi')) {
+                selectBox.innerHTML = "<option>Premium UPI Payment QR (Paytm/PhonePe/GPay)</option>";
+            } else if(txt.includes('wifi:') || txt.includes('WPA')) {
+                selectBox.innerHTML = "<option>Instant WiFi Auto-Connect Security QR</option>";
+            } else {
+                selectBox.innerHTML = "<option selected>Standard Website / Plain Text</option><option>Premium UPI Payment QR (Paytm/PhonePe/GPay)</option><option>Instant WiFi Auto-Connect Security QR</option>";
+            }
+        }
+
         function makeQR() {
             let txt = document.getElementById('qrText').value;
-            if(!txt) { alert("Please enter URL or Text!"); return; }
+            if(!txt.trim()) { 
+                alert("Please enter URL or Text first!"); 
+                return; 
+            }
+
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 UPI or WiFi DEEP INTERCEPT LOCK
+            let lowerTxt = txt.toLowerCase();
+            let isPremiumType = lowerTxt.includes('upi://') || lowerTxt.includes('@ybl') || lowerTxt.includes('@paytm') || lowerTxt.includes('@oksbi') || lowerTxt.includes('wifi:');
+            
+            if (!isProUser && isPremiumType) {
+                alert("🔒 PRO LOCK: मर्चेंट UPI पेमेंट QR कोड या ऑटो-कनेक्ट WiFi QR कोड्स बनाना केवल प्रीमियम सब्सक्रिप्शन प्लान में उपलब्ध है। कृपया अपग्रेड करें!");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            // 2. 🔒 DAILY 3 REQUESTS LIMIT CHECK
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { qrGen: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { qrGen: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.qrGen >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त बेसिक QR कोड जनरेटर चांस समाप्त हो चुके हैं! असीमित और व्यावसायिक QR बनाने के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            // Engine Execution
             let box = document.getElementById('qrcode');
             box.innerHTML = "";
             new QRCode(box, { text: txt, width: 180, height: 180 });
+            
+            document.getElementById('resultContainer').style.display = "block";
+
+            // Increment count for free users
+            if (!isProUser) {
+                usageCounters.qrGen++;
+                localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+            }
+        }
+
+        function downloadQR() {
+            let qrImg = document.querySelector('#qrcode img');
+            if (!qrImg) {
+                // If standard img tags fail, fallback to canvas check
+                let qrCanvas = document.querySelector('#qrcode canvas');
+                if (qrCanvas) {
+                    let link = document.createElement('a');
+                    link.download = 'quickresizer_qrcode.png';
+                    link.href = qrCanvas.toDataURL();
+                    link.click();
+                    return;
+                }
+                alert("Error downloading QR Code!");
+                return;
+            }
+            let link = document.createElement('a');
+            link.download = 'quickresizer_qrcode.png';
+            link.href = qrImg.src;
+            link.click();
         }
     </script>
 </body>
