@@ -16,10 +16,92 @@
     <title>SVG to PNG High Resolution Converter - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-svgtopng'">Use SVG Converter 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">Convert SVG Vector to PNG Image</h1><p class="sub-title">Render scalable SVG vector graphics into high-resolution PNG images up to 4x Ultra HD.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-file-code upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open SVG to PNG Converter</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="useSvgConverter('basic')">Use SVG Converter 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">Convert SVG Vector to PNG Image</h1>
+        <p class="sub-title">Render scalable SVG vector graphics into high-resolution PNG images up to 4x Ultra HD.</p>
+        
+        <div class="upload-container" onclick="useSvgConverter('basic')" style="cursor:pointer; margin-bottom: 20px;">
+            <i class="fa-solid fa-file-code upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text"><span class="browse-text">Click to Open Standard Converter (3 Free Daily | 1x Resolution)</span></p>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-maximize" style="color: #38bdf8;"></i> Premium Ultra HD Vector Scaling (2x / 4x Size)</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Scale and export vector models into high-density 4K textures or big printable graphics with perfect transparency mapping.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Export Scale Multiplier:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #eab308; border: 1px solid #334155; font-weight: 600;">
+                        <option>2x HD Resolution Scale</option>
+                        <option>4x Ultra HD Print Scale</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Color Depth Mode:</label>
+                    <input type="text" value="Lossless 32-bit PNG" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                </div>
+            </div>
+            
+            <button onclick="useSvgConverter('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Ultra HD 4x Scaling Export
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function useSvgConverter(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 एडवांस्ड एचडी स्केलिंग चुनने पर 100% HARD LOCK -> Subscription Plan ($3.99) Required
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: SVG वेक्टर्स को 2x या 4x Ultra HD साइज में स्केल करके एक्सपोर्ट करना केवल प्रीमियम प्रो प्लान में उपलब्ध है। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-svgtopng";
+                return;
+            }
+
+            // 2. 🔒 बेसिक कनवर्ट पर 3 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { svgToPng: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { svgToPng: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.svgToPng >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त बेसिक SVG to PNG कनवर्ट चांस समाप्त हो चुके हैं! असीमित इस्तेमाल और HD स्केलिंग के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.svgToPng++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-svgtopng";
+            }
+        }
+    </script>
 </body>
 </html>
