@@ -16,10 +16,89 @@
     <title>JSON Formatter, Beautifier & Validator Online - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-jsonformat'">Use JSON Formatter 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">JSON Formatter & Validator</h1><p class="sub-title">Beautify, format, and validate raw JSON string structures instantly inside your browser.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-code upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open JSON Formatter</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="useJsonTool('basic')">Use JSON Formatter 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">JSON Formatter & Validator</h1>
+        <p class="sub-title">Beautify, format, and validate raw JSON string structures instantly inside your browser.</p>
+        
+        <div class="upload-container" onclick="useJsonTool('basic')" style="cursor:pointer; margin-bottom: 20px;">
+            <i class="fa-solid fa-code upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text"><span class="browse-text">Click to Open Standard Formatter (3 Free Daily | Max 2,000 Chars)</span></p>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-server" style="color: #38bdf8;"></i> Heavy API Payload & Tree View Validator</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Validate complex nested API responses, large database dumps, and multi-megabyte JSON arrays seamlessly.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Character Limit:</label>
+                    <input type="text" value="Unlimited Heavy JSON" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #eab308; border: 1px solid #334155; font-weight: 600;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Tree View & Minify:</label>
+                    <input type="text" value="Enabled (Interactive)" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                </div>
+            </div>
+            
+            <button onclick="useJsonTool('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Unlimited JSON & API Validator
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function useJsonTool(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. भारी पेलोड/अनलिमिटेड मोड चुनने पर 100% HARD LOCK -> Professional Plan ($19.99)
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: भारी API पेलोड्स और कॉम्प्लेक्स JSON डेटा को वैलिडेट करना केवल Professional डेवलपर्स प्लान में उपलब्ध है। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-jsonformat";
+                return;
+            }
+
+            // 2. बेसिक फ़ॉर्मेटर पर 3 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { jsonFormat: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { jsonFormat: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.jsonFormat >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त JSON फ़ॉर्मेटर चांस समाप्त हो चुके हैं! असीमित इस्तेमाल और एडवांस वैलीडेशन के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.jsonFormat++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-jsonformat";
+            }
+        }
+    </script>
 </body>
 </html>
