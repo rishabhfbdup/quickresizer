@@ -6,7 +6,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-N5FS3X06BP');
     </script>
     
@@ -16,10 +15,59 @@
     <title>Change Photo Background Color to White or Blue - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-bgcolor'">Use BG Color Changer 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">Change Photo Background Color Online</h1><p class="sub-title">Instantly fill or replace passport photo backgrounds with official white, sky blue, or custom colors.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-palette upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open Background Color Tool</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="useBgColorTool()">Use BG Color Changer 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">Change Photo Background Color Online</h1>
+        <p class="sub-title">Instantly fill or replace passport photo backgrounds with official white, sky blue, or custom colors.</p>
+        
+        <div class="upload-container" onclick="useBgColorTool()" style="cursor:pointer;">
+            <i class="fa-solid fa-palette upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text">
+                <span class="browse-text">Click to Open Background Color Tool</span>
+            </p>
+        </div>
+    </main>
+
+    <script>
+        function useBgColorTool() {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { bg: 0, date: new Date().toDateString() };
+
+            // नया दिन शुरू होने पर रीसेट
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { bg: 0, date: new Date().toDateString() };
+            }
+
+            // अगर यूज़र प्रो नहीं है और 2 चांस ख़त्म हो चुके हैं
+            if ((!user || !user.isPro) && usageCounters.bg >= 2) {
+                alert("🔒 Free Limit Reached: आज के 2 मुफ़्त बैकग्राउंड चेंज चांस समाप्त हो गए हैं! अनलिमिटेड एक्सेस के लिए Pro प्लान चुनें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                // फ्री चांस काउंट +1 करें (केवल फ्री यूज़र्स के लिए)
+                if (!user || !user.isPro) {
+                    usageCounters.bg++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#controls-section";
+            }
+        }
+    </script>
 </body>
 </html>
