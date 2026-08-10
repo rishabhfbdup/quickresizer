@@ -16,32 +16,106 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+    
     <main class="hero-section">
         <h1 class="main-title">Kruti Dev to Mangal Font Converter</h1>
         <p class="sub-title">Convert Kruti Dev 010 font text into Unicode Mangal Font for Govt Exams & Data Entry</p>
-        <div style="max-width:700px; margin:20px auto; text-align:left;">
-            <label><b>Paste Kruti Dev Text:</b></label>
-            <textarea id="krutiText" rows="5" placeholder="कृतिदेव टेक्स्ट यहाँ पेस्ट करें..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc;"></textarea>
-            <button onclick="convertKruti()" style="width:100%; padding:12px; margin-top:10px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Convert to Mangal (Unicode)</button>
+        
+        <div style="max-width:700px; margin:20px auto; text-align:left; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <label><b>Paste Kruti Dev Text:</b></label>
+                <span id="charLimitMsg" style="font-size:12px; font-weight:bold; color:#64748b;">Characters: 0 / 1000 (Free Limit)</span>
+            </div>
+
+            <textarea id="krutiText" rows="5" placeholder="कृतिदेव टेक्स्ट यहाँ पेस्ट करें..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; font-size:16px;" oninput="checkLength()"></textarea>
+            
+            <button onclick="convertKruti()" style="width:100%; padding:12px; margin-top:10px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
+                <i class="fa-solid fa-right-left"></i> Convert to Mangal (Unicode)
+            </button>
+            
             <div style="margin-top:15px;">
                 <label><b>Mangal Font Result (मंगल यूनिकोड):</b></label>
-                <textarea id="mangalText" rows="5" readonly style="width:100%; margin-top:5px; padding:10px; border-radius:6px; border:1px solid #ccc; background:#f8fafc; font-size:18px;"></textarea>
+                <textarea id="mangalText" rows="5" readonly style="width:100%; margin-top:5px; padding:10px; border-radius:6px; border:1px solid #ccc; background:#f8fafc; font-size:18px; box-sizing:border-box;"></textarea>
             </div>
+
+            <button onclick="copyResultText()" style="width:100%; margin-top:12px; padding:10px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                <i class="fa-solid fa-copy"></i> Copy Mangal Text
+            </button>
         </div>
     </main>
+
     <script>
+        function checkLength() {
+            let input = document.getElementById('krutiText').value;
+            let badge = document.getElementById('charLimitMsg');
+            badge.innerText = `Characters: ${input.length} / 1000 (Free Limit)`;
+            
+            if (input.length > 1000) {
+                badge.style.color = '#ef4444';
+            } else {
+                badge.style.color = '#64748b';
+            }
+        }
+
         function convertKruti() {
             let src = document.getElementById('krutiText').value;
-            // Basic mapping array engine
+            if(!src.trim()) { 
+                alert("Please paste some Kruti Dev text first!"); 
+                return; 
+            }
+
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 TEXT SIZE LIMIT CHECK (Max 1000 Chars for Free) -> Pro / Subscription Plan
+            if (!isProUser && src.length > 1000) {
+                alert("🔒 PRO LOCK: 1,000 कैरेक्टर्स से बड़े लंबे टेक्स्ट को एक साथ कनवर्ट करना केवल प्रो मेंबर्स के लिए उपलब्ध है। कृपया अपग्रेड करें!");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            // 2. 🔒 DAILY 3 REQUESTS LIMIT CHECK
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { fontConvert: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { fontConvert: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.fontConvert >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त फॉन्ट कनवर्ट चांस समाप्त हो चुके हैं! असीमित डेटा कनवर्ट करने के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            // Engine Processing
             let kArray = ["k","s","Tk","Rk","~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+"];
             let mArray = ["ा","्","का","क्का","़","़","।","्","्र","्य","्र","्","्र","्","्र","्","न्","न्","म्","म्"];
             let res = src;
             for(let i=0; i<kArray.length; i++){
                 res = res.split(kArray[i]).join(mArray[i]);
             }
+            
             document.getElementById('mangalText').value = res;
+
+            // Increment count for free users
+            if (!isProUser) {
+                usageCounters.fontConvert++;
+                localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+            }
         }
-    </script>
-</body>
-</html>
+
+        function copyResultText() {
+            let out = document.getElementById('mangalText');
+            if(!out.value.trim()) {
+                alert("Nothing to copy!");
+                return;
+            }
+            navigator.clipboard.writeText(out.value);
+            alert("📋 Mangal
