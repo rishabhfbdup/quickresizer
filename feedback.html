@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Feedback & Suggestions | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title"><i class="fa-solid fa-comments"></i> User Feedback & Support</h1>
+        <p class="sub-title">We would love to hear your thoughts, bug reports, or feature requests!</p>
+        
+        <div style="max-width:600px; margin:20px auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            <form onsubmit="submitFeedback(event)">
+                <div style="margin-bottom:15px;">
+                    <label><b>Your Name:</b></label>
+                    <input type="text" id="fbName" placeholder="e.g. Rishabh Rajput" required style="width:100%; padding:10px; margin-top:5px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label><b>Email Address:</b></label>
+                    <input type="email" id="fbEmail" placeholder="e.g. name@example.com" required style="width:100%; padding:10px; margin-top:5px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label><b>Rating:</b></label>
+                    <select id="fbRating" style="width:100%; padding:10px; margin-top:5px; border:1px solid #ccc; border-radius:6px; background:#fff;">
+                        <option value="5">⭐⭐⭐⭐⭐ Excellent Experience</option>
+                        <option value="4">⭐⭐⭐⭐ Good</option>
+                        <option value="3">⭐⭐⭐ Average</option>
+                        <option value="1">⭐ Needs Improvement</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label><b>Your Feedback / Message:</b></label>
+                    <textarea id="fbMsg" rows="5" placeholder="Write your suggestions or feedback here..." required style="width:100%; padding:10px; margin-top:5px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;"></textarea>
+                </div>
+                <button type="submit" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Feedback
+                </button>
+            </form>
+            <div id="fbSuccess" style="display:none; margin-top:15px; padding:12px; background:#dcfce7; color:#15803d; border-radius:6px; text-align:center; font-weight:bold;">
+                🎉 Thank you! Your feedback has been received successfully.
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function submitFeedback(e) {
+            e.preventDefault();
+            let name = document.getElementById('fbName').value;
+            let msg = document.getElementById('fbMsg').value;
+            
+            // Local storage save log
+            let allFeedbacks = JSON.parse(localStorage.getItem('qr_feedbacks')) || [];
+            allFeedbacks.push({ name, msg, date: new Date().toLocaleString() });
+            localStorage.setItem('qr_feedbacks', JSON.stringify(allFeedbacks));
+
+            document.getElementById('fbSuccess').style.display = 'block';
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>
