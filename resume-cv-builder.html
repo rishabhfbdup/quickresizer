@@ -16,10 +16,92 @@
     <title>1-Click Free PDF Resume & CV Builder - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-resume'">Use Resume Builder 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">1-Click PDF Resume & CV Builder</h1><p class="sub-title">Fill basic education and skills details to generate a clean, ATS-friendly professional PDF Resume instantly.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-file-user upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open PDF Resume Builder</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="useResumeBuilder('basic')">Use Resume Builder 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">1-Click PDF Resume & CV Builder</h1>
+        <p class="sub-title">Fill basic education and skills details to generate a clean, ATS-friendly professional PDF Resume instantly.</p>
+        
+        <div class="upload-container" onclick="useResumeBuilder('basic')" style="cursor:pointer; margin-bottom: 20px;">
+            <i class="fa-solid fa-file-user upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text"><span class="browse-text">Click to Open Standard ATS Builder (2 Free Daily)</span></p>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-graduation-cap" style="color: #38bdf8;"></i> Premium Executive Resume Templates</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Build high-impact multi-page executive CVs with custom color palettes and specialized ATS scoring layouts.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Template Theme:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                        <option>Executive Corporate Modern</option>
+                        <option>Creative Portfolio CV Design</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">ATS Match Optimization:</label>
+                    <input type="text" value="99% Score Guarantee" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #eab308; border: 1px solid #334155; font-weight: 600;">
+                </div>
+            </div>
+            
+            <button onclick="useResumeBuilder('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Premium Executive Templates
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function useResumeBuilder(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 प्रीमियम टेम्पलेट्स सिलेक्ट करने पर 100% HARD LOCK -> Smart Plan ($9.99)
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: प्रीमियम एग्जीक्यूटिव टेम्पलेट्स और एडवांस्ड ATS रिज़्यूमे डिज़ाइन्स केवल प्रो मेंबर्स के लिए उपलब्ध हैं। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-resume";
+                return;
+            }
+
+            // 2. 🔒 बेसिक ATS बिल्डर पर 2 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { resumeBuild: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { resumeBuild: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.resumeBuild >= 2) {
+                alert("🔒 Limit Reached: आपके आज के 2 मुफ़्त ATS रिज़्यूमे बनाने के चांस समाप्त हो चुके हैं! असीमित इस्तेमाल और प्रीमियम डिज़ाइन्स के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.resumeBuild++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-resume";
+            }
+        }
+    </script>
 </body>
 </html>
