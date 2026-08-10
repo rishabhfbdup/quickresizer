@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIP & Compound Interest Calculator Online - Mutual Fund Returns | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">SIP & Mutual Fund Calculator</h1>
+        <p class="sub-title">Calculate expected returns & wealth growth on your monthly Systematic Investment Plan (SIP)</p>
+        <div style="max-width:500px; margin:20px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:left;">
+            <label><b>Monthly Investment Amount (₹):</b></label>
+            <input type="number" id="monthly" placeholder="e.g. 5000" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px;">
+            <label><b>Expected Return Rate (% p.a.):</b></label>
+            <input type="number" id="rate" placeholder="e.g. 12" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px;">
+            <label><b>Time Period (Years):</b></label>
+            <input type="number" id="years" placeholder="e.g. 10" style="width:100%; padding:10px; margin:5px 0 15px; border:1px solid #ccc; border-radius:6px;">
+            <button onclick="calcSIP()" style="width:100%; padding:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Calculate Wealth Growth</button>
+            <div id="sipResult" style="margin-top:20px; text-align:center; font-size:16px;"></div>
+        </div>
+    </main>
+    <script>
+        function calcSIP() {
+            let P = parseFloat(document.getElementById('monthly').value);
+            let i = parseFloat(document.getElementById('rate').value) / 12 / 100;
+            let n = parseFloat(document.getElementById('years').value) * 12;
+            if(!P || !i || !n) { alert("Please enter all fields!"); return; }
+            let total = P * (((Math.pow(1 + i, n) - 1) / i) * (1 + i));
+            let invested = P * n;
+            let returns = total - invested;
+            document.getElementById('sipResult').innerHTML = `
+                <p>Invested Amount: <b>₹${invested.toLocaleString('en-IN')}</b></p>
+                <p>Est. Returns: <b style="color:#10b981;">₹${Math.round(returns).toLocaleString('en-IN')}</b></p>
+                <p style="font-size:20px;">Total Value: <b style="color:#2563eb;">₹${Math.round(total).toLocaleString('en-IN')}</b></p>
+            `;
+        }
+    </script>
+</body>
+</html>
