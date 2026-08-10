@@ -67,6 +67,15 @@
             </span>
         </div>
 
+        <div style="display: flex; gap: 10px; justify-content: center; margin: 15px 0 25px 0; flex-wrap: wrap;">
+            <button onclick="filterCategory('all')" class="cat-btn active" style="padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">🔥 All Tools</button>
+            <button onclick="filterCategory('image')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">🖼️ Image Tools</button>
+            <button onclick="filterCategory('student')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">🎓 Student & Exam</button>
+            <button onclick="filterCategory('document')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">📄 Document Makers</button>
+            <button onclick="filterCategory('developer')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">💻 Developer & Text</button>
+            <button onclick="filterCategory('financial')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">💰 Financial & Tax</button>
+        </div>
+
         <div class="action-tabs">
             <button class="action-tab active" id="tab-resize" onclick="switchMode('resize')"><i class="fa-solid fa-expand"></i> <span data-lang="tab-resize">Resize Image</span></button>
             <button class="action-tab" id="tab-crop" onclick="switchMode('crop')"><i class="fa-solid fa-crop-simple"></i> <span data-lang="tab-crop">Crop Image</span></button>
@@ -122,7 +131,25 @@
             <button class="btn-primary" onclick="document.getElementById('image-input').click()" data-lang="btn-select">Select File</button>
         </div>
 
-        <div class="trust-badges">
+        <div style="max-width: 700px; margin: 25px auto 0 auto; background: #0f172a; border: 1px solid #334155; padding: 15px 20px; border-radius: 12px; text-align: left;">
+            <h4 style="margin: 0 0 10px 0; color: #38bdf8; font-size:14px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Other Useful Tools You Might Like:</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px;">
+                <a href="image-text-extractor.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-file-contract" style="color: #38bdf8;"></i> OCR Text Extractor
+                </a>
+                <a href="legal-docs.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-file-lines" style="color: #38bdf8;"></i> Affidavit & Application
+                </a>
+                <a href="qr-code-generator.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-qrcode" style="color: #38bdf8;"></i> UPI & QR Generator
+                </a>
+                <a href="text-to-handwriting.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-pen-fancy" style="color: #38bdf8;"></i> Text to Handwriting
+                </a>
+            </div>
+        </div>
+
+        <div class="trust-badges" style="margin-top: 20px;">
             <span><i class="fa-solid fa-shield-halved"></i> <span data-lang="badge-private">100% Private (No Server Uploads)</span></span>
             <span><i class="fa-solid fa-bolt"></i> <span data-lang="badge-fast">Ultra Fast Processing</span></span>
             <span><i class="fa-solid fa-face-smile"></i> <span data-lang="badge-free">Completely Free Forever</span></span>
@@ -606,7 +633,6 @@
         </div>
         
         <div class="pricing-grid">
-            
             <div class="pricing-card" style="position: relative; margin-top: 20px;">
                 <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+3 DAYS FREE</span>
                 <h3>Subscription</h3>
