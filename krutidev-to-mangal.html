@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kruti Dev to Mangal Font Converter Online | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">Kruti Dev to Mangal Font Converter</h1>
+        <p class="sub-title">Convert Kruti Dev 010 font text into Unicode Mangal Font for Govt Exams & Data Entry</p>
+        <div style="max-width:700px; margin:20px auto; text-align:left;">
+            <label><b>Paste Kruti Dev Text:</b></label>
+            <textarea id="krutiText" rows="5" placeholder="कृतिदेव टेक्स्ट यहाँ पेस्ट करें..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc;"></textarea>
+            <button onclick="convertKruti()" style="width:100%; padding:12px; margin-top:10px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Convert to Mangal (Unicode)</button>
+            <div style="margin-top:15px;">
+                <label><b>Mangal Font Result (मंगल यूनिकोड):</b></label>
+                <textarea id="mangalText" rows="5" readonly style="width:100%; margin-top:5px; padding:10px; border-radius:6px; border:1px solid #ccc; background:#f8fafc; font-size:18px;"></textarea>
+            </div>
+        </div>
+    </main>
+    <script>
+        function convertKruti() {
+            let src = document.getElementById('krutiText').value;
+            // Basic mapping array engine
+            let kArray = ["k","s","Tk","Rk","~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+"];
+            let mArray = ["ा","्","का","क्का","़","़","।","्","्र","्य","्र","्","्र","्","्र","्","न्","न्","म्","म्"];
+            let res = src;
+            for(let i=0; i<kArray.length; i++){
+                res = res.split(kArray[i]).join(mArray[i]);
+            }
+            document.getElementById('mangalText').value = res;
+        }
+    </script>
+</body>
+</html>
