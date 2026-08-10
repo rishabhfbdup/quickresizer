@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoder & Decoder Online | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">Base64 Encoder / Decoder</h1>
+        <p class="sub-title">Convert plain text string to Base64 code or decode Base64 back to normal text.</p>
+        <div style="max-width:700px; margin:20px auto; text-align:left;">
+            <textarea id="b64In" rows="5" placeholder="Enter text or Base64 code here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc;"></textarea>
+            <div style="margin:10px 0; display:flex; gap:10px;">
+                <button onclick="document.getElementById('b64Out').value = btoa(document.getElementById('b64In').value);" style="padding:10px 20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Encode to Base64</button>
+                <button onclick="try{document.getElementById('b64Out').value = atob(document.getElementById('b64In').value);}catch(e){alert('Invalid Base64!');}" style="padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Decode Base64</button>
+            </div>
+            <textarea id="b64Out" rows="5" readonly placeholder="Result will appear here..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; background:#f8fafc;"></textarea>
+        </div>
+    </main>
+</body>
+</html>
