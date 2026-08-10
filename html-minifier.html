@@ -28,8 +28,13 @@
         <p class="sub-title">Compress HTML and CSS code by removing extra spaces, new lines & comments to boost website speed.</p>
         
         <div style="max-width:800px; margin:20px auto; text-align:left; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
-            <label><b>Paste Your Raw HTML / CSS Code Here:</b></label>
-            <textarea id="codeIn" rows="8" placeholder="<!DOCTYPE html>&#10;<html>&#10;  <head>&#10;    &#10;    <title>Test</title>&#10;  </head>&#10;</html>" style="width:100%; padding:12px; margin-top:8px; border-radius:8px; border:1px solid #ccc; font-family:monospace; font-size:14px; box-sizing:border-box;"></textarea>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <label><b>Paste Your Raw HTML / CSS Code Here:</b></label>
+                <span id="charCounter" style="font-size:12px; font-weight:bold; color:#64748b;">Chars: 0 / 3000 (Free Limit)</span>
+            </div>
+
+            <textarea id="codeIn" rows="8" placeholder="<!DOCTYPE html>&#10;<html>&#10;  <head>&#10;    <title>Test</title>&#10;  </head>&#10;</html>" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-family:monospace; font-size:14px; box-sizing:border-box;" oninput="updateCharCount()"></textarea>
             
             <button onclick="minifyCode()" style="width:100%; padding:12px; margin-top:15px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px;">
                 <i class="fa-solid fa-bolt"></i> Minify Code Now
@@ -53,6 +58,17 @@
     </main>
 
     <script>
+        function updateCharCount() {
+            let len = document.getElementById('codeIn').value.length;
+            let counter = document.getElementById('charCounter');
+            counter.innerText = `Chars: ${len} / 3000 (Free Limit)`;
+            if (len > 3000) {
+                counter.style.color = '#ef4444';
+            } else {
+                counter.style.color = '#64748b';
+            }
+        }
+
         function minifyCode() {
             let input = document.getElementById('codeIn').value;
             if(!input.trim()) {
@@ -60,35 +76,21 @@
                 return;
             }
 
-            // Advanced Minification Regex (Removes comments, newlines, and extra spaces safely)
-            let minified = input
-                .replace(//g, '') // Remove HTML comments
-                .replace(/\/\*[\s\S]*?\*\//g, '') // Remove CSS comments
-                .replace(/\n+/g, ' ') // Remove line breaks
-                .replace(/\s+/g, ' ') // Remove multiple spaces
-                .replace(/>\s+</g, '><') // Remove spaces between tags
-                .trim();
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
 
-            document.getElementById('codeOut').value = minified;
-            document.getElementById('statusMsg').innerText = "Code successfully minified!";
-        }
-
-        function copyResult() {
-            let out = document.getElementById('codeOut');
-            if(!out.value) {
-                alert("Nothing to copy!");
+            // 1. 🔒 LARGE FILE LOCK (Max 3,000 characters for Free Users) -> Professional Plan ($19.99)
+            if (!isProUser && input.length > 3000) {
+                alert("🔒 PRO LOCK: 3,000 कैरेक्टर्स से बड़े व्यावसायिक सोर्स कोड को मिनिफ़ाई करना केवल Professional प्लान में उपलब्ध है। कृपया आगे बढ़ने के लिए अपग्रेड करें!");
+                window.location.href = "index.html#pricing";
                 return;
             }
-            out.select();
-            navigator.clipboard.writeText(out.value);
-            alert("Minified code copied to clipboard!");
-        }
 
-        function clearAll() {
-            document.getElementById('codeIn').value = "";
-            document.getElementById('codeOut').value = "";
-            document.getElementById('statusMsg').innerText = "";
-        }
-    </script>
-</body>
-</html>
+            // 2. 🔒 DAILY 3 USAGE LIMIT CHECK
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { codeMinify: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { codeMinify: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.codeMinify >=
