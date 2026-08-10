@@ -36,7 +36,7 @@
         </nav>
 
         <div class="nav-right">
-            <button class="btn-primary" onclick="window.location.href='index.html#panel-convert'">Use Converter Tool 🚀</button>
+            <button class="btn-primary" onclick="useWebpConverter('basic')">Use Converter Tool 🚀</button>
         </div>
     </header>
 
@@ -44,10 +44,31 @@
         <h1 class="main-title">Convert WEBP to JPG Online for Free</h1>
         <p class="sub-title">Instantly convert WEBP images downloaded from Google or modern websites to universally compatible JPG/JPEG format.</p>
 
-        <div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;">
+        <div class="upload-container" onclick="useWebpConverter('basic')" style="cursor:pointer; margin-bottom: 20px;">
             <i class="fa-solid fa-arrows-repeat upload-icon" style="color:#38bdf8;"></i>
-            <p class="upload-text"><span class="browse-text">Click here to Open WEBP to JPG Converter</span></p>
-            <span class="file-limits">100% Free | High Resolution | Instant Browser Conversion</span>
+            <p class="upload-text"><span class="browse-text">Click here to Open Standard Converter (5 Free Daily)</span></p>
+            <span class="file-limits">High Resolution | Instant Browser Conversion</span>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-images" style="color: #38bdf8;"></i> Bulk Batch WEBP to JPG Conversion</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Convert entire folders or multiple WEBP images at once into standard JPG photos with zero quality loss.</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Batch Upload Limit:</label>
+                    <input type="text" value="Unlimited Files at Once" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #eab308; border: 1px solid #334155; font-weight: 600;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Compression Engine:</label>
+                    <input type="text" value="Lossless Premium Render" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                </div>
+            </div>
+            
+            <button onclick="useWebpConverter('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Bulk WEBP Converter
+            </button>
         </div>
     </main>
 
@@ -69,6 +90,42 @@
             <div class="powered-by">Powered by :- <span>Kryzex Technologies</span></div>
         </div>
     </footer>
+
+    <script>
+        function useWebpConverter(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. बल्क मोड चुनने पर 100% HARD LOCK -> Subscription Plan ($3.99) Required
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: एक साथ कई WEBP फाइलों को बल्क में कनवर्ट करना केवल प्रीमियम सब्सक्रिप्शन प्लान में उपलब्ध है। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-convert";
+                return;
+            }
+
+            // 2. बेसिक सिंगल कनवर्ट पर 5 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { webpToJpg: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { webpToJpg: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.webpToJpg >= 5) {
+                alert("🔒 Limit Reached: आपके आज के 5 मुफ़्त सामान्य WEBP to JPG कनवर्ट चांस समाप्त हो चुके हैं! असीमित और बल्क प्रोसेसिंग के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.webpToJpg++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-convert";
+            }
+        }
+    </script>
 
 </body>
 </html>
