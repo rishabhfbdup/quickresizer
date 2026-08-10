@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5FS3X06BP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N5FS3X06BP');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English to Hindi Typing Online (Transliteration) | QuickResizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <main class="hero-section">
+        <h1 class="main-title">English to Hindi Typing Tool</h1>
+        <p class="sub-title">Type in English (Hinglish) and get instant Hindi Devanagari text (e.g. type 'namaste' -> 'नमस्ते')</p>
+        <div style="max-width:700px; margin:20px auto; text-align:left;">
+            <textarea id="englishInput" rows="5" placeholder="Type here in English (e.g. mera naam rishabh hai)..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; font-size:16px;" oninput="convertToHindi()"></textarea>
+            <div style="margin-top:15px; background:#fff; padding:20px; border-radius:8px; border:1px solid #ccc;">
+                <label><b>Hindi Output (हिंदी टेक्स्ट):</b></label>
+                <textarea id="hindiOutput" rows="5" readonly style="width:100%; margin-top:10px; padding:10px; border-radius:6px; border:1px solid #ddd; font-size:18px; color:#1e293b; background:#f8fafc;"></textarea>
+                <button onclick="navigator.clipboard.writeText(document.getElementById('hindiOutput').value); alert('Hindi text copied!');" style="margin-top:10px; padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Copy Hindi Text</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        async function convertToHindi() {
+            let input = document.getElementById('englishInput').value;
+            if(!input.trim()) { document.getElementById('hindiOutput').value = ""; return; }
+            let words = input.split(" ");
+            let lastWord = words[words.length - 1];
+            if(lastWord) {
+                try {
+                    let res = await fetch(`https://inputtools.google.com/request?text=${encodeURIComponent(input)}&itc=hi-t-i0-und&num=1`);
+                    let data = await res.json();
+                    if(data[0] === "SUCCESS") {
+                        document.getElementById('hindiOutput').value = data[1][0][1][0];
+                    }
+                } catch(e){}
+            }
+        }
+    </script>
+</body>
+</html>
