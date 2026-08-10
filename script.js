@@ -7,11 +7,12 @@ let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
 let pendingSubscriptionAfterAuth = false;
 let billingDetails = {};
 
-// Free Usage Counters (for limiting free users daily across all tools)
+// Free Usage Counters (for limiting free users daily)
 let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { age: 0, cgpa: 0, date: new Date().toDateString() };
+
 // Daily reset check
 if (usageCounters.date !== new Date().toDateString()) {
-    usageCounters = { date: new Date().toDateString() };
+    usageCounters = { age: 0, cgpa: 0, date: new Date().toDateString() };
     localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
 }
 
@@ -29,9 +30,14 @@ let selectedPlan = { name: 'Yearly', inrPrice: 2199, usdDisplay: '$25.99' };
 function switchMode(mode) {
     currentMode = mode;
 
-    document.querySelectorAll('.action-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.action-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+
     const activeTab = document.getElementById(`tab-${mode}`);
-    if(activeTab) activeTab.classList.add('active');
+    if (activeTab) {
+        activeTab.classList.add('active');
+    }
 
     const titles = {
         resize: "Resize Image Online",
@@ -52,6 +58,7 @@ function switchMode(mode) {
         svgtopng: "Convert SVG to High-Res PNG",
         jsonformat: "JSON Formatter & Validator"
     };
+
     const descs = {
         resize: "Change image width and height in pixels easily for free!",
         crop: "Drag and adjust box to visual crop your image precisely.",
@@ -72,19 +79,34 @@ function switchMode(mode) {
         jsonformat: "Beautify, format, and validate raw JSON code strings instantly."
     };
 
-    if (document.getElementById('mode-title')) document.getElementById('mode-title').innerText = titles[mode] || titles.resize;
-    if (document.getElementById('mode-desc')) document.getElementById('mode-desc').innerText = descs[mode] || descs.resize;
+    if (document.getElementById('mode-title')) {
+        document.getElementById('mode-title').innerText = titles[mode] || titles.resize;
+    }
+    if (document.getElementById('mode-desc')) {
+        document.getElementById('mode-desc').innerText = descs[mode] || descs.resize;
+    }
 
-    document.querySelectorAll('.mode-panel').forEach(panel => panel.classList.add('hidden'));
+    document.querySelectorAll('.mode-panel').forEach(panel => {
+        panel.classList.add('hidden');
+    });
+
     const selectedPanel = document.getElementById(`panel-${mode}`);
-    if (selectedPanel) selectedPanel.classList.remove('hidden');
+    if (selectedPanel) {
+        selectedPanel.classList.remove('hidden');
+    }
 
     const microTools = ['wordcounter', 'wa-chat', 'jsonformat', 'resume'];
     if (microTools.includes(mode)) {
-        document.getElementById('controls-section')?.classList.remove('hidden');
-        document.querySelector('.preview-box')?.classList.add('hidden');
+        if (document.getElementById('controls-section')) {
+            document.getElementById('controls-section').classList.remove('hidden');
+        }
+        if (document.querySelector('.preview-box')) {
+            document.querySelector('.preview-box').classList.add('hidden');
+        }
     } else {
-        document.querySelector('.preview-box')?.classList.remove('hidden');
+        if (document.querySelector('.preview-box')) {
+            document.querySelector('.preview-box').classList.remove('hidden');
+        }
     }
 
     if (currentMode === 'crop' && document.getElementById('image-preview').src) {
@@ -93,7 +115,7 @@ function switchMode(mode) {
         destroyCropper();
     }
 
-    // 🔒 PRO LOCK: Developer & Privacy tools hard gate for free plans
+    // 🔒 PRO LOCK: Developer & Privacy tools gate for free plans
     const devTools = ['jsonformat', 'password-generator', 'base64-encoder-decoder', 'url-encoder-decoder', 'html-minifier'];
     if (devTools.includes(mode) && (!currentUser || !currentUser.isPro)) {
         alert("🔒 PRO FEATURE: Developer & Privacy tools require a PRO subscription. Please choose a plan below!");
@@ -104,23 +126,41 @@ function switchMode(mode) {
     const btn = document.getElementById('process-btn');
     if (btn) {
         const countText = uploadedFiles.length > 1 ? ` (${uploadedFiles.length} Files)` : '';
-        if (mode === 'resize') btn.innerHTML = `<i class="fa-solid fa-download"></i> Resize & Download${countText}`;
-        else if (mode === 'crop') btn.innerHTML = `<i class="fa-solid fa-crop"></i> Crop & Download`;
-        else if (mode === 'compress') btn.innerHTML = `<i class="fa-solid fa-file-zipper"></i> Compress KB & Download${countText}`;
-        else if (mode === 'convert') btn.innerHTML = `<i class="fa-solid fa-arrows-repeat"></i> Convert & Download${countText}`;
-        else if (mode === 'namedate') btn.innerHTML = `<i class="fa-solid fa-id-card"></i> Add Name/Date & Download${countText}`;
-        else if (mode === 'signature') btn.innerHTML = `<i class="fa-solid fa-signature"></i> Clean Signature & Download${countText}`;
-        else if (mode === 'bgcolor') btn.innerHTML = `<i class="fa-solid fa-palette"></i> Apply BG Color & Download${countText}`;
-        else if (mode === 'imgtopdf') btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Generate PDF & Download`;
-        else if (mode === 'pdftoimg') btn.innerHTML = `<i class="fa-solid fa-file-image"></i> Extract Images & Download`;
-        else if (mode === 'mergepdf') btn.innerHTML = `<i class="fa-solid fa-object-group"></i> Merge PDFs & Download`;
-        else if (mode === 'splitpdf') btn.innerHTML = `<i class="fa-solid fa-scissors"></i> Split & Download PDF`;
-        else if (mode === 'compresspdf') btn.innerHTML = `<i class="fa-solid fa-file-contract"></i> Compress PDF & Download`;
-        else if (mode === 'resume') btn.innerHTML = `<i class="fa-solid fa-file-user"></i> Generate Resume PDF`;
-        else if (mode === 'wordcounter') btn.innerHTML = `<i class="fa-solid fa-copy"></i> Copy Text`;
-        else if (mode === 'wa-chat') btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Open Direct Chat`;
-        else if (mode === 'svgtopng') btn.innerHTML = `<i class="fa-solid fa-download"></i> Convert & Download PNG`;
-        else if (mode === 'jsonformat') btn.innerHTML = `<i class="fa-solid fa-code"></i> Format & Validate JSON`;
+        if (mode === 'resize') {
+            btn.innerHTML = `<i class="fa-solid fa-download"></i> Resize & Download${countText}`;
+        } else if (mode === 'crop') {
+            btn.innerHTML = `<i class="fa-solid fa-crop"></i> Crop & Download`;
+        } else if (mode === 'compress') {
+            btn.innerHTML = `<i class="fa-solid fa-file-zipper"></i> Compress KB & Download${countText}`;
+        } else if (mode === 'convert') {
+            btn.innerHTML = `<i class="fa-solid fa-arrows-repeat"></i> Convert & Download${countText}`;
+        } else if (mode === 'namedate') {
+            btn.innerHTML = `<i class="fa-solid fa-id-card"></i> Add Name/Date & Download${countText}`;
+        } else if (mode === 'signature') {
+            btn.innerHTML = `<i class="fa-solid fa-signature"></i> Clean Signature & Download${countText}`;
+        } else if (mode === 'bgcolor') {
+            btn.innerHTML = `<i class="fa-solid fa-palette"></i> Apply BG Color & Download${countText}`;
+        } else if (mode === 'imgtopdf') {
+            btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Generate PDF & Download`;
+        } else if (mode === 'pdftoimg') {
+            btn.innerHTML = `<i class="fa-solid fa-file-image"></i> Extract Images & Download`;
+        } else if (mode === 'mergepdf') {
+            btn.innerHTML = `<i class="fa-solid fa-object-group"></i> Merge PDFs & Download`;
+        } else if (mode === 'splitpdf') {
+            btn.innerHTML = `<i class="fa-solid fa-scissors"></i> Split & Download PDF`;
+        } else if (mode === 'compresspdf') {
+            btn.innerHTML = `<i class="fa-solid fa-file-contract"></i> Compress PDF & Download`;
+        } else if (mode === 'resume') {
+            btn.innerHTML = `<i class="fa-solid fa-file-user"></i> Generate Resume PDF`;
+        } else if (mode === 'wordcounter') {
+            btn.innerHTML = `<i class="fa-solid fa-copy"></i> Copy Text`;
+        } else if (mode === 'wa-chat') {
+            btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Open Direct Chat`;
+        } else if (mode === 'svgtopng') {
+            btn.innerHTML = `<i class="fa-solid fa-download"></i> Convert & Download PNG`;
+        } else if (mode === 'jsonformat') {
+            btn.innerHTML = `<i class="fa-solid fa-code"></i> Format & Validate JSON`;
+        }
     }
 }
 
@@ -133,28 +173,39 @@ const controlsSection = document.getElementById('controls-section');
 const imagePreview = document.getElementById('image-preview');
 
 if (dropZone) {
-    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#0284c7'; });
-    dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = '#38bdf8'; });
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#0284c7';
+    });
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '#38bdf8';
+    });
     dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
-        if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+        if (e.dataTransfer.files.length) {
+            handleFiles(e.dataTransfer.files);
+        }
     });
 }
 
 if (imageInput) {
     imageInput.addEventListener('change', (e) => {
-        if (e.target.files.length) handleFiles(e.target.files);
+        if (e.target.files.length) {
+            handleFiles(e.target.files);
+        }
     });
 }
 
 function getMaxMbLimit() {
-    if (!currentUser || !currentUser.isPro) return 5;
+    if (!currentUser || !currentUser.isPro) {
+        return 5;
+    }
     const plan = currentUser.plan || '';
-    if (plan === 'Subscription') return 10;
-    if (plan === 'Simple') return 15;
-    if (plan === 'Smart') return 20;
-    if (plan === 'Professional') return 30;
-    if (plan === 'Yearly') return Infinity;
+    if (plan === 'Subscription') { return 10; }
+    if (plan === 'Simple') { return 15; }
+    if (plan === 'Smart') { return 20; }
+    if (plan === 'Professional') { return 30; }
+    if (plan === 'Yearly') { return Infinity; }
     return 5;
 }
 
@@ -170,7 +221,9 @@ function handleFiles(files) {
             const limitText = maxMbLimit === Infinity ? 'Unlimited' : `${maxMbLimit}MB`;
             alert(`⚠️ File size exceeds your plan limit!\n\nYour current plan allows files up to ${limitText}. The uploaded file "${filesArray[i].name}" is ${fileSizeMb.toFixed(1)}MB.\n\nPlease upgrade your plan to upload larger files!`);
             const pricingSection = document.getElementById('pricing');
-            if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
+            if (pricingSection) {
+                pricingSection.scrollIntoView({ behavior: 'smooth' });
+            }
             return;
         }
     }
@@ -179,7 +232,9 @@ function handleFiles(files) {
         if (filesArray.length > 1 && currentMode !== 'mergepdf') {
             alert('⭐ Bulk Upload is a PRO Feature!\n\nFree users can process only 1 file at a time (Max 5MB). Please upgrade to Pro for bulk processing!');
             const pricingSection = document.getElementById('pricing');
-            if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
+            if (pricingSection) {
+                pricingSection.scrollIntoView({ behavior: 'smooth' });
+            }
             uploadedFiles = [filesArray[0]];
         } else {
             uploadedFiles = filesArray;
@@ -195,13 +250,23 @@ function handleFiles(files) {
 
     if (firstFile.type === 'application/pdf' || firstFile.name.endsWith('.pdf')) {
         imagePreview.src = 'https://cdn-icons-png.flaticon.com/512/337/337946.png';
-        if (controlsSection) controlsSection.classList.remove('hidden');
-        if (controlsSection) controlsSection.scrollIntoView({ behavior: 'smooth' });
+        if (controlsSection) {
+            controlsSection.classList.remove('hidden');
+        }
+        if (controlsSection) {
+            controlsSection.scrollIntoView({ behavior: 'smooth' });
+        }
     } else if (firstFile.name.endsWith('.svg')) {
         imagePreview.src = 'https://cdn-icons-png.flaticon.com/512/5968/5968364.png';
-        if (controlsSection) controlsSection.classList.remove('hidden');
-        if (controlsSection) controlsSection.scrollIntoView({ behavior: 'smooth' });
-        if (currentMode !== 'svgtopng') switchMode('svgtopng');
+        if (controlsSection) {
+            controlsSection.classList.remove('hidden');
+        }
+        if (controlsSection) {
+            controlsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (currentMode !== 'svgtopng') {
+            switchMode('svgtopng');
+        }
     } else {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -209,10 +274,18 @@ function handleFiles(files) {
             
             const img = new Image();
             img.onload = () => {
-                if (document.getElementById('width-input')) document.getElementById('width-input').value = img.width;
-                if (document.getElementById('height-input')) document.getElementById('height-input').value = img.height;
-                if (controlsSection) controlsSection.classList.remove('hidden');
-                if (controlsSection) controlsSection.scrollIntoView({ behavior: 'smooth' });
+                if (document.getElementById('width-input')) {
+                    document.getElementById('width-input').value = img.width;
+                }
+                if (document.getElementById('height-input')) {
+                    document.getElementById('height-input').value = img.height;
+                }
+                if (controlsSection) {
+                    controlsSection.classList.remove('hidden');
+                }
+                if (controlsSection) {
+                    controlsSection.scrollIntoView({ behavior: 'smooth' });
+                }
 
                 if (currentMode === 'crop') {
                     initCropper();
@@ -249,12 +322,19 @@ function destroyCropper() {
 }
 
 document.getElementById('crop-ratio')?.addEventListener('change', (e) => {
-    if (!cropperInstance) return;
+    if (!cropperInstance) {
+        return;
+    }
     const val = e.target.value;
-    if (val === 'square') cropperInstance.setAspectRatio(1);
-    else if (val === '16:9') cropperInstance.setAspectRatio(16 / 9);
-    else if (val === '4:3') cropperInstance.setAspectRatio(4 / 3);
-    else cropperInstance.setAspectRatio(NaN);
+    if (val === 'square') {
+        cropperInstance.setAspectRatio(1);
+    } else if (val === '16:9') {
+        cropperInstance.setAspectRatio(16 / 9);
+    } else if (val === '4:3') {
+        cropperInstance.setAspectRatio(4 / 3);
+    } else {
+        cropperInstance.setAspectRatio(NaN);
+    }
 });
 
 document.getElementById('quality-slider')?.addEventListener('input', (e) => {
@@ -269,7 +349,9 @@ document.getElementById('target-kb-input')?.addEventListener('focus', (e) => {
         e.target.blur();
         alert('⭐ Exact Target KB Compression (e.g. 20KB for SSC/UPSC forms) is a PRO Feature!\n\nUpgrade to Pro to set exact file size limits.');
         const pricingSection = document.getElementById('pricing');
-        if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
+        if (pricingSection) {
+            pricingSection.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 });
 
@@ -279,35 +361,50 @@ document.getElementById('word-input-text')?.addEventListener('input', (e) => {
     const chars = text.length;
     const readingTimeSec = Math.ceil(words / 3.3);
 
-    if (document.getElementById('cnt-words')) document.getElementById('cnt-words').innerText = words;
-    if (document.getElementById('cnt-chars')) document.getElementById('cnt-chars').innerText = chars;
-    if (document.getElementById('cnt-reading')) document.getElementById('cnt-reading').innerText = `${readingTimeSec}s`;
+    if (document.getElementById('cnt-words')) {
+        document.getElementById('cnt-words').innerText = words;
+    }
+    if (document.getElementById('cnt-chars')) {
+        document.getElementById('cnt-chars').innerText = chars;
+    }
+    if (document.getElementById('cnt-reading')) {
+        document.getElementById('cnt-reading').innerText = `${readingTimeSec}s`;
+    }
 });
 
 // ==========================================
 // 4. MAIN PROCESSOR WITH SPEED DELAY & PAGE LIMITS
 // ==========================================
 function getProcessingDelay() {
-    if (!currentUser || !currentUser.isPro) return 3500;
+    if (!currentUser || !currentUser.isPro) {
+        return 3500;
+    }
     const plan = currentUser.plan || '';
-    if (plan === 'Subscription' || plan === 'Simple') return 1500;
-    if (plan === 'Smart') return 800;
-    if (plan === 'Professional' || plan === 'Yearly') return 0;
+    if (plan === 'Subscription' || plan === 'Simple') {
+        return 1500;
+    }
+    if (plan === 'Smart') {
+        return 800;
+    }
+    if (plan === 'Professional' || plan === 'Yearly') {
+        return 0;
+    }
     return 3500;
 }
 
 document.getElementById('process-btn')?.addEventListener('click', async () => {
-    // 🔒 Dashboard Hook integration with index.html validator
+    // 🔒 Synchronize Active Dashboard Tool Count Gate
     if (typeof executeDashboardTool === 'function') {
         const canProceed = executeDashboardTool();
-        if (!canProceed) return;
+        if (!canProceed) {
+            return;
+        }
     }
 
     const btn = document.getElementById('process-btn');
     const originalText = btn ? btn.innerHTML : '';
     const isPremiumUser = currentUser && currentUser.isPro;
 
-    // 🔒 PRO LOCK: Check high resolution scaling rules for SVG
     if (currentMode === 'svgtopng' && !isPremiumUser) {
         const scale = parseFloat(document.getElementById('svg-scale')?.value || 1);
         if (scale > 1) {
@@ -374,7 +471,9 @@ document.getElementById('process-btn')?.addEventListener('click', async () => {
         } else if (currentMode === 'jsonformat') {
             formatJsonText();
         } else {
-            if (!uploadedFiles.length) return;
+            if (!uploadedFiles.length) {
+                return;
+            }
             for (let i = 0; i < uploadedFiles.length; i++) {
                 const file = uploadedFiles[i];
                 if (currentMode === 'crop' && cropperInstance) {
@@ -412,8 +511,8 @@ async function splitPdfFile() {
     let start = parseInt(document.getElementById('split-start')?.value || 1);
     let end = parseInt(document.getElementById('split-end')?.value || totalPages);
 
-    if (start < 1) start = 1;
-    if (end > totalPages) end = totalPages;
+    if (start < 1) { start = 1; }
+    if (end > totalPages) { end = totalPages; }
     if (start > end) {
         alert('Start page cannot be greater than End page!');
         return;
@@ -571,12 +670,16 @@ async function convertImagesToPdf() {
 
     for (let i = 0; i < uploadedFiles.length; i++) {
         const file = uploadedFiles[i];
-        if (file.type === 'application/pdf') continue;
+        if (file.type === 'application/pdf') {
+            continue;
+        }
 
         const dataUrl = await readFileAsDataUrl(file);
         const img = await loadImage(dataUrl);
 
-        if (i > 0) pdf.addPage();
+        if (i > 0) {
+            pdf.addPage();
+        }
 
         let renderWidth = pdfWidth - (margin * 2);
         let renderHeight = (img.height * renderWidth) / img.width;
@@ -646,7 +749,9 @@ async function mergePdfFiles() {
         const fileBuffer = await file.arrayBuffer();
         const pdf = await PDFLib.PDFDocument.load(fileBuffer);
         const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        copiedPages.forEach((page) => mergedPdf.addPage(page));
+        copiedPages.forEach((page) => {
+            mergedPdf.addPage(page);
+        });
     }
 
     const mergedPdfBytes = await mergedPdf.save();
@@ -710,7 +815,9 @@ async function compressPdfFile() {
 function readFileAsDataUrl(file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
+        reader.onload = (e) => {
+            resolve(e.target.result);
+        };
         reader.readAsDataURL(file);
     });
 }
@@ -718,13 +825,17 @@ function readFileAsDataUrl(file) {
 function loadImage(src) {
     return new Promise((resolve) => {
         const img = new Image();
-        img.onload = () => resolve(img);
+        img.onload = () => {
+            resolve(img);
+        };
         img.src = src;
     });
 }
 
 function drawNameAndDate(ctx, canvasWidth, canvasHeight, nameText, dateText) {
-    if (!nameText && !dateText) return;
+    if (!nameText && !dateText) {
+        return;
+    }
 
     const bannerHeight = Math.round(canvasHeight * 0.18);
     const bannerY = canvasHeight - bannerHeight;
@@ -840,8 +951,8 @@ function processSingleFile(file, index) {
                 }
 
                 let ext = 'jpg';
-                if (mimeType === 'image/png') ext = 'png';
-                else if (mimeType === 'image/webp') ext = 'webp';
+                if (mimeType === 'image/png') { ext = 'png'; }
+                else if (mimeType === 'image/webp') { ext = 'webp'; }
 
                 // Add branding watermark text over free canvas generated items
                 if (!isPremiumUser && (currentMode === 'invoice-maker' || currentMode === 'marriage-biodata-maker')) {
@@ -898,7 +1009,7 @@ function updateAuthUI() {
     const signupBtn = document.querySelector('.btn-signup');
 
     if (currentUser) {
-        if (loginBtn) loginBtn.style.display = 'none';
+        if (loginBtn) { loginBtn.style.display = 'none'; }
         if (signupBtn) {
             const badge = currentUser.isPro ? ' ⭐PRO' : '';
             signupBtn.innerText = `Hi, ${currentUser.name.split(' ')[0]}${badge}`;
@@ -908,11 +1019,11 @@ function updateAuthUI() {
     } else {
         if (loginBtn) {
             loginBtn.style.display = 'inline-block';
-            loginBtn.onclick = () => openAuthModal('login');
+            loginBtn.onclick = () => { openAuthModal('login'); };
         }
         if (signupBtn) {
             signupBtn.innerText = 'Sign Up';
-            signupBtn.onclick = () => openAuthModal('signup');
+            signupBtn.onclick = () => { openAuthModal('signup'); };
         }
     }
 }
@@ -921,12 +1032,16 @@ function openAuthModal(tab = 'login', triggerSubscription = false) {
     pendingSubscriptionAfterAuth = triggerSubscription;
     switchAuthTab(tab);
     const modal = document.getElementById('auth-modal');
-    if (modal) modal.classList.remove('hidden');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
 }
 
 function closeAuthModal() {
     const modal = document.getElementById('auth-modal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
     pendingSubscriptionAfterAuth = false;
 }
 
@@ -938,23 +1053,23 @@ function switchAuthTab(tab) {
     const forgotForm = document.getElementById('forgot-form');
     const modalHeader = document.getElementById('modal-tabs-header');
 
-    if (loginForm) loginForm.classList.add('hidden');
-    if (signupForm) signupForm.classList.add('hidden');
-    if (forgotForm) forgotForm.classList.add('hidden');
+    if (loginForm) { loginForm.classList.add('hidden'); }
+    if (signupForm) { signupForm.classList.add('hidden'); }
+    if (forgotForm) { forgotForm.classList.add('hidden'); }
 
     if (tab === 'login') {
-        if (modalHeader) modalHeader.style.display = 'flex';
-        if (loginTab) loginTab.classList.add('active');
-        if (signupTab) signupTab.classList.remove('active');
-        if (loginForm) loginForm.classList.remove('hidden');
+        if (modalHeader) { modalHeader.style.display = 'flex'; }
+        if (loginTab) { loginTab.classList.add('active'); }
+        if (signupTab) { signupTab.classList.remove('active'); }
+        if (loginForm) { loginForm.classList.remove('hidden'); }
     } else if (tab === 'signup') {
-        if (modalHeader) modalHeader.style.display = 'flex';
-        if (signupTab) signupTab.classList.add('active');
-        if (loginTab) loginTab.classList.remove('active');
-        if (signupForm) signupForm.classList.remove('hidden');
+        if (modalHeader) { modalHeader.style.display = 'flex'; }
+        if (signupTab) { signupTab.classList.add('active'); }
+        if (loginTab) { loginTab.classList.remove('active'); }
+        if (signupForm) { signupForm.classList.remove('hidden'); }
     } else if (tab === 'forgot') {
-        if (modalHeader) modalHeader.style.display = 'none';
-        if (forgotForm) forgotForm.classList.remove('hidden');
+        if (modalHeader) { modalHeader.style.display = 'none'; }
+        if (forgotForm) { forgotForm.classList.remove('hidden'); }
     }
 }
 
@@ -1066,7 +1181,9 @@ function updateBillingPrices() {
         document.getElementById('summary-total').innerText = `₹${Math.round(total)}`;
         
         const payBtn = document.querySelector('#billing-form button[type="submit"]');
-        if (payBtn) payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay ₹${Math.round(total)}`;
+        if (payBtn) {
+            payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay ₹${Math.round(total)}`;
+        }
     } else {
         document.getElementById('intl-fee-row').style.display = 'flex';
         document.getElementById('summary-base').innerText = `$${baseUsd.toFixed(2)}`;
@@ -1080,7 +1197,9 @@ function updateBillingPrices() {
         document.getElementById('summary-total').innerText = `$${total.toFixed(2)}`;
         
         const payBtn = document.querySelector('#billing-form button[type="submit"]');
-        if (payBtn) payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay $${total.toFixed(2)}`;
+        if (payBtn) {
+            payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Proceed to Pay $${total.toFixed(2)}`;
+        }
     }
 }
 
@@ -1088,8 +1207,12 @@ function openBillingModal() {
     const modal = document.getElementById('billing-modal');
     if (modal) {
         if (currentUser) {
-            if (document.getElementById('billing-name')) document.getElementById('billing-name').value = currentUser.name || '';
-            if (document.getElementById('billing-mobile')) document.getElementById('billing-mobile').value = currentUser.mobile || '';
+            if (document.getElementById('billing-name')) {
+                document.getElementById('billing-name').value = currentUser.name || '';
+            }
+            if (document.getElementById('billing-mobile')) {
+                document.getElementById('billing-mobile').value = currentUser.mobile || '';
+            }
         }
         
         modal.classList.remove('hidden');
@@ -1105,7 +1228,9 @@ function openBillingModal() {
 
 function closeBillingModal() {
     const modal = document.getElementById('billing-modal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
 }
 
 function handleBillingSubmit(event) {
