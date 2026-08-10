@@ -16,24 +16,57 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div></header>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+    </header>
+    
     <main class="hero-section">
         <h1 class="main-title">English to Hindi Typing Tool</h1>
         <p class="sub-title">Type in English (Hinglish) and get instant Hindi Devanagari text (e.g. type 'namaste' -> 'नमस्ते')</p>
-        <div style="max-width:700px; margin:20px auto; text-align:left;">
-            <textarea id="englishInput" rows="5" placeholder="Type here in English (e.g. mera naam rishabh hai)..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; font-size:16px;" oninput="convertToHindi()"></textarea>
-            <div style="margin-top:15px; background:#fff; padding:20px; border-radius:8px; border:1px solid #ccc;">
-                <label><b>Hindi Output (हिंदी टेक्स्ट):</b></label>
-                <textarea id="hindiOutput" rows="5" readonly style="width:100%; margin-top:10px; padding:10px; border-radius:6px; border:1px solid #ddd; font-size:18px; color:#1e293b; background:#f8fafc;"></textarea>
-                <button onclick="navigator.clipboard.writeText(document.getElementById('hindiOutput').value); alert('Hindi text copied!');" style="margin-top:10px; padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Copy Hindi Text</button>
+        
+        <div style="max-width:700px; margin:20px auto; text-align:left; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+            
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px; color:#64748b;">
+                <span>Standard Mode (Max 150 Words for Free)</span>
+                <span id="wordCountBadge">Words: 0 / 150</span>
+            </div>
+
+            <textarea id="englishInput" rows="5" placeholder="Type here in English (e.g. mera naam rishabh hai)..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; font-size:16px; box-sizing:border-box;" oninput="convertToHindi()"></textarea>
+            
+            <div style="margin-top:15px; background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0;">
+                <label style="color:#1e293b;"><b>Hindi Output (हिंदी टेक्स्ट):</b></label>
+                <textarea id="hindiOutput" rows="5" readonly style="width:100%; margin-top:10px; padding:10px; border-radius:6px; border:1px solid #cbd5e1; font-size:18px; color:#1e293b; background:#fff; box-sizing:border-box;"></textarea>
+                
+                <button onclick="copyHindiText()" style="margin-top:12px; padding:12px 20px; background:#10b981; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:15px; display:inline-flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-copy"></i> Copy Hindi Text
+                </button>
             </div>
         </div>
     </main>
+
     <script>
         async function convertToHindi() {
             let input = document.getElementById('englishInput').value;
-            if(!input.trim()) { document.getElementById('hindiOutput').value = ""; return; }
-            let words = input.split(" ");
+            if(!input.trim()) { 
+                document.getElementById('hindiOutput').value = ""; 
+                document.getElementById('wordCountBadge').innerText = "Words: 0 / 150";
+                return; 
+            }
+            
+            let words = input.trim().split(/\s+/);
+            document.getElementById('wordCountBadge').innerText = `Words: ${words.length} / 150`;
+
+            // 🔒 1. Strict Word Limit Check for Free Users
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            if ((!user || !user.isPro) && words.length > 150) {
+                alert("🔒 PRO LOCK: 150 शब्दों से अधिक लंबी टाइपिंग और ट्रांसलिट्रेशन केवल प्रो मेंबर्स के लिए उपलब्ध है। कृपया अपग्रेड करें!");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
             let lastWord = words[words.length - 1];
             if(lastWord) {
                 try {
@@ -43,6 +76,38 @@
                         document.getElementById('hindiOutput').value = data[1][0][1][0];
                     }
                 } catch(e){}
+            }
+        }
+
+        function copyHindiText() {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { hindiType: 0, date: new Date().toDateString() };
+
+            // नए दिन पर काउंट रीसेट
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { hindiType: 0, date: new Date().toDateString() };
+            }
+
+            // 🔒 2. Daily Actions / Copy Limit Check
+            if ((!user || !user.isPro) && usageCounters.hindiType >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त हिंदी टाइपिंग/कॉपी चांस समाप्त हो चुके हैं! असीमित इस्तेमाल के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+                return;
+            }
+
+            let outputVal = document.getElementById('hindiOutput').value;
+            if(!outputVal.trim()) {
+                alert("Please type something first!");
+                return;
+            }
+
+            navigator.clipboard.writeText(outputVal);
+            alert('📋 Hindi text copied successfully!');
+
+            // Increment count for free users
+            if (!user || !user.isPro) {
+                usageCounters.hindiType++;
+                localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
             }
         }
     </script>
