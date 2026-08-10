@@ -16,10 +16,92 @@
     <title>Split PDF Pages Online | Extract PDF Pages Free - QuickResizer</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar"><div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-expand logo-icon"></i><span>QuickResizer</span></div><nav class="tool-menu"><a href="index.html" class="tool-link">All Tools</a></nav><div class="nav-right"><button class="btn-primary" onclick="window.location.href='index.html#panel-splitpdf'">Use Split PDF Tool 🚀</button></div></header>
-    <main class="hero-section"><h1 class="main-title">Split PDF Document Online</h1><p class="sub-title">Extract specific page numbers or ranges (e.g. Page 1 to 3) into a separate new PDF file.</p><div class="upload-container" onclick="window.location.href='index.html#controls-section'" style="cursor:pointer;"><i class="fa-solid fa-scissors upload-icon" style="color:#38bdf8;"></i><p class="upload-text"><span class="browse-text">Click to Open Split PDF Tool</span></p></div></main>
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fa-solid fa-expand logo-icon"></i>
+            <span>QuickResizer</span>
+        </div>
+        <nav class="tool-menu">
+            <a href="index.html" class="tool-link">All Tools</a>
+        </nav>
+        <div class="nav-right">
+            <button class="btn-primary" onclick="usePdfSplitter('basic')">Use Split PDF Tool 🚀</button>
+        </div>
+    </header>
+
+    <main class="hero-section">
+        <h1 class="main-title">Split PDF Document Online</h1>
+        <p class="sub-title">Extract specific page numbers or ranges (e.g. Page 1 to 3) into a separate new PDF file.</p>
+        
+        <div class="upload-container" onclick="usePdfSplitter('basic')" style="cursor:pointer; margin-bottom: 20px;">
+            <i class="fa-solid fa-scissors upload-icon" style="color:#38bdf8;"></i>
+            <p class="upload-text"><span class="browse-text">Click to Open Standard PDF Splitter (3 Free Daily | Single Range)</span></p>
+        </div>
+
+        <div style="max-width: 600px; margin: 25px auto; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; text-align: left; position: relative;">
+            <span style="position: absolute; top: 12px; right: 12px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-lock"></i> PRO ONLY</span>
+            <h4 style="margin: 0 0 10px 0; color: #fff;"><i class="fa-solid fa-layer-group" style="color: #38bdf8;"></i> Advanced Multi-Range & Extract All Pages Mode</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin: 0 0 15px 0;">Split heavy PDF books into individual single-page PDFs or extract custom non-consecutive page groups (e.g., Pages 2, 5, 8-12).</p>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Split Extraction Mode:</label>
+                    <select disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #eab308; border: 1px solid #334155; font-weight: 600;">
+                        <option>Split Every Page to Separate File</option>
+                        <option>Extract Custom Non-Consecutive Pages</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px;">Output Zip Compression:</label>
+                    <input type="text" value="Instant Auto-ZIP Bundle" disabled style="width: 100%; padding: 8px; border-radius: 6px; background: #0f172a; color: #64748b; border: 1px solid #334155;">
+                </div>
+            </div>
+            
+            <button onclick="usePdfSplitter('advanced')" style="width: 100%; padding: 10px; background: #eab308; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Unlock Advanced Multi-Range Splitter
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function usePdfSplitter(type) {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            let isProUser = user && user.isPro;
+
+            // 1. 🔒 एडवांस मल्टी-रेंज / ऑल पेजेस स्प्लिट चुनने पर 100% HARD LOCK -> Subscription Plan ($3.99) Required
+            if (type === 'advanced') {
+                if (!isProUser) {
+                    alert("🔒 PRO FEATURE: हर पेज़ को अलग-अलग PDF में स्प्लिट करना या मल्टीपल कस्टम पेज़ रेंजेस एक्सट्रैक्ट करना केवल प्रो प्लान में उपलब्ध है। कृपया अपग्रेड करें!");
+                    window.location.href = "index.html#pricing";
+                    return;
+                }
+                window.location.href = "index.html#panel-splitpdf";
+                return;
+            }
+
+            // 2. 🔒 बेसिक स्प्लिट पर 3 डेली फ्री चांस
+            let usageCounters = JSON.parse(localStorage.getItem('qr_free_usage')) || { pdfSplit: 0, date: new Date().toDateString() };
+
+            if (usageCounters.date !== new Date().toDateString()) {
+                usageCounters = { pdfSplit: 0, date: new Date().toDateString() };
+            }
+
+            if (!isProUser && usageCounters.pdfSplit >= 3) {
+                alert("🔒 Limit Reached: आपके आज के 3 मुफ़्त बेसिक PDF स्प्लिट चांस समाप्त हो चुके हैं! असीमित इस्तेमाल और एडवांस स्प्लिट मोड्स के लिए प्रो प्लान लें।");
+                window.location.href = "index.html#pricing";
+            } else {
+                if (!isProUser) {
+                    usageCounters.pdfSplit++;
+                    localStorage.setItem('qr_free_usage', JSON.stringify(usageCounters));
+                }
+                window.location.href = "index.html#panel-splitpdf";
+            }
+        }
+    </script>
 </body>
 </html>
