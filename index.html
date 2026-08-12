@@ -945,7 +945,7 @@
                 <div class="form-group">
                     <label><i class="fa-solid fa-tag" style="color: #38bdf8;"></i> Have a Promo Code?</label>
                     <div style="display: flex; gap: 8px;">
-                        <input type="text" id="promo-code-input" placeholder="e.g. NEWUSER10" style="text-transform: uppercase;">
+                        <input type="text" id="promo-code-input" placeholder="e.g. SCHOOL6M" style="text-transform: uppercase;">
                         <button type="button" class="btn-primary" style="padding: 0 15px;" onclick="applyPromoCode()">Apply</button>
                     </div>
                     <small id="promo-msg" style="display: block; margin-top: 5px; font-weight: 500;"></small>
@@ -1041,9 +1041,9 @@
         let activeMode = "resize";
         let currentDiscountPercent = 10; // Default 10% new user discount
 
-        // Secret Promo Codes Database
+        // Secret Promo Codes Database (SCHOOL6M sets price to 0.00 / Free)
         const secretPromos = {
-            "SCHOOL6M": { name: "School Special (6 Months)", price: 3.99 },
+            "SCHOOL6M": { name: "School Special (6 Months Free)", price: 0.00 },
             "QUICK20": { discount: 20 },
             "WELCOME10": { discount: 10 }
         };
@@ -1169,15 +1169,16 @@
 
             if (secretPromos[code]) {
                 let promo = secretPromos[code];
-                if (promo.price) {
-                    selectedPlanPrice = promo.price;
+                if (promo.price !== undefined) {
+                    selectedPlanPrice = promo.price; // Set price to 0.00
                     selectedPlanName = promo.name;
+                    currentDiscountPercent = 0; // Disable 10% discount since it's already free
                 }
                 if (promo.discount !== undefined) {
                     currentDiscountPercent = promo.discount;
                 }
                 msgBox.style.color = "#10b981";
-                msgBox.innerHTML = `✅ Success! Code <b>${code}</b> applied successfully.`;
+                msgBox.innerHTML = `✅ Success! Code <b>${code}</b> applied. Price updated to $0.00 (Free)!`;
             } else {
                 msgBox.style.color = "#ef4444";
                 msgBox.innerHTML = `❌ Invalid or expired promo code.`;
@@ -1189,40 +1190,40 @@
             let country = document.getElementById('billing-country').value;
             let base = selectedPlanPrice;
             
-            let discountAmount = base * (currentDiscountPercent / 100);
+            let discountAmount = (base > 0) ? (base * (currentDiscountPercent / 100)) : 0;
             let finalBase = base - discountAmount;
-            let tax = finalBase * 0.18;
+            let tax = (finalBase > 0) ? (finalBase * 0.18) : 0;
             let total = finalBase + tax;
 
             if (country === 'IN') {
                 let inrBase = Math.round(base * 84);
                 let inrDisc = Math.round(inrBase * (currentDiscountPercent / 100));
                 let inrFinal = inrBase - inrDisc;
-                let inrTax = Math.round(inrFinal * 0.18);
+                let inrTax = (inrFinal > 0) ? Math.round(inrFinal * 0.18) : 0;
                 let inrTotal = inrFinal + inrTax;
 
                 document.getElementById('summary-base').innerText = `₹${inrBase}`;
                 document.getElementById('summary-discount').innerText = `-₹${inrDisc}`;
                 document.getElementById('summary-tax').innerText = `₹${inrTax}`;
-                document.getElementById('summary-total').innerText = `₹${inrTotal}`;
+                document.getElementById('summary-total').innerText = (inrTotal === 0) ? `₹0 (FREE)` : `₹${inrTotal}`;
             } else {
                 document.getElementById('summary-base').innerText = `$${base.toFixed(2)}`;
                 document.getElementById('summary-discount').innerText = `-$${discountAmount.toFixed(2)}`;
                 document.getElementById('summary-tax').innerText = `$${tax.toFixed(2)}`;
-                document.getElementById('summary-total').innerText = `$${total.toFixed(2)}`;
+                document.getElementById('summary-total').innerText = (total === 0) ? `$0.00 (FREE)` : `$${total.toFixed(2)}`;
             }
         }
 
         function handleBillingSubmit(e) {
             e.preventDefault();
-            alert(`🎉 Secure Gateway: Order confirmed for ${selectedPlanName} Plan! Account updated.`);
+            alert(`🎉 Order confirmed for ${selectedPlanName}! Your account has been upgraded successfully.`);
             
-            localStorage.setItem('quickresizer_user', JSON.stringify({ 
-                isPro: true, 
-                name: document.getElementById('billing-name').value, 
-                email: JSON.parse(localStorage.getItem('quickresizer_user'))?.email || "user@example.com",
-                mobile: document.getElementById('billing-mobile').value 
-            }));
+            let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || {};
+            currentUser.isPro = true;
+            currentUser.name = document.getElementById('billing-name').value || currentUser.name;
+            currentUser.mobile = document.getElementById('billing-mobile').value || currentUser.mobile;
+
+            localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
             closeBillingModal();
             syncUserSessionUI();
         }
