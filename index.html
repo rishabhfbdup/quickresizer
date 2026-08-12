@@ -61,13 +61,19 @@
     </header>
 
     <main class="hero-section">
-        <div style="max-width:800px; margin: 0 auto 10px auto; text-align:right;">
-            <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); margin-right: 5px;">
-                <i class="fa-solid fa-users"></i> Trusted by 1,000+ Active Users Daily 🚀
-            </span>
+        <div style="max-width:800px; margin: 0 auto 15px auto; text-align:right;">
             <span id="globalUsageBadge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.3);">
                 <i class="fa-solid fa-circle-info"></i> Standard Free Mode Activated
             </span>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center; margin: 15px 0 25px 0; flex-wrap: wrap;">
+            <button onclick="filterCategory('all')" class="cat-btn active" style="padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">🔥 All Tools</button>
+            <button onclick="filterCategory('image')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">🖼️ Image Tools</button>
+            <button onclick="filterCategory('student')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">🎓 Student & Exam</button>
+            <button onclick="filterCategory('document')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">📄 Document Makers</button>
+            <button onclick="filterCategory('developer')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">💻 Developer & Text</button>
+            <button onclick="filterCategory('financial')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">💰 Financial & Tax</button>
         </div>
 
         <div class="action-tabs">
@@ -223,7 +229,7 @@
                 <div class="settings-grid">
                     <div class="setting-group">
                         <label><i class="fa-solid fa-user"></i> Candidate Name:</label>
-                        <input type="text" id="candidate-name" placeholder="e.g. BALBINDER SINGH">
+                        <input type="text" id="candidate-name" placeholder="e.g. RISHABH RAJPUT">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-calendar-days"></i> Date of Photo / DOB:</label>
@@ -366,7 +372,7 @@
                 <div class="settings-grid">
                     <div class="setting-group">
                         <label><i class="fa-solid fa-user"></i> Full Name:</label>
-                        <input type="text" id="res-name" placeholder="e.g. BALBINDER SINGH">
+                        <input type="text" id="res-name" placeholder="e.g. Rishabh Rajput">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-briefcase"></i> Job Title / Designation:</label>
@@ -374,7 +380,7 @@
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-envelope"></i> Email Address:</label>
-                        <input type="email" id="res-email" placeholder="e.g. quickresizer@example.com">
+                        <input type="email" id="res-email" placeholder="e.g. rishabh@example.com">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-phone"></i> Phone Number:</label>
@@ -977,6 +983,34 @@
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="footer-links">
+            <div class="footer-brand">
+                <h3><i class="fa-solid fa-expand"></i> QuickResizer</h3>
+                <p>Online privacy-focused image & PDF tool to resize, crop, compress, and convert files fast.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="about.html">About Us</a>
+                <a href="blog.html">Blog</a>
+                <a href="mailto:support@kryzex.com?subject=QuickResizer%20User%20Feedback">Send Feedback</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal Policies</h4>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="privacy.html#image-privacy">Image Privacy</a>
+                <a href="cookie.html">Cookie Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="refund.html">Refund Policy</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">© 2026 QuickResizer. All rights reserved.</div>
+            <div class="powered-by">Powered by :- <span>Kryzex Technologies</span></div>
+        </div>
+    </footer>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
@@ -1040,8 +1074,11 @@
             return true;
         }
 
-        // 🔒 Security Check - Must login before launching plan checkout
+        // 🔒 FIXED: Security Check - Must login before launching plan checkout
         function checkoutPlanLaunch(planName, basePrice) {
+            selectedPlanName = planName;
+            selectedPlanPrice = basePrice;
+            
             let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
             if (!user || !user.email) {
                 alert(`🔒 Login Required: ${planName} प्लान खरीदने के लिए कृपया पहले अपने अकाउंट में Login या Sign Up करें!`);
@@ -1049,16 +1086,13 @@
                 return;
             }
 
-            selectedPlanName = planName;
-            selectedPlanPrice = Number(basePrice); // Lock correct individual plan price
-            
             document.getElementById('billing-modal').classList.remove('hidden');
             recalculatePriceSummary();
         }
 
         function recalculatePriceSummary() {
             let country = document.getElementById('billing-country').value;
-            let base = Number(selectedPlanPrice);
+            let base = selectedPlanPrice;
             let fee = (country !== 'IN') ? (base * 0.035) : 0.00;
             let tax = (base + fee) * 0.18;
             let total = base + fee + tax;
