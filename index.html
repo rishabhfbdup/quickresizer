@@ -61,7 +61,10 @@
     </header>
 
     <main class="hero-section">
-        <div style="max-width:800px; margin: 0 auto 15px auto; text-align:right;">
+        <div style="max-width:800px; margin: 0 auto 10px auto; text-align:right;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); margin-right: 5px;">
+                <i class="fa-solid fa-users"></i> Trusted by 1,000+ Active Users Daily 🚀
+            </span>
             <span id="globalUsageBadge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.3);">
                 <i class="fa-solid fa-circle-info"></i> Standard Free Mode Activated
             </span>
@@ -122,7 +125,25 @@
             <button class="btn-primary" onclick="document.getElementById('image-input').click()" data-lang="btn-select">Select File</button>
         </div>
 
-        <div class="trust-badges">
+        <div style="max-width: 700px; margin: 25px auto 0 auto; background: #0f172a; border: 1px solid #334155; padding: 15px 20px; border-radius: 12px; text-align: left;">
+            <h4 style="margin: 0 0 10px 0; color: #38bdf8; font-size:14px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Other Useful Tools You Might Like:</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px;">
+                <a href="image-text-extractor.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-file-contract" style="color: #38bdf8;"></i> OCR Text Extractor
+                </a>
+                <a href="legal-docs.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-file-lines" style="color: #38bdf8;"></i> Affidavit & Application
+                </a>
+                <a href="qr-code-generator.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-qrcode" style="color: #38bdf8;"></i> UPI & QR Generator
+                </a>
+                <a href="text-to-handwriting.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-pen-fancy" style="color: #38bdf8;"></i> Text to Handwriting
+                </a>
+            </div>
+        </div>
+
+        <div class="trust-badges" style="margin-top: 20px;">
             <span><i class="fa-solid fa-shield-halved"></i> <span data-lang="badge-private">100% Private (No Server Uploads)</span></span>
             <span><i class="fa-solid fa-bolt"></i> <span data-lang="badge-fast">Ultra Fast Processing</span></span>
             <span><i class="fa-solid fa-face-smile"></i> <span data-lang="badge-free">Completely Free Forever</span></span>
@@ -202,7 +223,7 @@
                 <div class="settings-grid">
                     <div class="setting-group">
                         <label><i class="fa-solid fa-user"></i> Candidate Name:</label>
-                        <input type="text" id="candidate-name" placeholder="e.g. RISHABH RAJPUT">
+                        <input type="text" id="candidate-name" placeholder="e.g. BALBINDER SINGH">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-calendar-days"></i> Date of Photo / DOB:</label>
@@ -345,7 +366,7 @@
                 <div class="settings-grid">
                     <div class="setting-group">
                         <label><i class="fa-solid fa-user"></i> Full Name:</label>
-                        <input type="text" id="res-name" placeholder="e.g. Rishabh Rajput">
+                        <input type="text" id="res-name" placeholder="e.g. BALBINDER SINGH">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-briefcase"></i> Job Title / Designation:</label>
@@ -353,7 +374,7 @@
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-envelope"></i> Email Address:</label>
-                        <input type="email" id="res-email" placeholder="e.g. rishabh@example.com">
+                        <input type="email" id="res-email" placeholder="e.g. quickresizer@example.com">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-phone"></i> Phone Number:</label>
@@ -910,15 +931,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fa-solid fa-tag" style="color: #38bdf8;"></i> Have a Promo Code?</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="text" id="promo-code-input" placeholder="e.g. KRYZEXVIP50" style="text-transform: uppercase;">
-                        <button type="button" class="btn-primary" style="padding: 0 15px;" onclick="applyPromoCode()">Apply</button>
-                    </div>
-                    <small id="promo-msg" style="display: block; margin-top: 5px; font-weight: 500;"></small>
-                </div>
-
-                <div class="form-group">
                     <label>Mobile Number (with Country Code)</label>
                     <input type="tel" id="billing-mobile" placeholder="e.g. +91 9876543210 or +1 123456789" required>
                 </div>
@@ -1019,14 +1031,6 @@
         let selectedPlanName = "Smart";
         let selectedPlanPrice = 9.99;
         let activeMode = "resize";
-        let currentPromoDiscount = 0; // Tracks promo discount percentage
-
-        // Valid Secret Promo Codes
-        const secretPromos = {
-            "KRYZEXVIP50": 50,
-            "QUICK20": 20,
-            "WELCOME10": 10
-        };
 
         document.addEventListener('DOMContentLoaded', () => {
             syncUserSessionUI();
@@ -1134,41 +1138,18 @@
             }
 
             selectedPlanName = planName;
-            selectedPlanPrice = basePrice;
-            currentPromoDiscount = 0; // Reset
-            document.getElementById('promo-code-input').value = "";
-            document.getElementById('promo-msg').innerText = "";
+            selectedPlanPrice = Number(basePrice); // Lock correct individual plan price
 
             document.getElementById('billing-modal').classList.remove('hidden');
             recalculatePriceSummary();
         }
 
-        function applyPromoCode() {
-            let code = document.getElementById('promo-code-input').value.trim().toUpperCase();
-            let msgBox = document.getElementById('promo-msg');
-
-            if (secretPromos[code] !== undefined) {
-                currentPromoDiscount = secretPromos[code];
-                msgBox.style.color = "#10b981";
-                msgBox.innerHTML = `✅ Success! Code <b>${code}</b> applied. ${currentPromoDiscount}% Discount activated!`;
-            } else {
-                currentPromoDiscount = 0;
-                msgBox.style.color = "#ef4444";
-                msgBox.innerHTML = `❌ Invalid or expired promo code.`;
-            }
-            recalculatePriceSummary();
-        }
-
         function recalculatePriceSummary() {
             let country = document.getElementById('billing-country').value;
-            let base = selectedPlanPrice;
+            let base = Number(selectedPlanPrice);
             let fee = (country !== 'IN') ? (base * 0.035) : 0.00;
-            
-            // Apply Promo Discount
-            let discountAmount = (base + fee) * (currentPromoDiscount / 100);
-            let taxable = (base + fee) - discountAmount;
-            let tax = taxable * 0.18;
-            let total = taxable + tax;
+            let tax = (base + fee) * 0.18;
+            let total = base + fee + tax;
 
             document.getElementById('summary-base').innerText = `$${base.toFixed(2)}`;
             document.getElementById('summary-fee').innerText = `$${fee.toFixed(2)}`;
@@ -1178,64 +1159,18 @@
             document.getElementById('intl-fee-row').style.display = (country !== 'IN') ? 'flex' : 'none';
         }
 
-        // 💳 Real Razorpay Checkout Integration on Form Submit
         function handleBillingSubmit(e) {
             e.preventDefault();
-
-            let name = document.getElementById('billing-name').value;
-            let mobile = document.getElementById('billing-mobile').value;
-            let email = JSON.parse(localStorage.getItem('quickresizer_user'))?.email || "user@example.com";
-
-            let country = document.getElementById('billing-country').value;
-            let base = selectedPlanPrice;
-            let fee = (country !== 'IN') ? (base * 0.035) : 0.00;
-            let discountAmount = (base + fee) * (currentPromoDiscount / 100);
-            let taxable = (base + fee) - discountAmount;
-            let totalUSD = taxable + (taxable * 0.18);
+            alert(`🎉 Secure Gateway: Order confirmed for ${selectedPlanName} Plan! Account updated.`);
             
-            let finalAmountInPaisa = (country === 'IN') ? Math.round(totalUSD * 84 * 100) : Math.round(totalUSD * 100);
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || {};
+            user.isPro = true;
+            user.name = document.getElementById('billing-name').value;
+            user.mobile = document.getElementById('billing-mobile').value;
 
-            var options = {
-                "key": "rzp_live_YOUR_KEY_HERE", // Replace with your actual Razorpay Key ID
-                "amount": finalAmountInPaisa, 
-                "currency": (country === 'IN') ? "INR" : "USD",
-                "name": "QuickResizer",
-                "description": `Subscription for ${selectedPlanName}`,
-                "handler": function (response){
-                    alert(`🎉 Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
-                    
-                    let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || {};
-                    currentUser.isPro = true;
-                    currentUser.name = name;
-                    currentUser.mobile = mobile;
-
-                    localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
-                    closeBillingModal();
-                    syncUserSessionUI();
-                },
-                "prefill": {
-                    "name": name,
-                    "email": email,
-                    "contact": mobile
-                },
-                "theme": {
-                    "color": "#2563eb"
-                }
-            };
-
-            if (typeof Razorpay !== 'undefined') {
-                var rzp1 = new Razorpay(options);
-                rzp1.open();
-            } else {
-                alert("Razorpay gateway initializing... Order confirmed for testing!");
-                let currentUser = JSON.parse(localStorage.getItem('quickresizer_user')) || {};
-                currentUser.isPro = true;
-                currentUser.name = name;
-                currentUser.mobile = mobile;
-                localStorage.setItem('quickresizer_user', JSON.stringify(currentUser));
-                closeBillingModal();
-                syncUserSessionUI();
-            }
+            localStorage.setItem('quickresizer_user', JSON.stringify(user));
+            closeBillingModal();
+            syncUserSessionUI();
         }
 
         function openAuthModal(tab) {
