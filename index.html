@@ -33,6 +33,12 @@
 </head>
 <body>
 
+    <div style="background: linear-gradient(90deg, #10b981, #059669); color: #fff; padding: 8px 0; font-size: 13px; font-weight: 600; overflow: hidden; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+        <marquee behavior="scroll" direction="left" scrollamount="5">
+            ✨ Note: यह सभी सेवाएँ सभी के लिए बिल्कुल मुफ्त हैं! | All these services are completely free for everyone! 🚀 Use all tools without any hidden charges.
+        </marquee>
+    </div>
+
     <header class="navbar">
         <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
             <i class="fa-solid fa-expand logo-icon"></i>
@@ -619,73 +625,6 @@
         </div>
     </section>
 
-    <section class="section-container bg-white" id="features">
-        <div class="section-heading">
-            <h2>Powerful Features of QuickResizer</h2>
-            <p>Get professional image, PDF, and micro tools right inside your browser.</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-box">
-                <i class="fa-solid fa-bolt feature-icon"></i>
-                <h3>Lightning Fast Speed</h3>
-                <p>Because all file processing is handled locally on your own browser, it takes less than a second regardless of file size.</p>
-            </div>
-            <div class="feature-box">
-                <i class="fa-solid fa-user-lock feature-icon"></i>
-                <h3>Zero Server Uploads</h3>
-                <p>Your photos and files stay 100% private. QuickResizer never sends your files to external servers or cloud databases.</p>
-            </div>
-            <div class="feature-box">
-                <i class="fa-solid fa-image feature-icon"></i>
-                <h3>Multiple Formats Supported</h3>
-                <p>Easily compress, crop, and resize photos in all popular formats including JPG, PNG, WEBP, SVG, and convert to/from PDF.</p>
-            </div>
-            <div class="feature-box">
-                <i class="fa-solid fa-sliders feature-icon"></i>
-                <h3>Custom Quality Control</h3>
-                <p>Fine-tune compression level or enter exact target KB to balance file size with crystal-clear quality.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-container" id="about">
-        <div class="info-block">
-            <h2>What is an Image File Size and Pixel Resolution?</h2>
-            <p>Digital images are made up of millions of microscopic square units called pixels. The number of pixels across width and height defines the image resolution. For example, a photo with 4000x3000 resolution contains 12 million pixels (12 Megapixels). While high resolution looks great, it creates huge file sizes—often reaching 5MB to 15MB per picture.</p>
-            <p>Large image files can slow down website loading speeds, fail to upload on official job portals or government exam forms, and consume excessive mobile data when shared on social media.</p>
-        </div>
-
-        <div class="info-block margin-top">
-            <h2>How QuickResizer Reduces Image KB Without Quality Loss</h2>
-            <p>Reducing image file size can be done in two ways: changing pixel dimensions or applying intelligent compression. QuickResizer allows you to combine both methods seamlessly. By scaling down excessive pixel dimensions or converting formats, you can reduce image KB by over 80% while keeping visual appearance identical on mobile and desktop screens.</p>
-        </div>
-    </section>
-
-    <section class="section-container bg-white" id="faq">
-        <div class="section-heading">
-            <h2>Frequently Asked Questions (FAQ)</h2>
-            <p>Got questions? We've got answers.</p>
-        </div>
-        <div class="faq-grid">
-            <div class="faq-item">
-                <h4><i class="fa-solid fa-circle-question"></i> Is QuickResizer completely free?</h4>
-                <p>Yes, QuickResizer is 100% free with no hidden charges, daily usage limits, or forced account registration.</p>
-            </div>
-            <div class="faq-item">
-                <h4><i class="fa-solid fa-circle-question"></i> What image formats are supported?</h4>
-                <p>We support all standard web image formats including JPG/JPEG, PNG, WEBP, GIF, SVG, and PDF documents.</p>
-            </div>
-            <div class="faq-item">
-                <h4><i class="fa-solid fa-circle-question"></i> Can I use QuickResizer on my phone?</h4>
-                <p>Yes! QuickResizer is fully responsive and works smoothly on Android devices, iPhones, iPads, laptops, and desktop computers.</p>
-            </div>
-            <div class="faq-item">
-                <h4><i class="fa-solid fa-circle-question"></i> Will resizing reduce my photo clarity?</h4>
-                <p>If you keep the quality slider set between 75% and 90%, you will achieve a significantly smaller file size with zero visible loss in image clarity.</p>
-            </div>
-        </div>
-    </section>
-
     <div id="auth-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <button class="modal-close" onclick="closeAuthModal()">&times;</button>
@@ -720,7 +659,7 @@
                     <input type="text" id="signup-name" placeholder="Rishabh Rajput" required>
                 </div>
                 <div class="form-group">
-                    <label>Email Address</label>
+                    <label>Email Address (Permanent)</label>
                     <input type="email" id="signup-email" placeholder="name@example.com" required>
                 </div>
                 <div class="form-group">
@@ -728,8 +667,8 @@
                     <input type="password" id="signup-password" placeholder="••••••••" required>
                 </div>
                 <div class="form-group">
-                    <label>Mobile Number</label>
-                    <input type="tel" id="signup-mobile" placeholder="+91 9876543210" required>
+                    <label>Mobile Number (Permanent - 10 Digits)</label>
+                    <input type="tel" id="signup-mobile" placeholder="9876543210" pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" required>
                 </div>
                 <div class="form-group">
                     <label>Country / Region</label>
@@ -749,7 +688,7 @@
 
             <form id="forgot-form" class="auth-form hidden" onsubmit="handleAuthSubmit(event, 'forgot')">
                 <h3>Reset Password</h3>
-                <p>Enter your registered email to reset your password.</p>
+                <p>Enter your registered email. (Email & Phone cannot be changed).</p>
                 <div class="form-group">
                     <label>Registered Email Address</label>
                     <input type="email" id="forgot-email" placeholder="name@example.com" required>
@@ -769,17 +708,30 @@
     <div id="profile-modal" class="modal-overlay hidden">
         <div class="modal-card" style="text-align: left;">
             <button class="modal-close" onclick="closeProfileModal()">&times;</button>
-            <h3 style="margin-bottom: 5px; color: #fff;"><i class="fa-solid fa-user-circle" style="color: #38bdf8;"></i> My Account Profile</h3>
-            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Your registered account details.</p>
+            <h3 style="margin-bottom: 5px; color: #fff;"><i class="fa-solid fa-user-gear" style="color: #38bdf8;"></i> User Profile & Update</h3>
+            <p style="color: #94a3b8; font-size: 12px; margin-bottom: 15px;">Email and Mobile Number are permanently locked and cannot be changed.</p>
             
-            <div style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; font-size: 14px; color: #e2e8f0; display: flex; flex-direction: column; gap: 10px;">
-                <div><strong>👤 Full Name:</strong> <span id="prof-name" style="color: #38bdf8;">-</span></div>
-                <div><strong>📧 Email Address:</strong> <span id="prof-email" style="color: #38bdf8;">-</span></div>
-                <div><strong>📱 Mobile Number:</strong> <span id="prof-mobile" style="color: #38bdf8;">-</span></div>
-                <div><strong>🌍 Country:</strong> <span id="prof-country" style="color: #38bdf8;">-</span></div>
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; font-size: 13px; color: #e2e8f0; display: flex; flex-direction: column; gap: 12px;">
+                
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="font-size:11px; color:#94a3b8;">Full Name (Editable)</label>
+                    <input type="text" id="update-name" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:4px;">
+                </div>
+
+                <div><strong>📧 Email (Locked):</strong> <span id="prof-email" style="color: #94a3b8;">-</span></div>
+                <div><strong>📱 Mobile (Locked):</strong> <span id="prof-mobile" style="color: #94a3b8;">-</span></div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="font-size:11px; color:#94a3b8;">Full Address with Pincode (Editable)</label>
+                    <textarea id="update-address" rows="2" placeholder="House No, Street, City, State - Pincode" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:4px; font-family:'Poppins',sans-serif;"></textarea>
+                </div>
             </div>
 
-            <button onclick="handleUserLogout()" class="btn-primary" style="margin-top: 20px; background: #ef4444; width: 100%; border:none; padding:10px; border-radius:6px; cursor:pointer; color:#fff; font-weight:bold;">
+            <button onclick="saveProfileUpdates()" class="btn-primary" style="margin-top: 15px; width: 100%; background: #10b981; border:none; padding:10px; border-radius:6px; cursor:pointer; color:#fff; font-weight:bold;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Profile Updates
+            </button>
+
+            <button onclick="handleUserLogout()" class="btn-primary" style="margin-top: 10px; background: #ef4444; width: 100%; border:none; padding:8px; border-radius:6px; cursor:pointer; color:#fff; font-weight:bold; font-size:13px;">
                 <i class="fa-solid fa-right-from-bracket"></i> Logout
             </button>
         </div>
@@ -841,16 +793,32 @@
                 openAuthModal('login');
                 return;
             }
-            document.getElementById('prof-name').innerText = user.name || "Rishabh Rajput";
+            document.getElementById('update-name').value = user.name || "Rishabh Rajput";
             document.getElementById('prof-email').innerText = user.email || "user@example.com";
-            document.getElementById('prof-mobile').innerText = user.mobile || "+91 9876543210";
-            document.getElementById('prof-country').innerText = user.country || "India";
+            document.getElementById('prof-mobile').innerText = user.mobile || "9876543210";
+            document.getElementById('update-address').value = user.address || "";
 
             document.getElementById('profile-modal').classList.remove('hidden');
         }
 
         function closeProfileModal() {
             document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        function saveProfileUpdates() {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || {};
+            user.name = document.getElementById('update-name').value.trim();
+            user.address = document.getElementById('update-address').value.trim();
+
+            if(!user.name) {
+                alert("Name cannot be empty!");
+                return;
+            }
+
+            localStorage.setItem('quickresizer_user', JSON.stringify(user));
+            alert("Profile updated successfully!");
+            closeProfileModal();
+            syncUserSessionUI();
         }
 
         function handleUserLogout() {
@@ -885,27 +853,57 @@
         function handleAuthSubmit(e, type) {
             e.preventDefault();
             if(type === 'signup') {
-                let nameVal = document.getElementById('signup-name').value;
-                let emailVal = document.getElementById('signup-email').value;
-                let mobileVal = document.getElementById('signup-mobile').value;
+                let nameVal = document.getElementById('signup-name').value.trim();
+                let emailVal = document.getElementById('signup-email').value.trim();
+                let mobileVal = document.getElementById('signup-mobile').value.trim();
                 let countryVal = document.getElementById('signup-country').value;
 
-                let userData = { name: nameVal, email: emailVal, mobile: mobileVal, country: countryVal };
+                // Strict validation check for email and mobile
+                let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                let phoneRegex = /^[0-9]{10}$/;
+
+                if (!emailRegex.test(emailVal)) {
+                    alert("⚠️ Please enter a valid email address!");
+                    return;
+                }
+                if (!phoneRegex.test(mobileVal)) {
+                    alert("⚠️ Please enter a valid 10-digit mobile number!");
+                    return;
+                }
+
+                let userData = { name: nameVal, email: emailVal, mobile: mobileVal, country: countryVal, address: "" };
                 localStorage.setItem('quickresizer_user', JSON.stringify(userData));
                 
-                alert("Account created and logged in successfully!");
+                alert("🎉 Account created and logged in successfully!");
                 closeAuthModal();
                 syncUserSessionUI();
             } else if(type === 'login') {
-                let emailVal = document.getElementById('login-email').value;
-                // Dummy login state preservation or retrieval if exists
-                let existingUser = JSON.parse(localStorage.getItem('quickresizer_user')) || { name: "Rishabh Rajput", mobile: "+91 9876543210", country: "India" };
+                let emailVal = document.getElementById('login-email').value.trim();
+                let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!emailRegex.test(emailVal)) {
+                    alert("⚠️ Please enter a valid registered email address!");
+                    return;
+                }
+
+                let existingUser = JSON.parse(localStorage.getItem('quickresizer_user')) || { name: "Rishabh Rajput", mobile: "9876543210", country: "India", address: "" };
                 existingUser.email = emailVal;
 
                 localStorage.setItem('quickresizer_user', JSON.stringify(existingUser));
-                alert("Login Successful!");
+                alert("🎉 Login Successful!");
                 closeAuthModal();
                 syncUserSessionUI();
+            } else if(type === 'forgot') {
+                let emailVal = document.getElementById('forgot-email').value.trim();
+                let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!emailRegex.test(emailVal)) {
+                    alert("⚠️ Please enter a valid registered email address!");
+                    return;
+                }
+
+                alert("🔒 Password update instructions sent to your registered email!");
+                switchAuthTab('login');
             }
         }
     </script>
