@@ -30,6 +30,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    
+    <style>
+        /* 🟢 Simple White Background Setup */
+        body {
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+        }
+        .navbar, .controls-card, .modal-card, .footer {
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -39,16 +51,16 @@
         </marquee>
     </div>
 
-    <header class="navbar">
-        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+    <header class="navbar" style="border-bottom: 1px solid #e2e8f0;">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer; color: #2563eb;">
             <i class="fa-solid fa-expand logo-icon"></i>
             <span>QuickResizer</span>
         </div>
 
         <nav class="tool-menu">
             <a href="support-pay.html" class="tool-link" style="color: #10b981; font-weight: bold;"><i class="fa-solid fa-heart"></i> Support Us</a>
-            <a href="feedback.html" class="tool-link">Feedback</a>
-            <a href="blog.html" class="tool-link">Blog</a>
+            <a href="feedback.html" class="tool-link" style="color: #475569;">Feedback</a>
+            <a href="blog.html" class="tool-link" style="color: #475569;">Blog</a>
         </nav>
 
         <div class="nav-right" id="nav-auth-container">
@@ -60,17 +72,17 @@
                 </select>
             </div>
 
-            <button class="btn-auth btn-login" data-lang="btn-login" onclick="openAuthModal('login')">Login</button>
-            <button class="btn-auth btn-signup" data-lang="btn-signup" onclick="openAuthModal('signup')">Sign Up</button>
+            <button class="btn-auth btn-login" onclick="openAuthModal('login')" style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1;">Login</button>
+            <button class="btn-auth btn-signup" onclick="openAuthModal('signup')" style="background: #2563eb; color: #fff;">Sign Up</button>
         </div>
     </header>
 
     <main class="hero-section">
         <div style="max-width:800px; margin: 0 auto 10px auto; text-align:right;">
-            <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); margin-right: 5px;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); color: #059669; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); margin-right: 5px;">
                 <i class="fa-solid fa-users"></i> Trusted by 1,000+ Active Users Daily 🚀
             </span>
-            <span id="globalUsageBadge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.3);">
+            <span id="globalUsageBadge" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(37, 99, 235, 0.3);">
                 <i class="fa-solid fa-circle-info"></i> Free Mode Active
             </span>
         </div>
@@ -119,42 +131,42 @@
             <button class="action-tab" onclick="window.location.href='discount-calculator.html'"><i class="fa-solid fa-tags"></i> <span>Discount Calc</span></button>
         </div>
 
-        <h1 class="main-title" id="mode-title" data-lang="hero-title">Resize Image Online</h1>
-        <p class="sub-title" id="mode-desc" data-lang="hero-subtitle">Change image width and height in pixels easily for free!</p>
+        <h1 class="main-title" id="mode-title" data-lang="hero-title" style="color: #0f172a;">Resize Image Online</h1>
+        <p class="sub-title" id="mode-desc" data-lang="hero-subtitle" style="color: #64748b;">Change image width and height in pixels easily for free!</p>
         
-        <div class="upload-container" id="drop-zone">
-            <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
-            <p class="upload-text"><span data-lang="drop-text">Drop your file here or</span> <span class="browse-text" data-lang="browse-text">browse files</span></p>
-            <span class="file-limits" data-lang="limits-text" id="upload-limits-text">Supports JPG, PNG, WEBP, GIF, PDF, SVG | Free Max Size: 5MB</span>
+        <div class="upload-container" id="drop-zone" style="background: #f8fafc; border: 2px dashed #cbd5e1;">
+            <i class="fa-solid fa-cloud-arrow-up upload-icon" style="color: #2563eb;"></i>
+            <p class="upload-text" style="color: #334155;"><span data-lang="drop-text">Drop your file here or</span> <span class="browse-text" data-lang="browse-text">browse files</span></p>
+            <span class="file-limits" data-lang="limits-text" id="upload-limits-text" style="color: #64748b;">Supports JPG, PNG, WEBP, GIF, PDF, SVG | Free Max Size: 5MB</span>
             <input type="file" id="image-input" accept="image/*,.pdf,.svg" multiple hidden>
             <button class="btn-primary" onclick="document.getElementById('image-input').click()" data-lang="btn-select">Select File</button>
         </div>
 
-        <div style="max-width: 700px; margin: 25px auto 0 auto; background: #0f172a; border: 1px solid #334155; padding: 15px 20px; border-radius: 12px; text-align: left;">
-            <h4 style="margin: 0 0 10px 0; color: #38bdf8; font-size:14px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Other Useful Tools You Might Like:</h4>
+        <div style="max-width: 700px; margin: 25px auto 0 auto; background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px 20px; border-radius: 12px; text-align: left;">
+            <h4 style="margin: 0 0 10px 0; color: #2563eb; font-size:14px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Other Useful Tools You Might Like:</h4>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px;">
-                <a href="image-text-extractor.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
-                    <i class="fa-solid fa-file-contract" style="color: #38bdf8;"></i> OCR Text Extractor
+                <a href="image-text-extractor.html" style="display: block; padding: 8px 10px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; color: #334155; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-file-contract" style="color: #2563eb;"></i> OCR Text Extractor
                 </a>
-                <a href="legal-docs.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
-                    <i class="fa-solid fa-file-lines" style="color: #38bdf8;"></i> Affidavit & Application
+                <a href="legal-docs.html" style="display: block; padding: 8px 10px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; color: #334155; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-file-lines" style="color: #2563eb;"></i> Affidavit & Application
                 </a>
-                <a href="qr-code-generator.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
-                    <i class="fa-solid fa-qrcode" style="color: #38bdf8;"></i> UPI & QR Generator
+                <a href="qr-code-generator.html" style="display: block; padding: 8px 10px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; color: #334155; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-qrcode" style="color: #2563eb;"></i> UPI & QR Generator
                 </a>
-                <a href="text-to-handwriting.html" style="display: block; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;">
-                    <i class="fa-solid fa-pen-fancy" style="color: #38bdf8;"></i> Text to Handwriting
+                <a href="text-to-handwriting.html" style="display: block; padding: 8px 10px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; color: #334155; text-decoration: none; font-size: 12px; font-weight: 500;">
+                    <i class="fa-solid fa-pen-fancy" style="color: #2563eb;"></i> Text to Handwriting
                 </a>
             </div>
         </div>
 
-        <div class="trust-badges" style="margin-top: 20px;">
+        <div class="trust-badges" style="margin-top: 20px; color: #64748b;">
             <span><i class="fa-solid fa-shield-halved"></i> <span data-lang="badge-private">100% Private (No Server Uploads)</span></span>
             <span><i class="fa-solid fa-bolt"></i> <span data-lang="badge-fast">Ultra Fast Processing</span></span>
             <span><i class="fa-solid fa-face-smile"></i> <span data-lang="badge-free">Completely Free Forever</span></span>
         </div>
 
-        <div class="controls-card hidden" id="controls-section">
+        <div class="controls-card hidden" id="controls-section" style="background: #f8fafc; border: 1px solid #e2e8f0;">
             <div class="preview-box">
                 <img id="image-preview" src="" alt="Preview">
             </div>
@@ -197,7 +209,7 @@
                         <input type="range" id="quality-slider" min="10" max="95" value="70">
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Pro Tip:</strong> Type exact KB (e.g., 20KB for government forms) and QuickResizer will automatically compress your image to fit that size!
                 </small>
             </div>
@@ -235,7 +247,7 @@
                         <input type="date" id="photo-date">
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Govt Exam Requirement:</strong> Adds a crisp white box at the bottom of your photo with clear black text for SSC, UPSC, and State Govt forms.
                 </small>
             </div>
@@ -251,7 +263,7 @@
                         <input type="range" id="sig-threshold" min="100" max="240" value="180">
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Instant Clean:</strong> Automatically removes grey shadows from phone photos and converts signatures to high-contrast black ink on pure white paper.
                 </small>
             </div>
@@ -273,7 +285,7 @@
                         <input type="color" id="bg-custom-color" value="#FFFFFF" style="height: 42px; padding: 2px; cursor: pointer; width: 100%;">
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Passports & Govt Forms:</strong> Instantly replaces transparent or dull photo backgrounds with standard Official White or Passport Blue.
                 </small>
             </div>
@@ -296,7 +308,7 @@
                         </select>
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Multi-Image Combine:</strong> Converts uploaded images into a single professional PDF document right in your browser. (Free: Up to 3 Pages)
                 </small>
             </div>
@@ -319,7 +331,7 @@
                         </select>
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>PDF Page Extractor:</strong> Renders each page of your uploaded PDF file as crisp downloadable images.
                 </small>
             </div>
@@ -328,10 +340,10 @@
                 <div class="settings-grid">
                     <div class="setting-group full-width">
                         <label><i class="fa-solid fa-object-group"></i> PDF Files Selected:</label>
-                        <small style="color:#94a3b8; display:block; margin-top:5px;">Select multiple PDF files above. They will be merged sequentially into a single file.</small>
+                        <small style="color:#64748b; display:block; margin-top:5px;">Select multiple PDF files above. They will be merged sequentially into a single file.</small>
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Merge PDFs:</strong> Combines 2 or more PDF documents into 1 consolidated PDF file safely in your browser.
                 </small>
             </div>
@@ -347,7 +359,7 @@
                         <input type="number" id="split-end" placeholder="e.g. 3" min="1" value="1">
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Split PDF:</strong> Extract specific pages (e.g. Page 1 to 3) into a separate new PDF file. (Free: Max 3 Pages)
                 </small>
             </div>
@@ -362,7 +374,7 @@
                         </select>
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Compress PDF:</strong> Reduces large PDF document size while keeping text and images clear.
                 </small>
             </div>
@@ -395,10 +407,10 @@
                     </div>
                     <div class="setting-group full-width">
                         <label><i class="fa-solid fa-building"></i> Work Experience / Projects:</label>
-                        <textarea id="res-exp" rows="3" placeholder="e.g. Developed QuickResizer web application with 37+ micro tools." style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:10px; font-family:'Poppins',sans-serif;"></textarea>
+                        <textarea id="res-exp" rows="3" placeholder="e.g. Developed QuickResizer web application with 37+ micro tools." style="width:100%; background:#ffffff; border:1px solid #cbd5e1; color:#1e293b; border-radius:8px; padding:10px; font-family:'Poppins',sans-serif;"></textarea>
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>1-Click Professional Resume:</strong> Generates a clean, ATS-friendly PDF Resume instantly.
                 </small>
             </div>
@@ -406,20 +418,20 @@
             <div class="mode-panel hidden" id="panel-wordcounter">
                 <div class="setting-group full-width">
                     <label><i class="fa-solid fa-align-left"></i> Paste or Type Your Text:</label>
-                    <textarea id="word-input-text" rows="6" placeholder="Type or paste your content here..." style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:12px; font-family:'Poppins',sans-serif;"></textarea>
+                    <textarea id="word-input-text" rows="6" placeholder="Type or paste your content here..." style="width:100%; background:#ffffff; border:1px solid #cbd5e1; color:#1e293b; border-radius:8px; padding:12px; font-family:'Poppins',sans-serif;"></textarea>
                 </div>
                 <div class="settings-grid" style="margin-top:15px; text-align:center;">
-                    <div style="background:#0f172a; padding:12px; border-radius:8px; border:1px solid #1e293b;">
-                        <h3 id="cnt-words" style="color:#38bdf8; margin:0; font-size:24px;">0</h3>
-                        <span style="font-size:12px; color:#94a3b8;">Words</span>
+                    <div style="background:#f1f5f9; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <h3 id="cnt-words" style="color:#2563eb; margin:0; font-size:24px;">0</h3>
+                        <span style="font-size:12px; color:#64748b;">Words</span>
                     </div>
-                    <div style="background:#0f172a; padding:12px; border-radius:8px; border:1px solid #1e293b;">
-                        <h3 id="cnt-chars" style="color:#38bdf8; margin:0; font-size:24px;">0</h3>
-                        <span style="font-size:12px; color:#94a3b8;">Characters</span>
+                    <div style="background:#f1f5f9; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <h3 id="cnt-chars" style="color:#2563eb; margin:0; font-size:24px;">0</h3>
+                        <span style="font-size:12px; color:#64748b;">Characters</span>
                     </div>
-                    <div style="background:#0f172a; padding:12px; border-radius:8px; border:1px solid #1e293b;">
-                        <h3 id="cnt-reading" style="color:#38bdf8; margin:0; font-size:24px;">0s</h3>
-                        <span style="font-size:12px; color:#94a3b8;">Reading Time</span>
+                    <div style="background:#f1f5f9; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <h3 id="cnt-reading" style="color:#2563eb; margin:0; font-size:24px;">0s</h3>
+                        <span style="font-size:12px; color:#64748b;">Reading Time</span>
                     </div>
                 </div>
             </div>
@@ -435,7 +447,7 @@
                         <input type="text" id="wa-msg" placeholder="e.g. Hi, I found your contact on QuickResizer">
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:-10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>Direct Chat:</strong> Open WhatsApp chat directly without saving phone numbers in your phone contacts!
                 </small>
             </div>
@@ -451,7 +463,7 @@
                         </select>
                     </div>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>SVG Vector Converter:</strong> Renders vector SVG files to crisp PNG images with transparent backgrounds.
                 </small>
             </div>
@@ -459,9 +471,9 @@
             <div class="mode-panel hidden" id="panel-jsonformat">
                 <div class="setting-group full-width">
                     <label><i class="fa-solid fa-code"></i> Paste Raw JSON Code:</label>
-                    <textarea id="json-input" rows="6" placeholder='{"name":"QuickResizer","status":"active"}' style="width:100%; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; padding:12px; font-family:monospace;"></textarea>
+                    <textarea id="json-input" rows="6" placeholder='{"name":"QuickResizer","status":"active"}' style="width:100%; background:#ffffff; border:1px solid #cbd5e1; color:#1e293b; border-radius:8px; padding:12px; font-family:monospace;"></textarea>
                 </div>
-                <small style="color: #38bdf8; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
+                <small style="color: #2563eb; display:block; margin-top:10px; margin-bottom:15px; text-align:left;">
                     💡 <strong>JSON Tool:</strong> Formats, validates, and beautifies raw JSON strings for developers.
                 </small>
             </div>
@@ -470,132 +482,132 @@
         </div>
     </main>
 
-    <section class="section-container bg-white">
+    <section class="section-container" style="background-color: #f8fafc;">
         <div class="section-heading">
-            <h2>Explore Our Featured Utility Tools</h2>
-            <p>Select any tool to directly jump and start processing instantly.</p>
+            <h2 style="color: #0f172a;">Explore Our Featured Utility Tools</h2>
+            <p style="color: #64748b;">Select any tool to directly jump and start processing instantly.</p>
         </div>
         <div class="tools-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; text-align: left;">
             
-            <div class="tool-card" onclick="window.location.href='legal-docs.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='legal-docs.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-file-lines" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Affidavit & Application</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Affidavit & Application</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Generate legal self-declarations and formal leave applications.</p>
             </div>
 
-            <div class="tool-card" onclick="window.location.href='support-pay.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='support-pay.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-hand-holding-heart" style="font-size:28px; color:#10b981; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Support Creator</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Support Creator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Pay what you wish to support free tools and server costs.</p>
             </div>
 
-            <div class="tool-card" onclick="window.location.href='feedback.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='feedback.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-comments" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Send Feedback</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Send Feedback</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Share your suggestions, bug reports, or feature requests.</p>
             </div>
 
-            <div class="tool-card" onclick="window.location.href='age-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='age-calculator.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-calculator" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Age Calculator</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Age Calculator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Calculate exact age in years, months & days for govt exams.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='cgpa-to-percentage.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='cgpa-to-percentage.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-graduation-cap" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">CGPA to Percentage</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">CGPA to Percentage</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Convert CBSE & College CGPA to percentage instantly.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='text-to-handwriting.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='text-to-handwriting.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-pen-fancy" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Text to Handwriting</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Text to Handwriting</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Convert typed text into handwritten notebook style.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='image-text-extractor.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='image-text-extractor.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-file-contract" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Image Text Extractor</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Image Text Extractor</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Extract text from photos and notes (OCR tool).</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='marriage-biodata-maker.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='marriage-biodata-maker.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-address-card" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Marriage Bio-Data</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Marriage Bio-Data</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Create attractive marriage biodata for print & PDF.</p>
             </div>
 
-            <div class="tool-card" onclick="window.location.href='qr-code-generator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='qr-code-generator.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-qrcode" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">QR Code Generator</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">QR Code Generator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Create custom QR codes for URLs, UPI & WiFi.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='hindi-typing.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='hindi-typing.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-language" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Hindi Typing</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Hindi Typing</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Type English to get Hindi Devanagari text.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='krutidev-to-mangal.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='krutidev-to-mangal.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-font" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Kruti Dev to Mangal</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Kruti Dev to Mangal</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Convert Kruti Dev font to Unicode Mangal font.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='sip-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='sip-calculator.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-chart-line" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">SIP Calculator</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">SIP Calculator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Calculate mutual fund SIP growth & returns.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='income-tax-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='income-tax-calculator.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-receipt" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Income Tax Calculator</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Income Tax Calculator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Compare New vs Old Income Tax Regime.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='no-crop-post-maker.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='no-crop-post-maker.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-square" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">No-Crop Post Maker</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">No-Crop Post Maker</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Create blur background square posts for Instagram/DP.</p>
             </div>
 
-            <div class="tool-card" onclick="window.location.href='password-generator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='password-generator.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-key" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Password Generator</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Password Generator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Generate strong & random passwords securely.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='scratchpad.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='scratchpad.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-note-sticky" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Private Scratchpad</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Private Scratchpad</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Temporary notepad with local browser auto-save.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='base64-encoder-decoder.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='base64-encoder-decoder.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-code-compare" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Base64 Tool</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Base64 Tool</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Encode text to Base64 code or decode back.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='url-encoder-decoder.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='url-encoder-decoder.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-link" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">URL Encoder / Decoder</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">URL Encoder / Decoder</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Safely encode or decode URL special characters.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='html-minifier.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='html-minifier.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-file-code" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">HTML Minifier</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">HTML Minifier</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Compress HTML/CSS code for faster site loading.</p>
             </div>
 
-            <div class="tool-card" onclick="window.location.href='invoice-maker.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='invoice-maker.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-file-invoice-dollar" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Invoice Maker</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Invoice Maker</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Create & print professional GST invoices.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='emi-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='emi-calculator.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-coins" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Loan EMI Calculator</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Loan EMI Calculator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Calculate home, car & personal loan EMIs.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='gst-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='gst-calculator.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-percent" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">GST Calculator</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">GST Calculator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Add or remove GST tax amounts instantly.</p>
             </div>
-            <div class="tool-card" onclick="window.location.href='discount-calculator.html'" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
+            <div class="tool-card" onclick="window.location.href='discount-calculator.html'" style="background:#ffffff; padding:20px; border-radius:10px; border:1px solid #e2e8f0; cursor:pointer;">
                 <i class="fa-solid fa-tags" style="font-size:28px; color:#2563eb; margin-bottom:10px;"></i>
-                <h3 style="margin:5px 0; font-size:18px;">Discount Calculator</h3>
+                <h3 style="margin:5px 0; font-size:18px; color: #1e293b;">Discount Calculator</h3>
                 <p style="font-size:13px; color:#64748b; margin:0;">Calculate shopping sale discounts & net savings.</p>
             </div>
         </div>
@@ -603,29 +615,29 @@
 
     <section class="section-container" id="how-it-works">
         <div class="section-heading">
-            <h2 data-lang="how-title">How to Use QuickResizer in 3 Easy Steps</h2>
-            <p data-lang="how-subtitle">QuickResizer is designed to be simple, fast, and accessible for everyone.</p>
+            <h2 data-lang="how-title" style="color: #0f172a;">How to Use QuickResizer in 3 Easy Steps</h2>
+            <p data-lang="how-subtitle" style="color: #64748b;">QuickResizer is designed to be simple, fast, and accessible for everyone.</p>
         </div>
         <div class="steps-grid">
-            <div class="step-card">
+            <div class="step-card" style="background: #ffffff; border: 1px solid #e2e8f0; color: #1e293b;">
                 <div class="step-num">1</div>
                 <h3 data-lang="step1-title">Upload / Input File</h3>
-                <p data-lang="step1-desc">Drag and drop your file above, or select from our daily utility tools.</p>
+                <p data-lang="step1-desc" style="color: #64748b;">Drag and drop your file above, or select from our daily utility tools.</p>
             </div>
-            <div class="step-card">
+            <div class="step-card" style="background: #ffffff; border: 1px solid #e2e8f0; color: #1e293b;">
                 <div class="step-num">2</div>
                 <h3 data-lang="step2-title">Choose Tool & Adjust</h3>
-                <p data-lang="step2-desc">Select Image, PDF, Developer, or Micro tools and customize your settings.</p>
+                <p data-lang="step2-desc" style="color: #64748b;">Select Image, PDF, Developer, or Micro tools and customize your settings.</p>
             </div>
-            <div class="step-card">
+            <div class="step-card" style="background: #ffffff; border: 1px solid #e2e8f0; color: #1e293b;">
                 <div class="step-num">3</div>
                 <h3 data-lang="step3-title">Download / Copy Instantly</h3>
-                <p data-lang="step3-desc">Click process to get your converted files or instant output generated directly in your browser.</p>
+                <p data-lang="step3-desc" style="color: #64748b;">Click process to get your converted files or instant output generated directly in your browser.</p>
             </div>
         </div>
     </section>
 
-    <section class="section-container bg-white" style="text-align: center; padding: 40px 20px;">
+    <section class="section-container" style="text-align: center; padding: 40px 20px; background-color: #ffffff;">
         <div style="max-width: 800px; margin: 0 auto; background: #f8fafc; border: 1px solid #cbd5e1; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
             <h3 style="color: #2563eb; font-size: 20px; margin-bottom: 12px;"><i class="fa-solid fa-graduation-cap"></i> A Special Note from the Creator</h3>
             <p style="color: #475569; font-size: 14px; line-height: 1.7; margin: 0;">
@@ -636,8 +648,8 @@
     </section>
 
     <div id="auth-modal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+        <div class="modal-card" style="background: #ffffff; color: #1e293b;">
+            <button class="modal-close" onclick="closeAuthModal()" style="color: #64748b;">&times;</button>
             
             <div class="modal-tabs" id="modal-tabs-header">
                 <button id="tab-login-btn" class="modal-tab active" onclick="switchAuthTab('login')">Login</button>
@@ -645,44 +657,44 @@
             </div>
 
             <form id="login-form" class="auth-form" onsubmit="handleAuthSubmit(event, 'login')">
-                <h3>Welcome Back</h3>
-                <p>Login to your account.</p>
+                <h3 style="color: #0f172a;">Welcome Back</h3>
+                <p style="color: #64748b;">Login to your account.</p>
                 <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="login-email" placeholder="name@example.com" required>
+                    <label style="color: #475569;">Email Address</label>
+                    <input type="email" id="login-email" placeholder="name@example.com" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #1e293b;" required>
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="login-password" placeholder="••••••••" required>
+                    <label style="color: #475569;">Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #1e293b;" required>
                 </div>
                 <div style="text-align: right; margin-bottom: 15px;">
-                    <a href="javascript:void(0)" onclick="switchAuthTab('forgot')" style="color: #38bdf8; font-size: 13px; text-decoration: none; font-weight: 500;">Forgot Password?</a>
+                    <a href="javascript:void(0)" onclick="switchAuthTab('forgot')" style="color: #2563eb; font-size: 13px; text-decoration: none; font-weight: 500;">Forgot Password?</a>
                 </div>
                 <button type="submit" class="btn-primary btn-block">Login to Continue</button>
             </form>
 
             <form id="signup-form" class="auth-form hidden" onsubmit="handleAuthSubmit(event, 'signup')">
-                <h3>Create an Account</h3>
-                <p>Sign up to use QuickResizer tools.</p>
+                <h3 style="color: #0f172a;">Create an Account</h3>
+                <p style="color: #64748b;">Sign up to use QuickResizer tools.</p>
                 <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="signup-name" placeholder="Rishabh Rajput" required>
+                    <label style="color: #475569;">Full Name</label>
+                    <input type="text" id="signup-name" placeholder="Rishabh Rajput" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #1e293b;" required>
                 </div>
                 <div class="form-group">
-                    <label>Email Address (Permanent)</label>
-                    <input type="email" id="signup-email" placeholder="name@example.com" required>
+                    <label style="color: #475569;">Email Address (Permanent)</label>
+                    <input type="email" id="signup-email" placeholder="name@example.com" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #1e293b;" required>
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="signup-password" placeholder="••••••••" required>
+                    <label style="color: #475569;">Password</label>
+                    <input type="password" id="signup-password" placeholder="••••••••" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #1e293b;" required>
                 </div>
                 <div class="form-group">
-                    <label>Mobile Number (Permanent - 10 Digits)</label>
-                    <input type="tel" id="signup-mobile" placeholder="9876543210" pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" required>
+                    <label style="color: #475569;">Mobile Number (Permanent - 10 Digits)</label>
+                    <input type="tel" id="signup-mobile" placeholder="9876543210" pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #1e293b;" required>
                 </div>
                 <div class="form-group">
-                    <label>Country / Region</label>
-                    <select id="signup-country" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-family: 'Poppins', sans-serif;">
+                    <label style="color: #475569;">Country / Region</label>
+                    <select id="signup-country" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; color: #1e293b; font-family: 'Poppins', sans-serif;">
                         <option value="India" selected>India (🇮🇳)</option>
                         <option value="United States">United States (🇺🇸)</option>
                         <option value="United Kingdom">United Kingdom (🇬🇧)</option>
@@ -697,43 +709,43 @@
             </form>
 
             <form id="forgot-form" class="auth-form hidden" onsubmit="handleAuthSubmit(event, 'forgot')">
-                <h3>Reset Password</h3>
-                <p>Enter your registered email. (Email & Phone cannot be changed).</p>
+                <h3 style="color: #0f172a;">Reset Password</h3>
+                <p style="color: #64748b;">Enter your registered email. (Email & Phone cannot be changed).</p>
                 <div class="form-group">
-                    <label>Registered Email Address</label>
-                    <input type="email" id="forgot-email" placeholder="name@example.com" required>
+                    <label style="color: #475569;">Registered Email Address</label>
+                    <input type="email" id="forgot-email" placeholder="name@example.com" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #1e293b;" required>
                 </div>
                 <div class="form-group">
-                    <label>New Password</label>
-                    <input type="password" id="forgot-new-password" placeholder="Enter new password" required>
+                    <label style="color: #475569;">New Password</label>
+                    <input type="password" id="forgot-new-password" placeholder="Enter new password" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #1e293b;" required>
                 </div>
                 <button type="submit" class="btn-primary btn-block">Update Password</button>
                 <div style="text-align: center; margin-top: 15px;">
-                    <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: #94a3b8; font-size: 13px; text-decoration: none;">← Back to Login</a>
+                    <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: #2563eb; font-size: 13px; text-decoration: none;">← Back to Login</a>
                 </div>
             </form>
         </div>
     </div>
 
     <div id="profile-modal" class="modal-overlay hidden">
-        <div class="modal-card" style="text-align: left;">
-            <button class="modal-close" onclick="closeProfileModal()">&times;</button>
-            <h3 style="margin-bottom: 5px; color: #fff;"><i class="fa-solid fa-user-gear" style="color: #38bdf8;"></i> User Profile & Update</h3>
-            <p style="color: #94a3b8; font-size: 12px; margin-bottom: 15px;">Email and Mobile Number are permanently locked and cannot be changed.</p>
+        <div class="modal-card" style="text-align: left; background: #ffffff; color: #1e293b;">
+            <button class="modal-close" onclick="closeProfileModal()" style="color: #64748b;">&times;</button>
+            <h3 style="margin-bottom: 5px; color: #0f172a;"><i class="fa-solid fa-user-gear" style="color: #2563eb;"></i> User Profile & Update</h3>
+            <p style="color: #64748b; font-size: 12px; margin-bottom: 15px;">Email and Mobile Number are permanently locked and cannot be changed.</p>
             
-            <div style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; font-size: 13px; color: #e2e8f0; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 13px; color: #334155; display: flex; flex-direction: column; gap: 12px;">
                 
                 <div class="form-group" style="margin-bottom:0;">
-                    <label style="font-size:11px; color:#94a3b8;">Full Name (Editable)</label>
-                    <input type="text" id="update-name" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:4px;">
+                    <label style="font-size:11px; color:#64748b;">Full Name (Editable)</label>
+                    <input type="text" id="update-name" style="width:100%; padding:8px; background:#ffffff; border:1px solid #cbd5e1; color:#1e293b; border-radius:4px;">
                 </div>
 
-                <div><strong>📧 Email (Locked):</strong> <span id="prof-email" style="color: #94a3b8;">-</span></div>
-                <div><strong>📱 Mobile (Locked):</strong> <span id="prof-mobile" style="color: #94a3b8;">-</span></div>
+                <div><strong>📧 Email (Locked):</strong> <span id="prof-email" style="color: #64748b;">-</span></div>
+                <div><strong>📱 Mobile (Locked):</strong> <span id="prof-mobile" style="color: #64748b;">-</span></div>
 
                 <div class="form-group" style="margin-bottom:0;">
-                    <label style="font-size:11px; color:#94a3b8;">Full Address with Pincode (Editable)</label>
-                    <textarea id="update-address" rows="2" placeholder="House No, Street, City, State - Pincode" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:4px; font-family:'Poppins',sans-serif;"></textarea>
+                    <label style="font-size:11px; color:#64748b;">Full Address with Pincode (Editable)</label>
+                    <textarea id="update-address" rows="2" placeholder="House No, Street, City, State - Pincode" style="width:100%; padding:8px; background:#ffffff; border:1px solid #cbd5e1; color:#1e293b; border-radius:4px; font-family:'Poppins',sans-serif;"></textarea>
                 </div>
             </div>
 
@@ -747,7 +759,7 @@
         </div>
     </div>
 
-    <footer class="footer">
+    <footer class="footer" style="background: #f8fafc; border-top: 1px solid #e2e8f0; color: #475569;">
         <div class="footer-links">
             <div class="footer-brand">
                 <h3><i class="fa-solid fa-expand"></i> QuickResizer</h3>
