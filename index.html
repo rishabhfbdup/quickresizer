@@ -977,53 +977,6 @@
         </div>
     </div>
 
-    <div id="profile-modal" class="modal-overlay hidden">
-        <div class="modal-card" style="text-align: left;">
-            <button class="modal-close" onclick="closeProfileModal()">&times;</button>
-            <h3 style="margin-bottom: 5px; color: #fff;"><i class="fa-solid fa-user-circle" style="color: #38bdf8;"></i> My Account Profile</h3>
-            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Your registered account details and status.</p>
-            
-            <div style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; font-size: 14px; color: #e2e8f0; display: flex; flex-direction: column; gap: 10px;">
-                <div><strong>👤 Full Name:</strong> <span id="prof-name" style="color: #38bdf8;">-</span></div>
-                <div><strong>📧 Email Address:</strong> <span id="prof-email" style="color: #38bdf8;">-</span></div>
-                <div><strong>📱 Mobile Number:</strong> <span id="prof-mobile" style="color: #38bdf8;">-</span></div>
-                <div><strong>⭐ Account Status:</strong> <span id="prof-status" style="font-weight: bold;">-</span></div>
-            </div>
-
-            <button onclick="handleUserLogout()" class="btn-primary" style="margin-top: 20px; background: #ef4444; width: 100%; border:none; padding:10px; border-radius:6px; cursor:pointer; color:#fff; font-weight:bold;">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </button>
-        </div>
-    </div>
-
-    <footer class="footer">
-        <div class="footer-links">
-            <div class="footer-brand">
-                <h3><i class="fa-solid fa-expand"></i> QuickResizer</h3>
-                <p>Online privacy-focused image & PDF tool to resize, crop, compress, and convert files fast.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Company</h4>
-                <a href="about.html">About Us</a>
-                <a href="blog.html">Blog</a>
-                <a href="mailto:support@kryzex.com?subject=QuickResizer%20User%20Feedback">Send Feedback</a>
-            </div>
-            <div class="footer-col">
-                <h4>Legal Policies</h4>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="privacy.html#image-privacy">Image Privacy</a>
-                <a href="cookie.html">Cookie Policy</a>
-                <a href="terms.html">Terms of Service</a>
-                <a href="refund.html">Refund Policy</a>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <div class="copyright">© 2026 QuickResizer. All rights reserved.</div>
-            <div class="powered-by">Powered by :- <span>Kryzex Technologies</span></div>
-        </div>
-    </footer>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
@@ -1042,54 +995,13 @@
             let badge = document.getElementById('globalUsageBadge');
 
             if (user && user.isPro) {
-                badge.innerHTML = `<i class="fa-solid fa-crown" style="color:#eab308;"></i> PRO PLAN ACTIVE`;
+                badge.innerHTML = `<i class="fa-solid fa-crown" style="color:#eab308;"></i> PRO PLAN LIFETIME ACTIVE`;
                 badge.style.color = "#eab308";
                 badge.style.background = "rgba(234, 179, 8, 0.1)";
                 badge.style.border = "1px solid rgba(234, 179, 8, 0.3)";
                 
-                navAuth.innerHTML = `
-                    <button onclick="openProfileModal()" style="background:#10b981; color:#fff; padding:6px 14px; border-radius:20px; font-weight:bold; font-size:13px; border:none; cursor:pointer;">
-                        <i class="fa-solid fa-crown"></i> ${user.name || 'Pro User'}
-                    </button>
-                `;
-            } else if (user && !user.isPro) {
-                navAuth.innerHTML = `
-                    <button onclick="openProfileModal()" style="background:#2563eb; color:#fff; padding:6px 14px; border-radius:20px; font-weight:bold; font-size:13px; border:none; cursor:pointer;">
-                        <i class="fa-solid fa-user"></i> ${user.name || 'My Profile'}
-                    </button>
-                `;
+                navAuth.innerHTML = `<span style="background:#10b981; color:#fff; padding:6px 14px; border-radius:20px; font-weight:bold; font-size:13px;"><i class="fa-solid fa-crown"></i> PRO USER</span>`;
             }
-        }
-
-        function openProfileModal() {
-            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
-            if (!user) {
-                openAuthModal('login');
-                return;
-            }
-            document.getElementById('prof-name').innerText = user.name || "Rishabh Rajput";
-            document.getElementById('prof-email').innerText = user.email || "user@example.com";
-            document.getElementById('prof-mobile').innerText = user.mobile || "+91 9876543210";
-            
-            let statusBox = document.getElementById('prof-status');
-            if (user.isPro) {
-                statusBox.innerHTML = `<span style="color: #eab308;"><i class="fa-solid fa-crown"></i> PRO USER (Active)</span>`;
-            } else {
-                statusBox.innerHTML = `<span style="color: #38bdf8;">Standard Free User</span>`;
-            }
-
-            document.getElementById('profile-modal').classList.remove('hidden');
-        }
-
-        function closeProfileModal() {
-            document.getElementById('profile-modal').classList.add('hidden');
-        }
-
-        function handleUserLogout() {
-            localStorage.removeItem('quickresizer_user');
-            alert("You have been logged out successfully.");
-            closeProfileModal();
-            location.reload();
         }
 
         function switchMode(mode) {
@@ -1139,7 +1051,7 @@
 
             selectedPlanName = planName;
             selectedPlanPrice = Number(basePrice); // Lock correct individual plan price
-
+            
             document.getElementById('billing-modal').classList.remove('hidden');
             recalculatePriceSummary();
         }
@@ -1163,12 +1075,7 @@
             e.preventDefault();
             alert(`🎉 Secure Gateway: Order confirmed for ${selectedPlanName} Plan! Account updated.`);
             
-            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || {};
-            user.isPro = true;
-            user.name = document.getElementById('billing-name').value;
-            user.mobile = document.getElementById('billing-mobile').value;
-
-            localStorage.setItem('quickresizer_user', JSON.stringify(user));
+            localStorage.setItem('quickresizer_user', JSON.stringify({ isPro: true, name: document.getElementById('billing-name').value }));
             closeBillingModal();
             syncUserSessionUI();
         }
@@ -1190,14 +1097,9 @@
         function handleAuthSubmit(e, type) {
             e.preventDefault();
             if(type === 'login' || type === 'signup') {
-                let emailVal = document.getElementById(type === 'login' ? 'login-email' : 'signup-email').value;
-                let nameVal = type === 'signup' ? document.getElementById('signup-name').value : "Rishabh Rajput";
-                let mobileVal = type === 'signup' ? document.getElementById('signup-mobile').value : "+91 9876543210";
-
-                localStorage.setItem('quickresizer_user', JSON.stringify({ isPro: false, name: nameVal, email: emailVal, mobile: mobileVal }));
-                alert("Login Successful! You can now select and purchase plans.");
+                localStorage.setItem('quickresizer_user', JSON.stringify({ isPro: false, email: "user@example.com" }));
+                alert("Account configured locally successfully!");
                 closeAuthModal();
-                syncUserSessionUI();
             }
         }
     </script>
