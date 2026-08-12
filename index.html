@@ -40,7 +40,6 @@
         </div>
 
         <nav class="tool-menu">
-            <a href="javascript:void(0)" class="tool-link" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</a>
             <a href="support-pay.html" class="tool-link" style="color: #10b981; font-weight: bold;"><i class="fa-solid fa-heart"></i> Support Us</a>
             <a href="feedback.html" class="tool-link">Feedback</a>
             <a href="blog.html" class="tool-link">Blog</a>
@@ -61,22 +60,13 @@
     </header>
 
     <main class="hero-section">
-        <div style="max-width:800px; margin: 0 auto 15px auto; text-align:right;">
+        <div style="max-width:800px; margin: 0 auto 10px auto; text-align:right;">
             <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); margin-right: 5px;">
                 <i class="fa-solid fa-users"></i> Trusted by 1,000+ Active Users Daily 🚀
             </span>
             <span id="globalUsageBadge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.3);">
-                <i class="fa-solid fa-circle-info"></i> Standard Free Mode Activated
+                <i class="fa-solid fa-circle-info"></i> Free Mode Active
             </span>
-        </div>
-
-        <div style="display: flex; gap: 10px; justify-content: center; margin: 15px 0 25px 0; flex-wrap: wrap;">
-            <button onclick="filterCategory('all')" class="cat-btn active" style="padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">🔥 All Tools</button>
-            <button onclick="filterCategory('image')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">🖼️ Image Tools</button>
-            <button onclick="filterCategory('student')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">🎓 Student & Exam</button>
-            <button onclick="filterCategory('document')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">📄 Document Makers</button>
-            <button onclick="filterCategory('developer')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">💻 Developer & Text</button>
-            <button onclick="filterCategory('financial')" class="cat-btn" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px;">💰 Financial & Tax</button>
         </div>
 
         <div class="action-tabs">
@@ -232,7 +222,7 @@
                 <div class="settings-grid">
                     <div class="setting-group">
                         <label><i class="fa-solid fa-user"></i> Candidate Name:</label>
-                        <input type="text" id="candidate-name" placeholder="e.g. BALBINDER SINGH">
+                        <input type="text" id="candidate-name" placeholder="e.g. RISHABH RAJPUT">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-calendar-days"></i> Date of Photo / DOB:</label>
@@ -375,7 +365,7 @@
                 <div class="settings-grid">
                     <div class="setting-group">
                         <label><i class="fa-solid fa-user"></i> Full Name:</label>
-                        <input type="text" id="res-name" placeholder="e.g. BALBINDER SINGH">
+                        <input type="text" id="res-name" placeholder="e.g. Rishabh Rajput">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-briefcase"></i> Job Title / Designation:</label>
@@ -383,7 +373,7 @@
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-envelope"></i> Email Address:</label>
-                        <input type="email" id="res-email" placeholder="e.g. quickresizer@example.com">
+                        <input type="email" id="res-email" placeholder="e.g. rishabh@example.com">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-phone"></i> Phone Number:</label>
@@ -629,150 +619,6 @@
         </div>
     </section>
 
-    <section class="section-container bg-white" id="pricing">
-        <div class="section-heading">
-            <h2>Flexible Plans with Extra Free Validity & Service Limits! 🎁</h2>
-            <p>Choose the right plan to unlock unlimited professional tools and dedicated services.</p>
-        </div>
-        
-        <div class="pricing-grid">
-            <div class="pricing-card" style="position: relative; margin-top: 20px;">
-                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+3 DAYS FREE</span>
-                <h3>Subscription</h3>
-                <p class="plan-desc">Monthly flexibility for students and light users.</p>
-                <div class="plan-price">
-                    <span class="currency">$</span><span class="amount">3</span><span class="cents">.99</span>
-                    <span class="currency-tag">USD</span>
-                    <span class="duration">1 Month + <strong>3 Days Extra Free</strong></span>
-                </div>
-                <button class="btn-select-plan" onclick="checkoutPlanLaunch('Subscription', 3.99)">Select Plan</button>
-                
-                <div class="top-features">
-                    <div style="background: rgba(56, 189, 248, 0.1); padding: 8px; border-radius: 6px; margin-bottom: 10px; font-size: 13px; font-weight: bold; color: #0284c7; text-align: center;">
-                        📦 Services Included: 15 Core Tools
-                    </div>
-                    <h4>Top features</h4>
-                    <ul>
-                        <li><i class="fa-solid fa-hard-drive" style="color:#38bdf8;"></i> <strong>Max File Size: 10 MB</strong></li>
-                        <li><i class="fa-solid fa-check"></i> <strong>10 Daily Uses</strong> per tool</li>
-                        <li><i class="fa-solid fa-check"></i> Image Resizing, Cropper & KB Compressor</li>
-                        <li><i class="fa-solid fa-check"></i> Standard PDF Merge & Split</li>
-                        <li><i class="fa-solid fa-check"></i> Standard Resume & ID Card Maker</li>
-                        <li><i class="fa-solid fa-envelope"></i> Standard E-mail Support</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pricing-card" style="position: relative; margin-top: 20px;">
-                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+12 DAYS FREE</span>
-                <h3>Simple</h3>
-                <p class="plan-desc">Extra bonus validity for regular everyday tasks.</p>
-                <div class="plan-price">
-                    <span class="currency">$</span><span class="amount">4</span><span class="cents">.99</span>
-                    <span class="currency-tag">USD</span>
-                    <span class="duration">1 Month + <strong>12 Days Extra Free</strong></span>
-                </div>
-                <button class="btn-select-plan" onclick="checkoutPlanLaunch('Simple', 4.99)">Select Plan</button>
-                
-                <div class="top-features">
-                    <div style="background: rgba(56, 189, 248, 0.1); padding: 8px; border-radius: 6px; margin-bottom: 10px; font-size: 13px; font-weight: bold; color: #0284c7; text-align: center;">
-                        📦 Services Included: 25+ Tools
-                    </div>
-                    <h4>Top features</h4>
-                    <ul>
-                        <li><i class="fa-solid fa-hard-drive" style="color:#38bdf8;"></i> <strong>Max File Size: 15 MB</strong></li>
-                        <li><i class="fa-solid fa-check"></i> <strong>25 Daily Uses</strong> per tool</li>
-                        <li><i class="fa-solid fa-check"></i> Bulk Uploads (Up to 10 files)</li>
-                        <li><i class="fa-solid fa-check"></i> Exact Target KB Compression (SSC/UPSC)</li>
-                        <li><i class="fa-solid fa-check"></i> Affidavit & Application Drafter</li>
-                        <li><i class="fa-solid fa-headset"></i> 24×7 Email Support</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pricing-card highlighted" style="position: relative; margin-top: 20px; border: 2px solid #38bdf8;">
-                <span style="position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: #38bdf8; color: #0f172a; font-size: 10px; font-weight: 800; padding: 2px 10px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); text-transform: uppercase; white-space: nowrap; z-index: 10;">🔥 MOST POPULAR</span>
-                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+1 MONTH FREE</span>
-                <h3>Smart</h3>
-                <p class="plan-desc">3 Months access for professionals and creators.</p>
-                <div class="plan-price">
-                    <span class="currency">$</span><span class="amount">9</span><span class="cents">.99</span>
-                    <span class="currency-tag">USD</span>
-                    <span class="duration">3 Months + <strong>1 Month Extra Free</strong></span>
-                </div>
-                <button class="btn-select-plan primary" onclick="checkoutPlanLaunch('Smart', 9.99)">Select Plan</button>
-                
-                <div class="top-features">
-                    <div style="background: rgba(234, 179, 8, 0.15); padding: 8px; border-radius: 6px; margin-bottom: 10px; font-size: 13px; font-weight: bold; color: #d97706; text-align: center;">
-                        📦 Services Included: All 37+ Micro Tools
-                    </div>
-                    <h4>Top features</h4>
-                    <ul>
-                        <li><i class="fa-solid fa-hard-drive" style="color:#38bdf8;"></i> <strong>Max File Size: 20 MB</strong></li>
-                        <li><i class="fa-solid fa-infinity" style="color:#38bdf8;"></i> <strong>Unlimited Usage</strong> on All Tools</li>
-                        <li><i class="fa-solid fa-check"></i> Ultra-Fast Priority Processing</li>
-                        <li><i class="fa-solid fa-check"></i> Zero Watermarks on Invoices & Bio-data</li>
-                        <li><i class="fa-solid fa-check"></i> Advanced Developer Tools (JSON, HTML Minifier)</li>
-                        <li><i class="fa-solid fa-headset"></i> Priority Email Support</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pricing-card" style="position: relative; margin-top: 20px;">
-                <span style="position: absolute; top: -12px; right: 10px; background: #eab308; color: #0f172a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+3 MONTHS FREE</span>
-                <h3>Professional</h3>
-                <p class="plan-desc">6 Months heavy utility and business grade features.</p>
-                <div class="plan-price">
-                    <span class="currency">$</span><span class="amount">14</span><span class="cents">.99</span>
-                    <span class="currency-tag">USD</span>
-                    <span class="duration">6 Months + <strong>3 Months Extra Free</strong></span>
-                </div>
-                <button class="btn-select-plan" onclick="checkoutPlanLaunch('Professional', 14.99)">Select Plan</button>
-                
-                <div class="top-features">
-                    <div style="background: rgba(56, 189, 248, 0.1); padding: 8px; border-radius: 6px; margin-bottom: 10px; font-size: 13px; font-weight: bold; color: #0284c7; text-align: center;">
-                        📦 Services Included: All 37+ Tools + Premium Templates
-                    </div>
-                    <h4>Top features</h4>
-                    <ul>
-                        <li><i class="fa-solid fa-hard-drive" style="color:#38bdf8;"></i> <strong>Max File Size: 30 MB</strong></li>
-                        <li><i class="fa-solid fa-infinity" style="color:#38bdf8;"></i> <strong>Unlimited Access</strong></li>
-                        <li><i class="fa-solid fa-check"></i> Resume Builder Premium Executive Templates</li>
-                        <li><i class="fa-solid fa-check"></i> Bulk PDF Merging & Compression</li>
-                        <li><i class="fa-solid fa-phone-volume" style="color:#38bdf8;"></i> <strong>24×7 Customer Care Call Support</strong></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pricing-card highlighted" style="position: relative; margin-top: 20px; border: 2px solid #eab308;">
-                <span style="position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: #eab308; color: #0f172a; font-size: 10px; font-weight: 800; padding: 2px 10px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); text-transform: uppercase; white-space: nowrap; z-index: 10;">⭐ RECOMMENDED</span>
-                <span style="position: absolute; top: -12px; right: 10px; background: #38bdf8; color: #0f172a; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">+6 MONTHS FREE</span>
-                <h3>Yearly</h3>
-                <p class="plan-desc">Full year VIP access with maximum savings & support.</p>
-                <div class="plan-price">
-                    <span class="currency">$</span><span class="amount">25</span><span class="cents">.99</span>
-                    <span class="currency-tag">USD</span>
-                    <span class="duration">12 Months + <strong>6 Months Extra Free</strong></span>
-                </div>
-                <button class="btn-select-plan primary" onclick="checkoutPlanLaunch('Yearly', 25.99)">Select Plan</button>
-                
-                <div class="top-features">
-                    <div style="background: rgba(234, 179, 8, 0.15); padding: 8px; border-radius: 6px; margin-bottom: 10px; font-size: 13px; font-weight: bold; color: #d97706; text-align: center;">
-                        📦 Services Included: 100% VIP All-Access Pass
-                    </div>
-                    <h4>Top features</h4>
-                    <ul>
-                        <li><i class="fa-solid fa-infinity" style="color:#38bdf8;"></i> <strong>Unlimited MB File Size Limit</strong></li>
-                        <li><i class="fa-solid fa-infinity" style="color:#38bdf8;"></i> <strong>Unlimited Usage</strong> on Everything</li>
-                        <li><i class="fa-solid fa-check"></i> All 37+ Micro Tools & Future Updates</li>
-                        <li><i class="fa-solid fa-phone-volume" style="color:#38bdf8;"></i> <strong>24×7 Direct Call & VIP Assistance</strong></li>
-                        <li><i class="fa-solid fa-star" style="color:#eab308;"></i> You save 65% (Best Value)</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="section-container bg-white" id="features">
         <div class="section-heading">
             <h2>Powerful Features of QuickResizer</h2>
@@ -851,7 +697,7 @@
 
             <form id="login-form" class="auth-form" onsubmit="handleAuthSubmit(event, 'login')">
                 <h3>Welcome Back</h3>
-                <p>Login to access Pro features & subscriptions.</p>
+                <p>Login to your account.</p>
                 <div class="form-group">
                     <label>Email Address</label>
                     <input type="email" id="login-email" placeholder="name@example.com" required>
@@ -868,14 +714,14 @@
 
             <form id="signup-form" class="auth-form hidden" onsubmit="handleAuthSubmit(event, 'signup')">
                 <h3>Create an Account</h3>
-                <p>Sign up to unlock Pro features & plan checkout.</p>
+                <p>Sign up to use QuickResizer tools.</p>
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" id="signup-name" placeholder="Rishabh Rajput" required>
                 </div>
                 <div class="form-group">
                     <label>Mobile Number</label>
-                    <input type="tel" id="signup-mobile" placeholder="+91 10-digit mobile or international number" required>
+                    <input type="tel" id="signup-mobile" placeholder="+91 10-digit mobile number" required>
                 </div>
                 <div class="form-group">
                     <label>Email Address</label>
@@ -885,7 +731,7 @@
                     <label>Password</label>
                     <input type="password" id="signup-password" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn-primary btn-block">Create Account & Proceed</button>
+                <button type="submit" class="btn-primary btn-block">Create Account</button>
             </form>
 
             <form id="forgot-form" class="auth-form hidden" onsubmit="handleAuthSubmit(event, 'forgot')">
@@ -903,85 +749,6 @@
                 <div style="text-align: center; margin-top: 15px;">
                     <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: #94a3b8; font-size: 13px; text-decoration: none;">← Back to Login</a>
                 </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="billing-modal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <button class="modal-close" onclick="closeBillingModal()">&times;</button>
-
-            <form id="billing-form" class="auth-form" onsubmit="handleBillingSubmit(event)">
-                <h3>Billing & Country Details</h3>
-                <p>Please enter your details to proceed with global secure checkout.</p>
-
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="billing-name" placeholder="Rishabh Rajput" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Country / Region</label>
-                    <select id="billing-country" onchange="recalculatePriceSummary()" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-family: 'Poppins', sans-serif;">
-                        <option value="IN" selected>India (🇮🇳)</option>
-                        <option value="US">United States (🇺🇸)</option>
-                        <option value="GB">United Kingdom (🇬🇧)</option>
-                        <option value="AE">United Arab Emirates (🇦🇪)</option>
-                        <option value="CA">Canada (🇨🇦)</option>
-                        <option value="AU">Australia (🇦🇺)</option>
-                        <option value="SG">Singapore (🇸🇬)</option>
-                        <option value="DE">Germany (🇩🇪)</option>
-                        <option value="FR">France (🇫🇷)</option>
-                        <option value="SA">Saudi Arabia (🇸🇦)</option>
-                        <option value="NPL">Nepal (🇳🇵)</option>
-                        <option value="BD">Bangladesh (🇧🇩)</option>
-                        <option value="OTHER">Other / Rest of World 🌐</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Mobile Number (with Country Code)</label>
-                    <input type="tel" id="billing-mobile" placeholder="e.g. +91 9876543210 or +1 123456789" required>
-                </div>
-
-                <div class="form-group">
-                    <label>City & State / Region</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="billing-city" placeholder="City" required style="width: 50%;">
-                        <input type="text" id="billing-state" placeholder="State / Province" required style="width: 50%;">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Zip / Postal Code</label>
-                    <input type="text" id="billing-pincode" placeholder="e.g. 209625 or 10001" required>
-                </div>
-
-                <div id="price-summary-box" style="background:#0f172a; padding:15px; border-radius:8px; border:1px solid #334155; margin:15px 0; font-size:14px; text-align:left;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                        <span style="color:#94a3b8;">Plan Base Price:</span>
-                        <span style="color:#fff; font-weight:600;" id="summary-base">$0.00</span>
-                    </div>
-                    
-                    <div id="intl-fee-row" style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                        <span style="color:#94a3b8;"><i class="fa-solid fa-globe" style="color:#38bdf8;"></i> International Transfer Fee (3.5%):</span>
-                        <span style="color:#38bdf8; font-weight:600;" id="summary-fee">$0.00</span>
-                    </div>
-
-                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                        <span style="color:#94a3b8;">Estimated Taxes (GST/VAT 18%):</span>
-                        <span style="color:#fff; font-weight:600;" id="summary-tax">$0.00</span>
-                    </div>
-
-                    <hr style="border:0; border-top:1px solid #334155; margin:8px 0;">
-
-                    <div style="display:flex; justify-content:space-between; font-size:16px;">
-                        <span style="color:#fff; font-weight:700;">Total Payable Amount:</span>
-                        <span style="color:#eab308; font-weight:700;" id="summary-total">$0.00</span>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-primary btn-block"><i class="fa-solid fa-lock"></i> Proceed to Pay</button>
             </form>
         </div>
     </div>
@@ -1015,11 +782,8 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
-        let selectedPlanName = "Smart";
-        let selectedPlanPrice = 9.99;
         let activeMode = "resize";
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1031,13 +795,8 @@
             let navAuth = document.getElementById('nav-auth-container');
             let badge = document.getElementById('globalUsageBadge');
 
-            if (user && user.isPro) {
-                badge.innerHTML = `<i class="fa-solid fa-crown" style="color:#eab308;"></i> PRO PLAN LIFETIME ACTIVE`;
-                badge.style.color = "#eab308";
-                badge.style.background = "rgba(234, 179, 8, 0.1)";
-                badge.style.border = "1px solid rgba(234, 179, 8, 0.3)";
-                
-                navAuth.innerHTML = `<span style="background:#10b981; color:#fff; padding:6px 14px; border-radius:20px; font-weight:bold; font-size:13px;"><i class="fa-solid fa-crown"></i> PRO USER</span>`;
+            if (user) {
+                navAuth.innerHTML = `<span style="background:#2563eb; color:#fff; padding:6px 14px; border-radius:20px; font-weight:bold; font-size:13px;"><i class="fa-solid fa-user"></i> ${user.name || 'User'}</span>`;
             }
         }
 
@@ -1047,74 +806,7 @@
         }
 
         function executeDashboardTool() {
-            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
-            if (user && user.isPro) return true; 
-
-            let freeLimitsMapping = {
-                'resize': 5, 'crop': 5, 'compress': 5, 'convert': 5,
-                'namedate': 3, 'signature': 3, 'bgcolor': 3, 'imgtopdf': 3,
-                'pdftoimg': 3, 'mergepdf': 3, 'splitpdf': 3, 'compresspdf': 3,
-                'resume': 2, 'wordcounter': 5, 'wa-chat': 5, 'svgtopng': 3, 'jsonformat': 3
-            };
-
-            let maxAllowed = freeLimitsMapping[activeMode] || 3;
-            let usage = JSON.parse(localStorage.getItem('qr_free_usage')) || { date: new Date().toDateString() };
-
-            if (usage.date !== new Date().toDateString()) {
-                usage = { date: new Date().toDateString() };
-            }
-
-            let counts = usage[activeMode] || 0;
-
-            if (counts >= maxAllowed) {
-                alert(`🔒 Daily Limit Reached: आपके आज के ${maxAllowed} मुफ़्त चांस समाप्त हो चुके हैं! असीमित इस्तेमाल के लिए प्रो प्लान में अपग्रेड करें।`);
-                document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
-                return false;
-            }
-
-            usage[activeMode] = counts + 1;
-            localStorage.setItem('qr_free_usage', JSON.stringify(usage));
             return true;
-        }
-
-        // 🔒 FIXED: Security Check - Must login before launching plan checkout
-        function checkoutPlanLaunch(planName, basePrice) {
-            selectedPlanName = planName;
-            selectedPlanPrice = basePrice;
-            
-            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
-            if (!user || !user.email) {
-                alert(`🔒 Login Required: ${planName} प्लान खरीदने के लिए कृपया पहले अपने अकाउंट में Login या Sign Up करें!`);
-                openAuthModal('login');
-                return;
-            }
-
-            document.getElementById('billing-modal').classList.remove('hidden');
-            recalculatePriceSummary();
-        }
-
-        function recalculatePriceSummary() {
-            let country = document.getElementById('billing-country').value;
-            let base = selectedPlanPrice;
-            let fee = (country !== 'IN') ? (base * 0.035) : 0.00;
-            let tax = (base + fee) * 0.18;
-            let total = base + fee + tax;
-
-            document.getElementById('summary-base').innerText = `$${base.toFixed(2)}`;
-            document.getElementById('summary-fee').innerText = `$${fee.toFixed(2)}`;
-            document.getElementById('summary-tax').innerText = `$${tax.toFixed(2)}`;
-            document.getElementById('summary-total').innerText = `$${total.toFixed(2)}`;
-            
-            document.getElementById('intl-fee-row').style.display = (country !== 'IN') ? 'flex' : 'none';
-        }
-
-        function handleBillingSubmit(e) {
-            e.preventDefault();
-            alert(`🎉 Secure Gateway: Order confirmed for ${selectedPlanName} Plan! Account updated.`);
-            
-            localStorage.setItem('quickresizer_user', JSON.stringify({ isPro: true, name: document.getElementById('billing-name').value }));
-            closeBillingModal();
-            syncUserSessionUI();
         }
 
         function openAuthModal(tab) {
@@ -1122,7 +814,6 @@
             switchAuthTab(tab);
         }
         function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
-        function closeBillingModal() { document.getElementById('billing-modal').classList.add('hidden'); }
 
         function switchAuthTab(type) {
             document.getElementById('login-form').classList.toggle('hidden', type !== 'login');
@@ -1134,9 +825,14 @@
         function handleAuthSubmit(e, type) {
             e.preventDefault();
             if(type === 'login' || type === 'signup') {
-                localStorage.setItem('quickresizer_user', JSON.stringify({ isPro: false, email: "user@example.com" }));
-                alert("Account configured locally successfully!");
+                let nameVal = type === 'signup' ? document.getElementById('signup-name').value : "Rishabh Rajput";
+                let emailVal = document.getElementById(type === 'login' ? 'login-email' : 'signup-email').value;
+                let mobileVal = type === 'signup' ? document.getElementById('signup-mobile').value : "+91 9876543210";
+
+                localStorage.setItem('quickresizer_user', JSON.stringify({ name: nameVal, email: emailVal, mobile: mobileVal }));
+                alert("Login Successful!");
                 closeAuthModal();
+                syncUserSessionUI();
             }
         }
     </script>
