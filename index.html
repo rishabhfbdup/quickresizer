@@ -365,7 +365,7 @@
                 <div class="settings-grid">
                     <div class="setting-group">
                         <label><i class="fa-solid fa-user"></i> Full Name:</label>
-                        <input type="text" id="res-name" placeholder="e.g. Rishabh Rajput">
+                        <input type="text" id="res-name" placeholder="e.g. BALBINDER SINGH">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-briefcase"></i> Job Title / Designation:</label>
@@ -373,7 +373,7 @@
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-envelope"></i> Email Address:</label>
-                        <input type="email" id="res-email" placeholder="e.g. rishabh@example.com">
+                        <input type="email" id="res-email" placeholder="e.g. quickresizer@example.com">
                     </div>
                     <div class="setting-group">
                         <label><i class="fa-solid fa-phone"></i> Phone Number:</label>
@@ -720,16 +720,29 @@
                     <input type="text" id="signup-name" placeholder="Rishabh Rajput" required>
                 </div>
                 <div class="form-group">
-                    <label>Mobile Number</label>
-                    <input type="tel" id="signup-mobile" placeholder="+91 10-digit mobile number" required>
-                </div>
-                <div class="form-group">
                     <label>Email Address</label>
                     <input type="email" id="signup-email" placeholder="name@example.com" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
                     <input type="password" id="signup-password" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="signup-mobile" placeholder="+91 9876543210" required>
+                </div>
+                <div class="form-group">
+                    <label>Country / Region</label>
+                    <select id="signup-country" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-family: 'Poppins', sans-serif;">
+                        <option value="India" selected>India (🇮🇳)</option>
+                        <option value="United States">United States (🇺🇸)</option>
+                        <option value="United Kingdom">United Kingdom (🇬🇧)</option>
+                        <option value="United Arab Emirates">United Arab Emirates (🇦🇪)</option>
+                        <option value="Canada">Canada (🇨🇦)</option>
+                        <option value="Australia">Australia (🇦🇺)</option>
+                        <option value="Singapore">Singapore (🇸🇬)</option>
+                        <option value="Other">Other / International 🌐</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn-primary btn-block">Create Account</button>
             </form>
@@ -750,6 +763,25 @@
                     <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: #94a3b8; font-size: 13px; text-decoration: none;">← Back to Login</a>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal-overlay hidden">
+        <div class="modal-card" style="text-align: left;">
+            <button class="modal-close" onclick="closeProfileModal()">&times;</button>
+            <h3 style="margin-bottom: 5px; color: #fff;"><i class="fa-solid fa-user-circle" style="color: #38bdf8;"></i> My Account Profile</h3>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Your registered account details.</p>
+            
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; font-size: 14px; color: #e2e8f0; display: flex; flex-direction: column; gap: 10px;">
+                <div><strong>👤 Full Name:</strong> <span id="prof-name" style="color: #38bdf8;">-</span></div>
+                <div><strong>📧 Email Address:</strong> <span id="prof-email" style="color: #38bdf8;">-</span></div>
+                <div><strong>📱 Mobile Number:</strong> <span id="prof-mobile" style="color: #38bdf8;">-</span></div>
+                <div><strong>🌍 Country:</strong> <span id="prof-country" style="color: #38bdf8;">-</span></div>
+            </div>
+
+            <button onclick="handleUserLogout()" class="btn-primary" style="margin-top: 20px; background: #ef4444; width: 100%; border:none; padding:10px; border-radius:6px; cursor:pointer; color:#fff; font-weight:bold;">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
         </div>
     </div>
 
@@ -793,11 +825,39 @@
         function syncUserSessionUI() {
             let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
             let navAuth = document.getElementById('nav-auth-container');
-            let badge = document.getElementById('globalUsageBadge');
 
             if (user) {
-                navAuth.innerHTML = `<span style="background:#2563eb; color:#fff; padding:6px 14px; border-radius:20px; font-weight:bold; font-size:13px;"><i class="fa-solid fa-user"></i> ${user.name || 'User'}</span>`;
+                navAuth.innerHTML = `
+                    <button onclick="openProfileModal()" style="background:#2563eb; color:#fff; padding:6px 14px; border-radius:20px; font-weight:bold; font-size:13px; border:none; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                        <i class="fa-solid fa-user-circle"></i> ${user.name || 'My Profile'}
+                    </button>
+                `;
             }
+        }
+
+        function openProfileModal() {
+            let user = JSON.parse(localStorage.getItem('quickresizer_user')) || null;
+            if (!user) {
+                openAuthModal('login');
+                return;
+            }
+            document.getElementById('prof-name').innerText = user.name || "Rishabh Rajput";
+            document.getElementById('prof-email').innerText = user.email || "user@example.com";
+            document.getElementById('prof-mobile').innerText = user.mobile || "+91 9876543210";
+            document.getElementById('prof-country').innerText = user.country || "India";
+
+            document.getElementById('profile-modal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        function handleUserLogout() {
+            localStorage.removeItem('quickresizer_user');
+            alert("You have been logged out successfully.");
+            closeProfileModal();
+            location.reload();
         }
 
         function switchMode(mode) {
@@ -824,12 +884,25 @@
 
         function handleAuthSubmit(e, type) {
             e.preventDefault();
-            if(type === 'login' || type === 'signup') {
-                let nameVal = type === 'signup' ? document.getElementById('signup-name').value : "Rishabh Rajput";
-                let emailVal = document.getElementById(type === 'login' ? 'login-email' : 'signup-email').value;
-                let mobileVal = type === 'signup' ? document.getElementById('signup-mobile').value : "+91 9876543210";
+            if(type === 'signup') {
+                let nameVal = document.getElementById('signup-name').value;
+                let emailVal = document.getElementById('signup-email').value;
+                let mobileVal = document.getElementById('signup-mobile').value;
+                let countryVal = document.getElementById('signup-country').value;
 
-                localStorage.setItem('quickresizer_user', JSON.stringify({ name: nameVal, email: emailVal, mobile: mobileVal }));
+                let userData = { name: nameVal, email: emailVal, mobile: mobileVal, country: countryVal };
+                localStorage.setItem('quickresizer_user', JSON.stringify(userData));
+                
+                alert("Account created and logged in successfully!");
+                closeAuthModal();
+                syncUserSessionUI();
+            } else if(type === 'login') {
+                let emailVal = document.getElementById('login-email').value;
+                // Dummy login state preservation or retrieval if exists
+                let existingUser = JSON.parse(localStorage.getItem('quickresizer_user')) || { name: "Rishabh Rajput", mobile: "+91 9876543210", country: "India" };
+                existingUser.email = emailVal;
+
+                localStorage.setItem('quickresizer_user', JSON.stringify(existingUser));
                 alert("Login Successful!");
                 closeAuthModal();
                 syncUserSessionUI();
