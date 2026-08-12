@@ -75,6 +75,17 @@
             </span>
         </div>
 
+        <div style="max-width: 800px; margin: 0 auto 20px auto; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); padding: 18px 22px; border-radius: 12px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <i class="fa-solid fa-graduation-cap" style="color: #38bdf8; font-size: 20px;"></i>
+                <h3 style="color: #f8fafc; font-size: 16px; margin: 0;">A Special Note from the Creator</h3>
+            </div>
+            <p style="color: #cbd5e1; font-size: 13px; line-height: 1.6; margin: 0;">
+                यह प्लेटफ़ॉर्म एक 16 वर्षीय छात्र द्वारा तैयार किया गया है। एक छात्र-जीवन (Student Life) में ऑनलाइन टूल्स, फॉर्म रीसाइज़िंग, और दस्तावेज़ तैयार करने की कितनी आवश्यकता और कठिनाई होती है, यह इसे बेहद करीब से समझते हैं। इसी बात को ध्यान में रखते हुए, छात्र-हित में इन सभी सेवाओं को हमेशा के लिए **पूरी तरह से मुफ्त** रखा गया है ताकि किसी भी छात्र या आम नागरिक को पैसे न चुकाने पड़े।<br><br>
+                💡 यदि आप इस छोटे से प्रयास को और आगे बढ़ाना चाहते हैं, तो ऊपर दिए गए <strong>"Support Us"</strong> विकल्प पर क्लिक करके अपनी इच्छा और सामर्थ्य अनुसार सर्वर और मेंटेनेंस कॉस्ट में योगदान दे सकते हैं। आपकी इस सहायता और कृपा के लिए हम सदैव आभारी रहेंगे! 🙏✨
+            </p>
+        </div>
+
         <div class="action-tabs">
             <button class="action-tab active" id="tab-resize" onclick="switchMode('resize')"><i class="fa-solid fa-expand"></i> <span data-lang="tab-resize">Resize Image</span></button>
             <button class="action-tab" id="tab-crop" onclick="switchMode('crop')"><i class="fa-solid fa-crop-simple"></i> <span data-lang="tab-crop">Crop Image</span></button>
@@ -625,6 +636,16 @@
         </div>
     </section>
 
+    <section class="section-container bg-white" style="text-align: center; padding: 40px 20px;">
+        <div style="max-width: 800px; margin: 0 auto; background: #f8fafc; border: 1px solid #cbd5e1; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+            <h3 style="color: #2563eb; font-size: 20px; margin-bottom: 12px;"><i class="fa-solid fa-graduation-cap"></i> A Special Note from the Creator</h3>
+            <p style="color: #475569; font-size: 14px; line-height: 1.7; margin: 0;">
+                यह प्लेटफ़ॉर्म एक 16 वर्षीय छात्र द्वारा तैयार किया गया है। छात्र-जीवन (Student Life) में आवश्यक टूल्स की उपयोगिता को समझते हुए, छात्रहित में इन सभी सेवाओं को हमेशा के लिए **पूरी तरह से मुफ्त** रखा गया है।<br>
+                यदि आप इस प्रयास को सहयोग देना चाहते हैं, तो ऊपर दिए गए <strong>"Support Us"</strong> विकल्प के माध्यम से सर्वर और मेंटेनेंस कॉस्ट में अपनी इच्छा अनुसार योगदान दे सकते हैं। आपकी इस कृपा के लिए हम सदैव आभारी रहेंगे! 🙏✨
+            </p>
+        </div>
+    </section>
+
     <div id="auth-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <button class="modal-close" onclick="closeAuthModal()">&times;</button>
@@ -858,7 +879,6 @@
                 let mobileVal = document.getElementById('signup-mobile').value.trim();
                 let countryVal = document.getElementById('signup-country').value;
 
-                // Strict validation check for email and mobile
                 let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 let phoneRegex = /^[0-9]{10}$/;
 
